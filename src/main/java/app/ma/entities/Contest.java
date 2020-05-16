@@ -35,9 +35,7 @@ public class Contest {
 	@Column(nullable = false)
 	private boolean isPartialVerdict;
 
-	// TODO Prob-Cont-User Prob
-	// TODO Prob-Cont-User Cont
-	// TODO Prob-Cont-User User
+	// TODO Problem-Contest
 
 	@CreationTimestamp
 	private Date createAt;
