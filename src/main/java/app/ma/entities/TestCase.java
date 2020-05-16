@@ -25,9 +25,9 @@ public class TestCase {
 	private Long id;
 
 	@Column(nullable = false)
-	private String tcInput;
+	private String tcInputURL;
 	@Column(nullable = false)
-	private String tcOutput;
+	private String tcOutputURL;
 	@Column
 	private Long tcDifficulty;
 
@@ -49,5 +49,52 @@ public class TestCase {
 
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getTcInputURL() {
+		return tcInputURL;
+	}
+
+	public void setTcInputURL(String tcInput) {
+		this.tcInputURL = tcInput;
+	}
+
+	public String getTcOutputURL() {
+		return tcOutputURL;
+	}
+
+	public void setTcOutputURL(String tcOutput) {
+		this.tcOutputURL = tcOutput;
+	}
+
+	public Long getTcDifficulty() {
+		return tcDifficulty;
+	}
+
+	public void setTcDifficulty(Long tcDifficulty) {
+		this.tcDifficulty = tcDifficulty;
+	}
+
+	public Problem getProblem() {
+		return problem;
+	}
+
+	public void setProblem(Problem problem) {
+		this.problem = problem;
+	}
+
+	public Date getCreateAt() {
+		return createAt;
+	}
+
+	public Date getUpdateAt() {
+		return updateAt;
+	}
 
 }
