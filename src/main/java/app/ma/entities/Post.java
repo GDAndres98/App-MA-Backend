@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,22 +17,31 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "resource")
-public class Resource {
+@Table(name = "post")
+public class Post {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(nullable = false)
+	private String title;
+	@Column(nullable = false)
 	private String content;
 	@Column(nullable = false)
-	private String description;
+	private Date creationDate;
 
-	@ManyToOne
-	@JoinColumn(name = "posted_at", nullable = false)
+	// TODO User-Class User
+	// TODO User-Class Class
+
+	@OneToOne
+	@JoinColumn(name = "parent", nullable = false)
 	@JsonManagedReference
-	private Class postedAt;
+	private Post parent;
+	@OneToOne
+	@JoinColumn(name = "child", nullable = false)
+	@JsonManagedReference
+	private Post child;
 
 	@CreationTimestamp
 	private Date createAt;
@@ -43,7 +52,7 @@ public class Resource {
 
 	// -------------------------------------------------------------------
 
-	public Resource() {
+	public Post() {
 
 	}
 
@@ -55,6 +64,14 @@ public class Resource {
 		this.id = id;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public String getContent() {
 		return content;
 	}
@@ -63,28 +80,44 @@ public class Resource {
 		this.content = content;
 	}
 
-	public String getDescription() {
-		return description;
+	public Date getCreationDate() {
+		return creationDate;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 
-	public Class getPostedAt() {
-		return postedAt;
+	public Post getParent() {
+		return parent;
 	}
 
-	public void setPostedAt(Class postedAt) {
-		this.postedAt = postedAt;
+	public void setParent(Post parent) {
+		this.parent = parent;
+	}
+
+	public Post getChild() {
+		return child;
+	}
+
+	public void setChild(Post child) {
+		this.child = child;
 	}
 
 	public Date getCreateAt() {
 		return createAt;
 	}
 
+	public void setCreateAt(Date createAt) {
+		this.createAt = createAt;
+	}
+
 	public Date getUpdateAt() {
 		return updateAt;
+	}
+
+	public void setUpdateAt(Date updateAt) {
+		this.updateAt = updateAt;
 	}
 
 }

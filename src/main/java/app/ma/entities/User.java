@@ -31,6 +31,8 @@ public class User {
 	private String firstName;
 	@Column(nullable = false)
 	private String lastName;
+	@Column
+	private String profilePicUrl;
 
 	@Column(nullable = false)
 	private String email;
@@ -39,7 +41,7 @@ public class User {
 
 	@Column(nullable = false, columnDefinition = "integer default 0")
 	private Long rating;
-	private String profilePicUrl;
+
 
 	@CreationTimestamp
 	private Date createAt;
