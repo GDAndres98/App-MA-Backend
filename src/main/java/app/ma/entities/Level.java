@@ -14,8 +14,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 @Table(name = "level")
 public class Level {
@@ -29,9 +27,8 @@ public class Level {
 	@Column(nullable = false)
 	private Long number;
 
-	@OneToOne
-	@JoinColumn(name = "problems", nullable = false)
-	@JsonManagedReference
+	@OneToOne // TODO One to one
+	@JoinColumn(nullable = false)
 	private Contest problems;
 
 	@CreationTimestamp
@@ -53,6 +50,30 @@ public class Level {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Long getNumber() {
+		return number;
+	}
+
+	public void setNumber(Long number) {
+		this.number = number;
+	}
+
+	public Contest getProblems() {
+		return problems;
+	}
+
+	public void setProblems(Contest problems) {
+		this.problems = problems;
 	}
 
 	public Date getCreateAt() {

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -30,12 +31,15 @@ public class Section {
 	private String description;
 
 	// TODO Section-Article Article
-	// TODO Contest ID
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "posted_at", nullable = false)
 	@JsonManagedReference
 	private Class postedAt;
+
+	@OneToOne // TODO One to one
+	@JoinColumn(nullable = false)
+	private Contest problems;
 
 	@CreationTimestamp
 	private Date createAt;
@@ -80,6 +84,14 @@ public class Section {
 
 	public void setPostedAt(Class postedAt) {
 		this.postedAt = postedAt;
+	}
+
+	public Contest getProblems() {
+		return problems;
+	}
+
+	public void setProblems(Contest problems) {
+		this.problems = problems;
 	}
 
 	public Date getCreateAt() {

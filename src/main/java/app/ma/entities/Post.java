@@ -34,11 +34,11 @@ public class Post {
 	// TODO User-Class User
 	// TODO User-Class Class
 
-	@OneToOne
+	@OneToOne // TODO One to one
 	@JoinColumn(name = "parent", nullable = false)
 	@JsonManagedReference
 	private Post parent;
-	@OneToOne
+	@OneToOne // TODO One to one
 	@JoinColumn(name = "child", nullable = false)
 	@JsonManagedReference
 	private Post child;

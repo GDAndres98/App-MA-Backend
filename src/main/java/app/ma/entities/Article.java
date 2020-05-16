@@ -7,10 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "article")
@@ -30,8 +34,12 @@ public class Article {
 	private Date dateWritten;
 
 	// TODO Tag-Article
-	// TODO Level ID
 
+	@ManyToOne
+	@JoinColumn(name = "level", nullable = false)
+	@JsonManagedReference
+	private Level level;
+	
 	@CreationTimestamp
 	private Date createAt;
 	@UpdateTimestamp
