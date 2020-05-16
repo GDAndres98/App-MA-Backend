@@ -29,8 +29,8 @@ public class Article {
 	@Column(nullable = false)
 	private String description;
 
-	// TODO Section-Article Article
-	// TODO Contest ID
+	// TODO Tag-Article
+	// TODO Level ID
 
 	@OneToOne
 	@JoinColumn(name = "posted_at", nullable = false)

@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "user")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Long.class)
 public class User {
-
+	// TODO User-Class
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -41,7 +41,6 @@ public class User {
 
 	@Column(nullable = false, columnDefinition = "integer default 0")
 	private Long rating;
-
 
 	@CreationTimestamp
 	private Date createAt;

@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "class")
 public class Class {
-
+	// TODO User-Class
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -82,8 +82,9 @@ public class Class {
 	public Date getCreateAt() {
 		return createAt;
 	}
+
 	public Date getUpdateAt() {
 		return updateAt;
 	}
-	
+
 }
