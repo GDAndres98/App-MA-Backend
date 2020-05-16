@@ -13,8 +13,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "article")
-public class Article {
+@Table(name = "problem")
+public class Problem {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,13 +27,16 @@ public class Article {
 	@Column(nullable = false)
 	private String markdownURL;
 	@Column(nullable = false)
-	private Date dateWritten;
+	private Long timeLimit;
+	@Column(nullable = false)
+	private Long memoryLimit;
 
-	// TODO Tag-Article
-	// TODO Level ID
+	// TODO Problem-Contest
+	// TODO Tag-Problem
 
 	@CreationTimestamp
 	private Date createAt;
+
 	@UpdateTimestamp
 	private Date updateAt;
 
@@ -41,7 +44,7 @@ public class Article {
 
 	// -------------------------------------------------------------------
 
-	public Article() {
+	public Problem() {
 
 	}
 	
@@ -77,12 +80,20 @@ public class Article {
 		this.markdownURL = markdownURL;
 	}
 
-	public Date getDateWritten() {
-		return dateWritten;
+	public Long getTimeLimit() {
+		return timeLimit;
 	}
 
-	public void setDateWritten(Date dateWritten) {
-		this.dateWritten = dateWritten;
+	public void setTimeLimit(Long timeLimit) {
+		this.timeLimit = timeLimit;
+	}
+
+	public Long getMemoryLimit() {
+		return memoryLimit;
+	}
+
+	public void setMemoryLimit(Long memoryLimit) {
+		this.memoryLimit = memoryLimit;
 	}
 
 	public Date getCreateAt() {
