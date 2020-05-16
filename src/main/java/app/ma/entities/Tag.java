@@ -37,6 +37,10 @@ public class Tag {
 
 	// -------------------------------------------------------------------
 
+	public Tag() {
+		
+	}
+	
 	public Long getId() {
 		return id;
 	}
