@@ -39,7 +39,6 @@ public class User {
 
 	@Column(nullable = false, columnDefinition = "integer default 0")
 	private Long rating;
-	@Column(name = "")
 	private String profilePicUrl;
 
 	@CreationTimestamp

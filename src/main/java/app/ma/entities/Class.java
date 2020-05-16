@@ -21,8 +21,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Class {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_tweet")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(nullable = false)
