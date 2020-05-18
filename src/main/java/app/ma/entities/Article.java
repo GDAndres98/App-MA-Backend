@@ -92,6 +92,22 @@ public class Article {
 	public void setDateWritten(Date dateWritten) {
 		this.dateWritten = dateWritten;
 	}
+	
+	public Set<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<Tag> tags) {
+		this.tags = tags;
+	}
+
+	public Level getLevel() {
+		return level;
+	}
+
+	public void setLevel(Level level) {
+		this.level = level;
+	}
 
 	public Date getCreateAt() {
 		return createAt;

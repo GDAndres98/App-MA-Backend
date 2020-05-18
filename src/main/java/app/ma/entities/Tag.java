@@ -30,21 +30,13 @@ public class Tag {
 	private Long level;
 
 	@ManyToMany
-	@JoinTable(
-			  name = "tag_problem", 
-			  joinColumns = @JoinColumn(name = "tag_id"), 
-			  inverseJoinColumns = @JoinColumn(name = "problem_id"))
+	@JoinTable(name = "tag_problem", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "problem_id"))
 	private Set<Problem> problems;
-	
+
 	@ManyToMany
-	@JoinTable(
-			  name = "tag_article", 
-			  joinColumns = @JoinColumn(name = "tag_id"), 
-			  inverseJoinColumns = @JoinColumn(name = "article_id"))
+	@JoinTable(name = "tag_article", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "article_id"))
 	private Set<Article> articles;
-	
-	
-	
+
 	@CreationTimestamp
 	private Date createAt;
 	@UpdateTimestamp
@@ -55,9 +47,9 @@ public class Tag {
 	// -------------------------------------------------------------------
 
 	public Tag() {
-		
+
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -72,6 +64,22 @@ public class Tag {
 
 	public Date getUpdateAt() {
 		return updateAt;
+	}
+
+	public Set<Problem> getProblems() {
+		return problems;
+	}
+
+	public void setProblems(Set<Problem> problems) {
+		this.problems = problems;
+	}
+
+	public Set<Article> getArticles() {
+		return articles;
+	}
+
+	public void setArticles(Set<Article> articles) {
+		this.articles = articles;
 	}
 
 }
