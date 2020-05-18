@@ -3,7 +3,9 @@ package app.ma.compositeKey;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class UserCourseKey implements Serializable{
 
 	@Column(name = "student_id")

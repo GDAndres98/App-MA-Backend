@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -38,6 +41,17 @@ public class Submit {
 	// TODO Prob-Cont-User Prob
 	// TODO Prob-Cont-User Cont
 	// TODO Prob-Cont-User User
+	
+	@ManyToOne
+	@JoinColumns({
+        @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+        @JoinColumn(name = "problem_id", referencedColumnName = "problem_id"),
+        @JoinColumn(name = "contest_id", referencedColumnName = "contest_id"),
+        })	
+	private ProblemContestUser problemContestUser;
+	
+	
+	
 
 	@CreationTimestamp
 	private Date createAt;

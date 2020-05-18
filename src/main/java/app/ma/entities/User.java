@@ -41,7 +41,7 @@ public class User {
 	@Column
 	private String profilePicUrl;
 
-	@Column(nullable = false)
+	@Column(unique = true, nullable = false)
 	private String email;
 	@Column(nullable = false)
 	private String password;
@@ -55,6 +55,9 @@ public class User {
 	
 	@OneToMany(mappedBy = "student")
 	Set<UserCourse> courses;
+	
+    @OneToMany(mappedBy = "user")
+    Set<ProblemContestUser> problemContestUser;
 	
 
 	@CreationTimestamp
