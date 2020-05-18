@@ -32,7 +32,7 @@ public class Resource {
 	@ManyToOne
 	@JoinColumn(name = "posted_at", nullable = false)
 	@JsonManagedReference
-	private Class postedAt;
+	private Course postedAt;
 
 	@CreationTimestamp
 	private Date createAt;
@@ -71,11 +71,11 @@ public class Resource {
 		this.description = description;
 	}
 
-	public Class getPostedAt() {
+	public Course getPostedAt() {
 		return postedAt;
 	}
 
-	public void setPostedAt(Class postedAt) {
+	public void setPostedAt(Course postedAt) {
 		this.postedAt = postedAt;
 	}
 

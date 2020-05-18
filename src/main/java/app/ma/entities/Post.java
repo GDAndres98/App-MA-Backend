@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -32,15 +33,24 @@ public class Post {
 	private Date creationDate;
 
 	// TODO User-Class User
+	
+	@ManyToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	private User creator;
+	
 	// TODO User-Class Class
+	
+	@ManyToOne
+	@JoinColumn(name = "course_id", nullable = false)
+	private Course course;
+	
 
 	@OneToOne // TODO One to one
 	@JoinColumn(name = "parent", nullable = false)
-	@JsonManagedReference
 	private Post parent;
+	
 	@OneToOne // TODO One to one
 	@JoinColumn(name = "child", nullable = false)
-	@JsonManagedReference
 	private Post child;
 
 	@CreationTimestamp

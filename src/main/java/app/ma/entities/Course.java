@@ -1,6 +1,8 @@
 package app.ma.entities;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -17,8 +21,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "class")
-public class Class {
+@Table(name = "course")
+public class Course {
 	// TODO User-Class
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,9 +34,16 @@ public class Class {
 	private String logoUrl;
 
 	@ManyToOne
-	@JoinColumn(name = "professor", nullable = false)
-	@JsonManagedReference
+	@JoinColumn(name = "professor_id", nullable = false)
 	private User professor;
+	
+	@ManyToMany
+	@JoinTable(
+			  name = "user_course", 
+			  joinColumns = @JoinColumn(name = "course_id"), 
+			  inverseJoinColumns = @JoinColumn(name = "student_id"))
+	private Set<User> students;
+	
 
 	@CreationTimestamp
 	private Date createAt;
@@ -43,7 +54,7 @@ public class Class {
 
 	// -------------------------------------------------------------------
 
-	public Class() {
+	public Course() {
 
 	}
 
