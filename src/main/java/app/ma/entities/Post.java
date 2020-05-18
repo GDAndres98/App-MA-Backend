@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -35,14 +36,11 @@ public class Post {
 	// TODO User-Class User
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
-	private User creator;
-	
-	// TODO User-Class Class
-	
-	@ManyToOne
-	@JoinColumn(name = "course_id", nullable = false)
-	private Course course;
+	@JoinColumns({
+        @JoinColumn(name = "student_id", referencedColumnName = "student_id"),
+        @JoinColumn(name = "course_id", referencedColumnName = "course_id"),
+        })	
+	private UserCourse userCourse;
 	
 
 	@OneToOne // TODO One to one

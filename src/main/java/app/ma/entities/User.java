@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -51,8 +52,8 @@ public class User {
 	@JoinColumn( nullable = false)
 	private Level level;
 	
-	@ManyToMany(mappedBy = "students")
-	private Set<Course> courses;
+	@OneToMany(mappedBy = "student")
+	Set<UserCourse> courses;
 	
 
 	@CreationTimestamp

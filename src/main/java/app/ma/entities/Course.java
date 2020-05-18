@@ -2,6 +2,7 @@ package app.ma.entities;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -37,13 +39,11 @@ public class Course {
 	@JoinColumn(name = "professor_id", nullable = false)
 	private User professor;
 	
-	@ManyToMany
-	@JoinTable(
-			  name = "user_course", 
-			  joinColumns = @JoinColumn(name = "course_id"), 
-			  inverseJoinColumns = @JoinColumn(name = "student_id"))
-	private Set<User> students;
+
+    @OneToMany(mappedBy = "course")
+    Set<UserCourse> students;
 	
+    
 
 	@CreationTimestamp
 	private Date createAt;
@@ -54,7 +54,7 @@ public class Course {
 
 	// -------------------------------------------------------------------
 
-	public Course() {
+	public Course() {		
 
 	}
 
