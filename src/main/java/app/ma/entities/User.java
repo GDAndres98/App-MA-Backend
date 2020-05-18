@@ -19,6 +19,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
@@ -46,10 +47,10 @@ public class User {
 	private String password;
 
 	@Column(nullable = false, columnDefinition = "integer default 0")
-	private Long rating;
+	private Long rating = 0l;
 	
 	@OneToOne // TODO One to one
-	@JoinColumn( nullable = false)
+	@JoinColumn( nullable = true)
 	private Level level;
 	
 	@OneToMany(mappedBy = "student")
@@ -66,6 +67,14 @@ public class User {
 	// -------------------------------------------------------------------------
 
 	public User() {
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public User(String username) {
