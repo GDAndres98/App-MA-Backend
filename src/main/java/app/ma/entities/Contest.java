@@ -34,7 +34,7 @@ public class Contest {
 	private Date durationTime;
 	@Column(nullable = false)
 	private boolean isPartialVerdict;
-	
+
 	// TODO Problem-Contest
 
 	@CreationTimestamp

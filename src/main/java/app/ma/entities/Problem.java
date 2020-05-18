@@ -34,7 +34,7 @@ public class Problem {
 	private Long memoryLimit;
 
 	// TODO Problem-Contest
-	
+
 	@ManyToMany(mappedBy = "problems")
 	private Set<Tag> tags;
 
@@ -51,7 +51,7 @@ public class Problem {
 	public Problem() {
 
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
