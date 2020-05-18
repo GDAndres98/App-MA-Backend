@@ -1,6 +1,7 @@
 package app.ma.entities;
 
 import java.sql.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,14 +9,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "section")
@@ -30,11 +31,12 @@ public class Section {
 	@Column(nullable = false)
 	private String description;
 
-	// TODO Section-Article Article
+	@ManyToMany
+	@JoinTable(name = "section_article", joinColumns = @JoinColumn(name = "section_id"), inverseJoinColumns = @JoinColumn(name = "article_id"))
+	private Set<Article> articles;
 
 	@ManyToOne
 	@JoinColumn(name = "posted_at", nullable = false)
-	@JsonManagedReference
 	private Course postedAt;
 
 	@OneToOne // TODO One to one
@@ -76,6 +78,14 @@ public class Section {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Set<Article> getArticles() {
+		return articles;
+	}
+
+	public void setArticles(Set<Article> articles) {
+		this.articles = articles;
 	}
 
 	public Course getPostedAt() {

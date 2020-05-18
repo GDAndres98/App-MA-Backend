@@ -35,11 +35,14 @@ public class Article {
 
 	@ManyToMany(mappedBy = "articles")
 	private Set<Tag> tags;
-	
+
+	@ManyToMany(mappedBy = "articles")
+	private Set<Section> sections;
+
 	@ManyToOne
 	@JoinColumn(name = "level", nullable = false)
 	private Level level;
-	
+
 	@CreationTimestamp
 	private Date createAt;
 	@UpdateTimestamp
@@ -52,7 +55,7 @@ public class Article {
 	public Article() {
 
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -92,13 +95,21 @@ public class Article {
 	public void setDateWritten(Date dateWritten) {
 		this.dateWritten = dateWritten;
 	}
-	
+
 	public Set<Tag> getTags() {
 		return tags;
 	}
 
 	public void setTags(Set<Tag> tags) {
 		this.tags = tags;
+	}
+
+	public Set<Section> getSections() {
+		return sections;
+	}
+
+	public void setSections(Set<Section> sections) {
+		this.sections = sections;
 	}
 
 	public Level getLevel() {
