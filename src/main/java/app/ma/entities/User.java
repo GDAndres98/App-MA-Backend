@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -47,17 +48,20 @@ public class User {
 
 	@Column(nullable = false, columnDefinition = "integer default 0")
 	private Long rating = 0l;
-	
+
 	@OneToOne
-	@JoinColumn( nullable = true) //TODO Default Level
+	@JoinColumn(nullable = true) // TODO Default Level
 	private Level level;
-	
+
 	@OneToMany(mappedBy = "student")
 	Set<UserCourse> courses;
-	
-    @OneToMany(mappedBy = "user")
-    Set<ProblemContestUser> problemContestUser;
-	
+
+	@OneToMany(mappedBy = "user")
+	Set<ProblemContestUser> problemContestUser;
+
+	@ManyToOne
+	@JoinColumn(name = "role_id", nullable = true) // TODO
+	private Role role;
 
 	@CreationTimestamp
 	private Date createAt;
@@ -70,7 +74,7 @@ public class User {
 
 	public User() {
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -137,6 +141,38 @@ public class User {
 
 	public void setProfilePicUrl(String profilePicUrl) {
 		this.profilePicUrl = profilePicUrl;
+	}
+
+	public Level getLevel() {
+		return level;
+	}
+
+	public void setLevel(Level level) {
+		this.level = level;
+	}
+
+	public Set<UserCourse> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(Set<UserCourse> courses) {
+		this.courses = courses;
+	}
+
+	public Set<ProblemContestUser> getProblemContestUser() {
+		return problemContestUser;
+	}
+
+	public void setProblemContestUser(Set<ProblemContestUser> problemContestUser) {
+		this.problemContestUser = problemContestUser;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public Date getCreateAt() {
