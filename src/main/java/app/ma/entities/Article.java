@@ -1,6 +1,7 @@
 package app.ma.entities;
 
 import java.sql.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -33,8 +35,9 @@ public class Article {
 	@Column(nullable = false)
 	private Date dateWritten;
 
-	// TODO Tag-Article
-
+	@ManyToMany(mappedBy = "articles")
+	private Set<Tag> tags;
+	
 	@ManyToOne
 	@JoinColumn(name = "level", nullable = false)
 	@JsonManagedReference

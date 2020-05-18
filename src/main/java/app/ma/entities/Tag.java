@@ -1,12 +1,16 @@
 package app.ma.entities;
 
 import java.sql.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,9 +29,22 @@ public class Tag {
 	@Column(nullable = false)
 	private Long level;
 
-	// TODO Tag-Article
-	// TODO Tag-Problem
-
+	@ManyToMany
+	@JoinTable(
+			  name = "tag_problem", 
+			  joinColumns = @JoinColumn(name = "tag_id"), 
+			  inverseJoinColumns = @JoinColumn(name = "problem_id"))
+	private Set<Problem> problems;
+	
+	@ManyToMany
+	@JoinTable(
+			  name = "tag_article", 
+			  joinColumns = @JoinColumn(name = "tag_id"), 
+			  inverseJoinColumns = @JoinColumn(name = "article_id"))
+	private Set<Article> articles;
+	
+	
+	
 	@CreationTimestamp
 	private Date createAt;
 	@UpdateTimestamp
