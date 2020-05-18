@@ -14,8 +14,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 @Table(name = "resource")
 public class Resource {
@@ -31,7 +29,6 @@ public class Resource {
 
 	@ManyToOne
 	@JoinColumn(name = "posted_at", nullable = false)
-	@JsonManagedReference
 	private Course postedAt;
 
 	@CreationTimestamp

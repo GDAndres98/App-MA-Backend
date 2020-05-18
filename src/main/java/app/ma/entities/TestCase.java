@@ -33,7 +33,6 @@ public class TestCase {
 
 	@ManyToOne
 	@JoinColumn(name = "problem", nullable = false)
-	@JsonManagedReference
 	private Problem problem;
 
 	@CreationTimestamp
