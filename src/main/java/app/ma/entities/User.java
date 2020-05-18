@@ -1,7 +1,6 @@
 package app.ma.entities;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -10,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -44,13 +42,14 @@ public class User {
 	@Column(unique = true, nullable = false)
 	private String email;
 	@Column(nullable = false)
+	@JsonIgnore
 	private String password;
 
 	@Column(nullable = false, columnDefinition = "integer default 0")
 	private Long rating = 0l;
 	
-	@OneToOne // TODO One to one
-	@JoinColumn( nullable = true)
+	@OneToOne
+	@JoinColumn( nullable = true) //TODO Default Level
 	private Level level;
 	
 	@OneToMany(mappedBy = "student")
