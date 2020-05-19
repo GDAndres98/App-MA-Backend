@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import app.ma.compositeKey.UserCourseKey;
 
 @Entity
@@ -30,6 +32,7 @@ public class UserCourse {
     Course course;
     
     @OneToMany(mappedBy="userCourse")
+	@JsonIgnore
     private Set<Post> post;
     
   

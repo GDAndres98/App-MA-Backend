@@ -31,24 +31,21 @@ public class Post {
 	@Column(nullable = false)
 	private String content;
 	@Column(nullable = false)
-	private Date creationDate;
+	private Date creationDate = new Date(System.currentTimeMillis());
 
-	// TODO User-Class User
-	
 	@ManyToOne
 	@JoinColumns({
         @JoinColumn(name = "student_id", referencedColumnName = "student_id"),
         @JoinColumn(name = "course_id", referencedColumnName = "course_id"),
         })	
 	private UserCourse userCourse;
-	
 
 	@OneToOne // TODO One to one
-	@JoinColumn(name = "parent", nullable = false)
+	@JoinColumn(name = "parent", nullable = true)
 	private Post parent;
 	
 	@OneToOne // TODO One to one
-	@JoinColumn(name = "child", nullable = false)
+	@JoinColumn(name = "child", nullable = true)
 	private Post child;
 
 	@CreationTimestamp
@@ -99,7 +96,15 @@ public class Post {
 	public Post getParent() {
 		return parent;
 	}
+	
+	public UserCourse getUserCourse() {
+		return userCourse;
+	}
 
+	public void setUserCourse(UserCourse userCourse) {
+		this.userCourse = userCourse;
+	}
+	
 	public void setParent(Post parent) {
 		this.parent = parent;
 	}

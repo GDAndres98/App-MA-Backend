@@ -37,7 +37,7 @@ public class Course {
 	@Column(nullable = false)
 	private String logoUrl;
 
-	@ManyToOne
+	@ManyToOne	
 	@JoinColumn(name = "professor_id", nullable = false)
 	private User professor;
 
