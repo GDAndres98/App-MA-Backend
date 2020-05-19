@@ -54,6 +54,7 @@ public class User {
 	private Level level;
 
 	@OneToMany(mappedBy = "student")
+	@JsonIgnore
 	Set<UserCourse> courses;
 
 	@OneToMany(mappedBy = "user")

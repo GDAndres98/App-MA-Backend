@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -38,12 +40,10 @@ public class Course {
 	@ManyToOne	
 	@JoinColumn(name = "professor_id", nullable = false)
 	private User professor;
-	
 
-    @OneToMany(mappedBy = "course")
-    Set<UserCourse> students;
-	
-    
+	@OneToMany(mappedBy = "course")
+	@JsonIgnore
+	Set<UserCourse> students;
 
 	@CreationTimestamp
 	private Date createAt;
@@ -54,7 +54,7 @@ public class Course {
 
 	// -------------------------------------------------------------------
 
-	public Course() {		
+	public Course() {
 
 	}
 
@@ -68,6 +68,14 @@ public class Course {
 
 	public String getName() {
 		return name;
+	}
+
+	public Set<UserCourse> getStudents() {
+		return students;
+	}
+
+	public void setStudents(Set<UserCourse> students) {
+		this.students = students;
 	}
 
 	public void setName(String name) {

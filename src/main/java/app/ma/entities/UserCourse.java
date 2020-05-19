@@ -17,7 +17,9 @@ public class UserCourse {
 	@EmbeddedId
 	UserCourseKey id;
 
-    @ManyToOne
+
+
+	@ManyToOne
     @MapsId("student_id")
     @JoinColumn(name = "student_id")
     User student;
@@ -37,6 +39,10 @@ public class UserCourse {
 	// -------------------------------------------------------------------
 
     
+    
+    public void setId(UserCourseKey id) {
+		this.id = id;
+	}
     
 	public Set<Post> getPost() {
 		return post;
