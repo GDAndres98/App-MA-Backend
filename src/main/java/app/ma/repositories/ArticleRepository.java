@@ -7,9 +7,8 @@ import org.springframework.stereotype.Repository;
 import app.ma.entities.*;
 
 @Repository
-public interface CourseRepository extends CrudRepository<Course, Long> {
+public interface ArticleRepository extends CrudRepository<Article, Long> {
 
-	public Course findById(long id);
-	public List<Course> findByStudents_student_Id(long id);
+	public Article findById(long id);
 
 }

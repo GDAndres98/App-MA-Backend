@@ -1,5 +1,6 @@
 package app.ma.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import app.ma.entities.Course;
 import app.ma.entities.Role;
 import app.ma.entities.User;
+import app.ma.repositories.CourseRepository;
 import app.ma.repositories.RoleRepository;
 import app.ma.repositories.UserRepository;
 
@@ -24,6 +27,9 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepositoryDAO;
+	
+	@Autowired
+	private CourseRepository courseRepositoryDAO;
 	
 	@Autowired
 	private RoleRepository roleRepository;
@@ -65,6 +71,16 @@ public class UserController {
 		
 		return user;
 	}
+	
+	@RequestMapping(path="/getAllUserCoursesById", method=RequestMethod.GET)
+	public List<Course> getAllUserCoursesById 
+	(
+			@RequestHeader Long id) {
+		return courseRepositoryDAO.findByStudents_student_Id(id);
+	}
+	
+	
+	
 	
 	@RequestMapping(path="/createStudent", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> addNewUser 
@@ -116,6 +132,8 @@ public class UserController {
 			
 		return new ResponseEntity<>("Usuario creado correctamente.", HttpStatus.CREATED);
 	}
+	
+	
 	
 	
 	

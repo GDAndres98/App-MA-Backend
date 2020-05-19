@@ -104,8 +104,6 @@ public class CourseController {
 	
 	@RequestMapping(path = "/getCourseStudentsById", method = RequestMethod.GET)
 	public List<User> getAllCourseStudentsById(@RequestHeader Long id) {
-		Optional<Course> course = courseRepository.findById(id);
-		if(!course.isPresent()) return null;
 		return userRepository.findByCourses_Course_Id(id);
 	}
 	
