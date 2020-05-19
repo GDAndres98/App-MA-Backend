@@ -31,10 +31,8 @@ public class Post {
 	@Column(nullable = false)
 	private String content;
 	@Column(nullable = false)
-	private Date creationDate;
+	private Date creationDate = new Date(System.currentTimeMillis());
 
-	// TODO User-Class User
-	
 	@ManyToOne
 	@JoinColumns({
         @JoinColumn(name = "student_id", referencedColumnName = "student_id"),
@@ -44,11 +42,11 @@ public class Post {
 	
 
 	@OneToOne // TODO One to one
-	@JoinColumn(name = "parent", nullable = false)
+	@JoinColumn(name = "parent", nullable = true)
 	private Post parent;
 	
 	@OneToOne // TODO One to one
-	@JoinColumn(name = "child", nullable = false)
+	@JoinColumn(name = "child", nullable = true)
 	private Post child;
 
 	@CreationTimestamp
