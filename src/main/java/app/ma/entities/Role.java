@@ -25,11 +25,17 @@ public class Role {
 	private Long id;
 
 	@Column(unique = true, nullable = false)
-	private String nombre;
+	private String name;
+
+
 
 	@Column(nullable = false, columnDefinition = "boolean default false")
 	private boolean createUser = false;
 	
+	@Column(nullable = false, columnDefinition = "boolean default false")
+	private boolean isProfessor = false;
+
+
 
 	@CreationTimestamp
 	private Date createAt;
@@ -41,6 +47,15 @@ public class Role {
 	// -------------------------------------------------------------------------
 
 	public Role() {
+	}
+	
+
+	public boolean isProfessor() {
+		return isProfessor;
+	}
+
+	public void setProfessor(boolean isProfessor) {
+		this.isProfessor = isProfessor;
 	}
 	
 	public Long getId() {
@@ -57,6 +72,16 @@ public class Role {
 
 	public Date getUpdateAt() {
 		return updateAt;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

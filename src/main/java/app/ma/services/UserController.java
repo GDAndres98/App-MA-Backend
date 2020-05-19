@@ -8,9 +8,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
+import app.ma.entities.Role;
 import app.ma.entities.User;
+import app.ma.repositories.RoleRepository;
 import app.ma.repositories.UserRepository;
 
 @RestController
@@ -18,6 +24,9 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepositoryDAO;
+	
+	@Autowired
+	private RoleRepository roleRepository;
 	
 	@RequestMapping("/getAllUsers")
 	public Iterable<User> getAllUsers () {
@@ -57,8 +66,8 @@ public class UserController {
 		return user;
 	}
 	
-	@RequestMapping(path="/addUser", method=RequestMethod.POST) 
-	public @ResponseBody String addNewUser 
+	@RequestMapping(path="/createStudent", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> addNewUser 
 	(
 			@RequestParam String 	firstName	, 
 			@RequestParam String 	lastName	, 
@@ -67,16 +76,48 @@ public class UserController {
 			@RequestParam String 	password	,
 			@RequestParam String 	profilePic	) {
 		
+		if(emailIsUsed(email)) return new ResponseEntity<>("Email en uso.", HttpStatus.BAD_REQUEST);
+		
+		User newUser = new User(username);
+		newUser.setFirstName(firstName);
+		newUser.setLastName(lastName);
+		newUser.setUsername(username);
+		newUser.setRole(roleRepository.findByName("student"));
+		newUser.setEmail(email);
+		newUser.setPassword(password);
+		newUser.setProfilePicUrl(profilePic);
+		userRepositoryDAO.save(newUser);
+			
+		return new ResponseEntity<>("Usuario creado correctamente.", HttpStatus.CREATED);
+	}
+	
+	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(path="/createProfessor", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> createNewProfessor 
+	(
+			@RequestParam String 	firstName	, 
+			@RequestParam String 	lastName	, 
+			@RequestParam String 	username	, 
+			@RequestParam String 	email		,
+			@RequestParam String 	password	,
+			@RequestParam String 	profilePic	) {
+		
+		if(emailIsUsed(email)) return new ResponseEntity<>("Email en uso.", HttpStatus.BAD_REQUEST);
+		
 		User newUser = new User(username);
 		newUser.setFirstName(firstName);
 		newUser.setLastName(lastName);
 		newUser.setUsername(username);
 		newUser.setEmail(email);
+		newUser.setRole(roleRepository.findByName("professor"));
 		newUser.setPassword(password);
 		newUser.setProfilePicUrl(profilePic);
 		userRepositoryDAO.save(newUser);
-		return "Usuario Guardado";
+			
+		return new ResponseEntity<>("Usuario creado correctamente.", HttpStatus.CREATED);
 	}
+	
+	
 	
 	@RequestMapping(path="/validatedUser", method=RequestMethod.POST)
 	public @ResponseBody User validatedUser 
@@ -89,5 +130,25 @@ public class UserController {
 		return user;
 	}
 	
+	@RequestMapping(path="/createRoles", method=RequestMethod.POST)
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	private void createRoles() {
+		Role student = new Role();
+		student.setName("student");
+		
+		roleRepository.save(student);
+		
+		Role professor = new Role();
+		professor.setName("professor");
+		professor.setProfessor(true);
+	
+		roleRepository.save(professor);
+	}
+	
+	
+
+	public boolean emailIsUsed(String email) {
+		return userRepositoryDAO.countByEmail(email) != 0;
+	}
 	
 }
