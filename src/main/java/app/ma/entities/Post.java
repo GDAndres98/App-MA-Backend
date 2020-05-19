@@ -39,7 +39,6 @@ public class Post {
         @JoinColumn(name = "course_id", referencedColumnName = "course_id"),
         })	
 	private UserCourse userCourse;
-	
 
 	@OneToOne // TODO One to one
 	@JoinColumn(name = "parent", nullable = true)
@@ -97,7 +96,15 @@ public class Post {
 	public Post getParent() {
 		return parent;
 	}
+	
+	public UserCourse getUserCourse() {
+		return userCourse;
+	}
 
+	public void setUserCourse(UserCourse userCourse) {
+		this.userCourse = userCourse;
+	}
+	
 	public void setParent(Post parent) {
 		this.parent = parent;
 	}
