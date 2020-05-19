@@ -19,6 +19,14 @@ public class UserCourseKey implements Serializable{
 
 	// -------------------------------------------------------------------
 
+    public UserCourseKey() {
+	}
+    
+	public UserCourseKey(Long courseId, Long studentId) {
+		setCourseId(courseId);
+		setStudentId(studentId);
+	}
+
 	public Long getStudentId() {
 		return studentId;
 	}
