@@ -10,5 +10,5 @@ import app.ma.entities.*;
 
 @Repository
 public interface PostRepository extends CrudRepository<Post, Long> {
-	public List<Post> findByUserCourse_Course_IdOrderByCreationDateAsc(Long id);
+	public List<Post> findByUserCourse_Course_IdAndParentIsNullOrderByCreationDateAsc(Long id);
 }

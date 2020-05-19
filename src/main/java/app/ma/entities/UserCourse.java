@@ -19,8 +19,6 @@ public class UserCourse {
 	@EmbeddedId
 	UserCourseKey id;
 
-
-
 	@ManyToOne
     @MapsId("student_id")
     @JoinColumn(name = "student_id")
