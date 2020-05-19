@@ -29,7 +29,7 @@ public class ArticleController {
 		return findAll;
 	}
 	
-	@RequestMapping(path="/getArticleByID", method=RequestMethod.GET)
+	@RequestMapping(path="/getArticleById", method=RequestMethod.GET)
 	public Article getArticleByID 
 	(
 			@RequestHeader Long id) {

@@ -40,8 +40,8 @@ public class Article {
 	private Set<Section> sections;
 
 	@ManyToOne
-	@JoinColumn(name = "level", nullable = false)
-	private Level level;
+	@JoinColumn(name = "level", nullable = true) // TODO 
+	private Level level = null;
 
 	@CreationTimestamp
 	private Date createAt;
