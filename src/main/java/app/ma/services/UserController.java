@@ -1,5 +1,6 @@
 package app.ma.services;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +39,13 @@ public class UserController {
 	public Iterable<User> getAllUsers () {
 		
 		Iterable<User> findAll = userRepositoryDAO.findAll();
+		return findAll;
+	}
+	
+	@RequestMapping("/getAllRole")
+	public Iterable<Role> getAllRole () {
+		
+		Iterable<Role> findAll = roleRepository.findAll();
 		return findAll;
 	}
 	
@@ -98,12 +106,15 @@ public class UserController {
 		newUser.setFirstName(firstName);
 		newUser.setLastName(lastName);
 		newUser.setUsername(username);
-		newUser.addRole(roleRepository.findByName("student"));
+		Role role = roleRepository.findByName("student");
+		newUser.addRole(role);
+		role.addUser(newUser);
 		newUser.setEmail(email);
 		newUser.setPassword(password);
 		newUser.setProfilePicUrl(profilePic);
 		userRepositoryDAO.save(newUser);
-			
+
+		
 		return new ResponseEntity<>("Usuario creado correctamente.", HttpStatus.CREATED);
 	}
 	
@@ -125,7 +136,9 @@ public class UserController {
 		newUser.setLastName(lastName);
 		newUser.setUsername(username);
 		newUser.setEmail(email);
-		newUser.addRole(roleRepository.findByName("professor"));
+		Role role = roleRepository.findByName("professor");
+		newUser.addRole(role);
+		role.addUser(newUser);
 		newUser.setPassword(password);
 		newUser.setProfilePicUrl(profilePic);
 		userRepositoryDAO.save(newUser);

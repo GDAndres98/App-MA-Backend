@@ -1,6 +1,7 @@
 package app.ma.entities;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -44,7 +45,7 @@ public class Role {
 
 	@ManyToMany
 	@JoinTable(name = "role_user", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-	private Set<User> users;
+	private Set<User> users = new HashSet<>();
 
 
 	@CreationTimestamp
@@ -100,6 +101,11 @@ public class Role {
 
 	public void setStudent(boolean isStudent) {
 		this.isStudent = isStudent;
+	}
+
+
+	public void addUser(User newUser) {
+		this.users.add(newUser);
 	}
 
 }

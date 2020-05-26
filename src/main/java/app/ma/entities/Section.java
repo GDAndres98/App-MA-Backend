@@ -1,6 +1,7 @@
 package app.ma.entities;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -33,14 +34,14 @@ public class Section {
 
 	@ManyToMany
 	@JoinTable(name = "section_article", joinColumns = @JoinColumn(name = "section_id"), inverseJoinColumns = @JoinColumn(name = "article_id"))
-	private Set<Article> articles;
+	private Set<Article> articles = new HashSet<>();
 
 	@ManyToOne
 	@JoinColumn(name = "posted_at", nullable = false)
 	private Course postedAt;
 
 	@OneToOne // TODO One to one
-	@JoinColumn(nullable = false)
+	@JoinColumn(nullable = true)
 	private Contest problems;
 
 	@CreationTimestamp
@@ -110,6 +111,10 @@ public class Section {
 
 	public Date getUpdateAt() {
 		return updateAt;
+	}
+
+	public void addArticle(Article article) {
+		articles.add(article);
 	}
 
 }

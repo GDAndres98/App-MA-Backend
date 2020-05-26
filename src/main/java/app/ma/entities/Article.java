@@ -1,6 +1,7 @@
 package app.ma.entities;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -15,6 +16,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "article")
@@ -37,7 +40,8 @@ public class Article {
 	private Set<Tag> tags;
 
 	@ManyToMany(mappedBy = "articles")
-	private Set<Section> sections;
+	@JsonIgnore
+	private Set<Section> sections = new HashSet<Section>();
 
 	@ManyToOne
 	@JoinColumn(name = "level", nullable = true) // TODO 
@@ -126,6 +130,11 @@ public class Article {
 
 	public Date getUpdateAt() {
 		return updateAt;
+	}
+
+	public void addSection(Section section) {
+		this.sections.add(section);
+		
 	}
 
 }

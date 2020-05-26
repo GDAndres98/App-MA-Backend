@@ -1,7 +1,9 @@
 package app.ma.entities;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,7 +65,7 @@ public class User {
 	Set<ProblemContestUser> problemContestUser;
 	
 	@ManyToMany(mappedBy = "users")
-	private Set<Role> role;
+	private Set<Role> role = new HashSet<>();
 	
 	
 
@@ -78,7 +80,10 @@ public class User {
 
 	// -------------------------------------------------------------------------
 
-	public User() {
+	public User() {}
+	public User(String username) {
+		super();
+		this.username = username;
 	}
 
 	public Long getId() {
@@ -87,10 +92,6 @@ public class User {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public User(String username) {
-		this.username = username;
 	}
 
 	public String getUsername() {
@@ -190,8 +191,8 @@ public class User {
 		this.role = role;
 	}
 	
-	public void addRole(Role role) {
-		this.role.add(role);
+	public void addRole(Role rol) {
+		this.role.add(rol);
 	}
 
 }
