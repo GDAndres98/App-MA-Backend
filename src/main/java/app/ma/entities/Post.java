@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -42,10 +43,12 @@ public class Post {
 
 	@OneToOne // TODO One to one
 	@JoinColumn(name = "parent", nullable = true)
+	@JsonIgnore
 	private Post parent;
 	
 	@OneToOne // TODO One to one
 	@JoinColumn(name = "child", nullable = true)
+	@JsonIgnore
 	private Post child;
 
 	@CreationTimestamp

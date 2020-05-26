@@ -41,7 +41,7 @@ public class UserController {
 		return findAll;
 	}
 	
-	@RequestMapping(path="/getUserByID", method=RequestMethod.GET)
+	@RequestMapping(path="/getUserById", method=RequestMethod.GET)
 	public User getUserByID 
 	(
 			@RequestHeader Long id) {
