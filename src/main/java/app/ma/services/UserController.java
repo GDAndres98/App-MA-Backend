@@ -98,7 +98,7 @@ public class UserController {
 		newUser.setFirstName(firstName);
 		newUser.setLastName(lastName);
 		newUser.setUsername(username);
-		newUser.setRole(roleRepository.findByName("student"));
+		newUser.addRole(roleRepository.findByName("student"));
 		newUser.setEmail(email);
 		newUser.setPassword(password);
 		newUser.setProfilePicUrl(profilePic);
@@ -125,7 +125,7 @@ public class UserController {
 		newUser.setLastName(lastName);
 		newUser.setUsername(username);
 		newUser.setEmail(email);
-		newUser.setRole(roleRepository.findByName("professor"));
+		newUser.addRole(roleRepository.findByName("professor"));
 		newUser.setPassword(password);
 		newUser.setProfilePicUrl(profilePic);
 		userRepositoryDAO.save(newUser);
@@ -153,6 +153,7 @@ public class UserController {
 	private void createRoles() {
 		Role student = new Role();
 		student.setName("student");
+		student.setStudent(true);
 		
 		roleRepository.save(student);
 		

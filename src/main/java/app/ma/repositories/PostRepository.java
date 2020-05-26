@@ -11,10 +11,5 @@ import app.ma.entities.*;
 
 @Repository
 public interface PostRepository extends CrudRepository<Post, Long> {
-<<<<<<< HEAD
-	
-	public List<Post> findByUserCourse_Course_IdOrderByCreationDateAsc(Long id);
-=======
 	public List<Post> findByUserCourse_Course_IdAndParentIsNullOrderByCreationDateAsc(Long id);
->>>>>>> branch 'master' of https://github.com/GDAndres98/App-MA-Backend.git
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.ma.compositeKey.UserCourseKey;
 import app.ma.entities.Course;
+import app.ma.entities.Role;
 import app.ma.entities.User;
 import app.ma.entities.UserCourse;
 import app.ma.repositories.CourseRepository;
@@ -61,7 +62,11 @@ public class CourseController {
 		if(!opProfessor.isPresent())
 			return new ResponseEntity<>("Usuario no existe.", HttpStatus.BAD_REQUEST);
 		User professor = opProfessor.get();
-		if(!professor.getRole().isProfessor())
+		
+		boolean haveRole = false;
+		for(Role r: professor.getRole())
+			haveRole |= r.isProfessor();
+		if(!haveRole)
 			return new ResponseEntity<>("Usuario no es profesor.", HttpStatus.UNAUTHORIZED);
 		Course course = new Course();
 		course.setName(name);
@@ -86,7 +91,11 @@ public class CourseController {
 		Course course = opCourse.get();
 		User student  = opStudent.get();
 		
-		if(!student.getRole().getName().equals("student"))  
+		boolean haveRole = false;
+		for(Role r: student.getRole())
+			haveRole |= r.isStudent();
+		
+		if(!haveRole)  
 			return new ResponseEntity<>("Usuario no es un estudiante.", HttpStatus.UNAUTHORIZED);
 		
 		UserCourseKey key = new UserCourseKey(course.getId(), student.getId());

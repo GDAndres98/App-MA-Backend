@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -60,10 +61,13 @@ public class User {
 
 	@OneToMany(mappedBy = "user")
 	Set<ProblemContestUser> problemContestUser;
+	
+	@ManyToMany(mappedBy = "users")
+	private Set<Role> role;
+	
+	
 
-	@ManyToOne
-	@JoinColumn(name = "role_id", nullable = true) // TODO
-	private Role role;
+
 
 	@CreationTimestamp
 	private Date createAt;
@@ -169,13 +173,6 @@ public class User {
 		this.problemContestUser = problemContestUser;
 	}
 
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
 
 	public Date getCreateAt() {
 		return createAt;
@@ -183,6 +180,18 @@ public class User {
 
 	public Date getUpdateAt() {
 		return updateAt;
+	}
+	
+	public Set<Role> getRole() {
+		return role;
+	}
+
+	public void setRole(Set<Role> role) {
+		this.role = role;
+	}
+	
+	public void addRole(Role role) {
+		this.role.add(role);
 	}
 
 }
