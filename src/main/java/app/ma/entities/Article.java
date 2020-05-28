@@ -37,7 +37,7 @@ public class Article {
 	private Date dateWritten;
 
 	@ManyToMany(mappedBy = "articles")
-	private Set<Tag> tags;
+	private Set<Tag> tags = new HashSet<Tag>();
 
 	@ManyToMany(mappedBy = "articles")
 	@JsonIgnore
@@ -135,6 +135,15 @@ public class Article {
 	public void addSection(Section section) {
 		this.sections.add(section);
 		
+	}
+	
+	public void addTag(Tag tag) {
+		this.tags.add(tag);
+		
+	}
+
+	public void removeTag(Tag tag) {
+		this.tags.remove(tag);
 	}
 
 }

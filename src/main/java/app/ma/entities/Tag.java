@@ -1,6 +1,7 @@
 package app.ma.entities;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -15,6 +16,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tag")
@@ -31,11 +34,12 @@ public class Tag {
 
 	@ManyToMany
 	@JoinTable(name = "tag_problem", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "problem_id"))
-	private Set<Problem> problems;
+	private Set<Problem> problems = new HashSet<Problem>();
 
 	@ManyToMany
 	@JoinTable(name = "tag_article", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "article_id"))
-	private Set<Article> articles;
+	@JsonIgnore
+	private Set<Article> articles = new HashSet<Article>();
 
 	@CreationTimestamp
 	private Date createAt;
@@ -56,6 +60,22 @@ public class Tag {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Long getLevel() {
+		return level;
+	}
+
+	public void setLevel(Long level) {
+		this.level = level;
 	}
 
 	public Date getCreateAt() {
@@ -80,6 +100,15 @@ public class Tag {
 
 	public void setArticles(Set<Article> articles) {
 		this.articles = articles;
+	}
+
+	public void addArticle(Article article) {
+		this.articles.add(article);
+	}
+
+	public void removeArticle(Article article) {
+		this.articles.remove(article);
+		
 	}
 
 }

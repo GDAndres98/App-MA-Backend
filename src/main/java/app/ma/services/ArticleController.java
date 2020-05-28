@@ -14,18 +14,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.ma.entities.Article;
+import app.ma.entities.Tag;
 import app.ma.entities.User;
 import app.ma.repositories.ArticleRepository;
+import app.ma.repositories.TagRepository;
 
 @RestController
 public class ArticleController {
-	@Autowired
-	private ArticleRepository articleRepostory;
+	@Autowired	private ArticleRepository articleRepository;
+	@Autowired	private TagRepository tagRepository;
 	
 	@RequestMapping("/getAllArticles")
 	public Iterable<Article> getAllArticles () {
 		
-		Iterable<Article> findAll = articleRepostory.findAll();
+		Iterable<Article> findAll = articleRepository.findAll();
 		return findAll;
 	}
 	
@@ -34,7 +36,7 @@ public class ArticleController {
 	(
 			@RequestHeader Long id) {
 		
-		Optional<Article> article = articleRepostory.findById(id);
+		Optional<Article> article = articleRepository.findById(id);
 		if(!article.isPresent())
 			return null;
 		return article.get();
@@ -55,8 +57,11 @@ public class ArticleController {
 		article.setMarkdownURL(markdownURL);
 		article.setDateWritten(dateWritten);
 		
-		articleRepostory.save(article);
+		articleRepository.save(article);
 		
 		return new ResponseEntity<>("Articulo creado correctamente.", HttpStatus.CREATED);
 	}
+	
+	
+	
 }
