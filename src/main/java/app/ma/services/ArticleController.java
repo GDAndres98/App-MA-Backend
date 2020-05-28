@@ -22,7 +22,6 @@ import app.ma.repositories.TagRepository;
 @RestController
 public class ArticleController {
 	@Autowired	private ArticleRepository articleRepository;
-	@Autowired	private TagRepository tagRepository;
 	
 	@RequestMapping("/getAllArticles")
 	public Iterable<Article> getAllArticles () {

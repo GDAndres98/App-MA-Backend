@@ -34,6 +34,7 @@ public class Tag {
 
 	@ManyToMany
 	@JoinTable(name = "tag_problem", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "problem_id"))
+	@JsonIgnore
 	private Set<Problem> problems = new HashSet<Problem>();
 
 	@ManyToMany
@@ -108,6 +109,15 @@ public class Tag {
 
 	public void removeArticle(Article article) {
 		this.articles.remove(article);
+		
+	}
+	
+	public void addProblem(Problem problem) {
+		this.problems.add(problem);
+	}
+
+	public void removeProblem(Problem problem) {
+		this.problems.remove(problem);
 		
 	}
 

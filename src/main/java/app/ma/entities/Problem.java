@@ -1,6 +1,7 @@
 package app.ma.entities;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -35,13 +36,11 @@ public class Problem {
 	private Long memoryLimit;
 
 	// TODO Problem-Contest
-    @OneToMany(mappedBy = "problem")
-    Set<ProblemContest> problemContest;
+	@OneToMany(mappedBy = "problem")
+	Set<ProblemContest> problemContest;
 
-    
-    
 	@ManyToMany(mappedBy = "problems")
-	private Set<Tag> tags;
+	private Set<Tag> tags = new HashSet<Tag>();
 
 	@CreationTimestamp
 	private Date createAt;
@@ -112,7 +111,7 @@ public class Problem {
 	public void setTags(Set<Tag> tags) {
 		this.tags = tags;
 	}
-	
+
 	public Date getCreateAt() {
 		return createAt;
 	}
@@ -121,4 +120,12 @@ public class Problem {
 		return updateAt;
 	}
 
+	public void addTag(Tag tag) {
+		this.tags.add(tag);
+
+	}
+
+	public void removeTag(Tag tag) {
+		this.tags.remove(tag);
+	}
 }

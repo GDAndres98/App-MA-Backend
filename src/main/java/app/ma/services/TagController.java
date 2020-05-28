@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.ma.entities.Article;
+import app.ma.entities.Problem;
 import app.ma.entities.Tag;
 import app.ma.repositories.ArticleRepository;
-import app.ma.repositories.CourseRepository;
-import app.ma.repositories.SectionRepository;
+import app.ma.repositories.ProblemRepository;
 import app.ma.repositories.TagRepository;
 
 @RestController
@@ -25,8 +25,7 @@ public class TagController {
 	
 	@Autowired private TagRepository tagRepository;
 	@Autowired private ArticleRepository articleRepository;
-	@Autowired private SectionRepository sectionRepository;
-	@Autowired private CourseRepository  courseRepository;
+	@Autowired private ProblemRepository problemRepository;
 
 	
 	@RequestMapping("/getAllTags")
@@ -102,15 +101,17 @@ public class TagController {
 			@RequestParam Long 		tagId,  
 			@RequestParam Long 		articleId) {
 		Optional<Tag> opTag = tagRepository.findById(tagId);
-		if(!opTag.isPresent()) return new ResponseEntity<>("Tag no existe.", HttpStatus.BAD_REQUEST);
+		if (!opTag.isPresent())
+			return new ResponseEntity<>("Tag no existe.", HttpStatus.BAD_REQUEST);
 		Optional<Article> opArticle = articleRepository.findById(articleId);
-		if(!opArticle.isPresent()) return new ResponseEntity<>("Artículo no existe.", HttpStatus.BAD_REQUEST);
+		if (!opArticle.isPresent())
+			return new ResponseEntity<>("Artículo no existe.", HttpStatus.BAD_REQUEST);
 		Article article = opArticle.get();
 		Tag tag = opTag.get();
-		
+
 		tag.addArticle(article);
 		article.addTag(tag);
-		
+
 		tagRepository.save(tag);
 
 		return new ResponseEntity<>("Tag Agregado correctamente.", HttpStatus.ACCEPTED);
@@ -122,15 +123,74 @@ public class TagController {
 			@RequestParam Long 		tagId,  
 			@RequestParam Long 		articleId) {
 		Optional<Tag> opTag = tagRepository.findById(tagId);
-		if(!opTag.isPresent()) return new ResponseEntity<>("Tag no existe.", HttpStatus.BAD_REQUEST);
+		if (!opTag.isPresent())
+			return new ResponseEntity<>("Tag no existe.", HttpStatus.BAD_REQUEST);
 		Optional<Article> opArticle = articleRepository.findById(articleId);
-		if(!opArticle.isPresent()) return new ResponseEntity<>("Artículo no existe.", HttpStatus.BAD_REQUEST);
+		if (!opArticle.isPresent())
+			return new ResponseEntity<>("Artículo no existe.", HttpStatus.BAD_REQUEST);
 		Article article = opArticle.get();
 		Tag tag = opTag.get();
-		
+
 		tag.removeArticle(article);
 		article.removeTag(tag);
+
+		tagRepository.save(tag);
+
+		return new ResponseEntity<>("Tag Desasociado correctamente.", HttpStatus.ACCEPTED);
+	}
+	
+	
+	@RequestMapping(path="/getProblemsByTagId", method=RequestMethod.GET)
+	public Iterable<Problem> getProblemsByTagId 
+	(
+			@RequestHeader Long id) {
+
+		Optional<Tag> opTag = tagRepository.findById(id);
+		if(!opTag.isPresent()) return null;
 		
+		return opTag.get().getProblems();
+		
+	}
+	
+	@RequestMapping(path="/addTagtoProblem", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> addTagtoProblem
+	(
+			@RequestParam Long 		tagId,  
+			@RequestParam Long 		problemId) {
+		Optional<Tag> opTag = tagRepository.findById(tagId);
+		if (!opTag.isPresent())
+			return new ResponseEntity<>("Tag no existe.", HttpStatus.BAD_REQUEST);
+		Optional<Problem> opProblem = problemRepository.findById(problemId);
+		if (!opProblem.isPresent())
+			return new ResponseEntity<>("Problema no existe.", HttpStatus.BAD_REQUEST);
+		Problem problem = opProblem.get();
+		Tag tag = opTag.get();
+
+		tag.addProblem(problem);
+		problem.addTag(tag);
+
+		tagRepository.save(tag);
+
+		return new ResponseEntity<>("Tag Agregado correctamente.", HttpStatus.ACCEPTED);
+	}
+	
+	@RequestMapping(path="/removeTagofProblem", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> removeTagofProblem
+	(
+			@RequestParam Long 		tagId,  
+			@RequestParam Long 		problemId) {
+		Optional<Tag> opTag = tagRepository.findById(tagId);
+		if (!opTag.isPresent())
+			return new ResponseEntity<>("Tag no existe.", HttpStatus.BAD_REQUEST);
+		Optional<Problem> opProblem = problemRepository.findById(problemId);
+		if (!opProblem.isPresent())
+			return new ResponseEntity<>("Problema no existe.", HttpStatus.BAD_REQUEST);
+		Problem problem = opProblem.get();
+		Tag tag = opTag.get();
+
+		tag.removeProblem(problem);
+		problem.removeTag(tag);
+
 		tagRepository.save(tag);
 
 		return new ResponseEntity<>("Tag Desasociado correctamente.", HttpStatus.ACCEPTED);
