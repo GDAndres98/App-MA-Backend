@@ -1,19 +1,17 @@
 package app.ma.services;
 
 import java.util.List;
-import java.util.Observable;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.ma.compositeKey.UserCourseKey;
@@ -22,7 +20,6 @@ import app.ma.entities.Role;
 import app.ma.entities.User;
 import app.ma.entities.UserCourse;
 import app.ma.repositories.CourseRepository;
-import app.ma.repositories.RoleRepository;
 import app.ma.repositories.UserCourseRepository;
 import app.ma.repositories.UserRepository;
 
@@ -36,13 +33,14 @@ public class CourseController {
 	@Autowired
 	private UserCourseRepository userCourseRepository;
 	
-	
+	@CrossOrigin
 	@RequestMapping("/getAllCourses")
 	public Iterable<Course> getAllCourses() {
 		Iterable<Course> findAll = courseRepository.findAll();
 		return findAll;
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path = "/getCourseById", method = RequestMethod.GET)
 	public Course getCourseById(@RequestHeader Long id) {
 		Optional<Course> course = courseRepository.findById(id);
@@ -50,7 +48,7 @@ public class CourseController {
 		return course.get();
 	}
 	
-
+	@CrossOrigin
 	@RequestMapping(path="/createCourse", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> createCourse
 	(
@@ -77,6 +75,7 @@ public class CourseController {
 		return new ResponseEntity<>("Curso \""+ name + "\" creado satisfactoriamente.", HttpStatus.CREATED);
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/addStudentToCourse", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> addStudentToCourse
 	(
@@ -111,6 +110,7 @@ public class CourseController {
 		return new ResponseEntity<>("Estudiante añadido satisfactoriamente a la clase.", HttpStatus.CREATED);
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path = "/getCourseStudentsById", method = RequestMethod.GET)
 	public List<User> getAllCourseStudentsById(@RequestHeader Long id) {
 		return userRepository.findByCourses_Course_Id(id);

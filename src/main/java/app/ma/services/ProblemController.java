@@ -3,18 +3,27 @@ package app.ma.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.ma.entities.Problem;
+import app.ma.entities.TestCase;
 import app.ma.repositories.ProblemRepository;
+import app.ma.repositories.TestCaseRepository;
 
 @RestController
 public class ProblemController {
 	@Autowired	private ProblemRepository problemRepository;
+	@Autowired	private TestCaseRepository testCaseRepository;
 	
+	@CrossOrigin
 	@RequestMapping("/getAllProblems")
 	public Iterable<Problem> getAllProblems () {
 		
@@ -22,6 +31,14 @@ public class ProblemController {
 		return findAll;
 	}
 	
+	@RequestMapping("/getAllTC")
+	public Iterable<TestCase> getAllTC () {
+		
+		Iterable<TestCase> findAll = testCaseRepository.findAll();
+		return findAll;
+	}
+	
+	@CrossOrigin
 	@RequestMapping(path="/getProblemById", method=RequestMethod.GET)
 	public Problem getProblemByID 
 	(
@@ -33,5 +50,92 @@ public class ProblemController {
 		return problem.get();
 	}
 	
+	@CrossOrigin
+	@RequestMapping(path="/getAllTestCasesByProblemId", method=RequestMethod.GET)
+	public Iterable<TestCase> getAllTestCasesByProblemId
+	(
+			@RequestHeader Long problemId) {
+		Iterable<TestCase> findAll = testCaseRepository.findByProblem_Id(problemId);
+		return findAll;
+	}
 	
+	@CrossOrigin
+	@RequestMapping(path="/createProblem", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> createProblem 
+	(
+			@RequestParam String 	title		, 
+			@RequestParam String 	author		, 
+			@RequestParam String 	markdownURL	, 
+			@RequestParam Long 		timeLimit	, 
+			@RequestParam Long  	memoryLimit) {
+		
+		Problem problem = new Problem();
+		
+		problem.setTitle(title);
+		problem.setAuthor(author);
+		problem.setMarkdownURL(markdownURL);
+		problem.setTimeLimit(timeLimit);
+		problem.setMemoryLimit(memoryLimit);
+		
+		problemRepository.save(problem);
+		
+		return new ResponseEntity<>("Problema creado correctamente.", HttpStatus.CREATED);
+	}
+	
+	@CrossOrigin
+	@RequestMapping(path="/removeProblem", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> removeProblem 
+	(
+			@RequestParam Long 		problemId	) {
+
+		Optional<Problem> opProblem = problemRepository.findById(problemId);
+		if (!opProblem.isPresent())
+			return new ResponseEntity<>("Problema no valido.", HttpStatus.BAD_REQUEST);
+		Problem problem = opProblem.get();
+		
+		problemRepository.delete(problem);
+		return new ResponseEntity<>("Problema eliminado correctamente.", HttpStatus.CREATED);
+	}
+	
+	@CrossOrigin
+	@RequestMapping(path="/addTestCase", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> addTestCase 
+	(
+			@RequestParam Long 		problemId	, 
+			@RequestParam String 	tcInput		, 
+			@RequestParam String 	tcOutput	, 
+			@RequestParam Long  	tcDifficulty) {
+
+		Optional<Problem> opProblem = problemRepository.findById(problemId);
+		if (!opProblem.isPresent())
+			return new ResponseEntity<>("Problema no valido.", HttpStatus.BAD_REQUEST);
+		Problem problem = opProblem.get();
+
+		TestCase testCase = new TestCase();
+
+		testCase.setProblem(problem);
+		testCase.setTcInputURL(tcInput);
+		testCase.setTcOutputURL(tcOutput);
+		testCase.setTcDifficulty(tcDifficulty);
+
+		testCaseRepository.save(testCase);
+
+		return new ResponseEntity<>("Caso de Prueba añadido correctamente.", HttpStatus.CREATED);
+	}
+	
+	@CrossOrigin
+	@RequestMapping(path="/removeTestCase", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> removeTestCase 
+	(
+			@RequestParam Long 		testCaseId	) {
+
+		Optional<TestCase> opTestCase = testCaseRepository.findById(testCaseId);
+		if (!opTestCase.isPresent())
+			return new ResponseEntity<>("Caso de prueba no valido.", HttpStatus.BAD_REQUEST);
+
+		testCaseRepository.deleteById(testCaseId);
+		return new ResponseEntity<>("Caso de Prueba eliminado correctamente.", HttpStatus.CREATED);
+	}
+	
+
 }

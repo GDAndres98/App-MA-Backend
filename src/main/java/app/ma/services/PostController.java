@@ -1,12 +1,12 @@
 package app.ma.services;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,6 +36,7 @@ public class PostController {
 	@Autowired
 	private UserCourseRepository userCourseRepository;
 
+	@CrossOrigin
 	@RequestMapping(path = "/getPostsFromCourse", method = RequestMethod.GET)
 	public Iterable<Post> getPostsFromCourse(@RequestHeader Long id) {
 
@@ -44,6 +45,7 @@ public class PostController {
 		return posts;
 	}
 
+	@CrossOrigin
 	@RequestMapping(path = "/getSubPostFromPost", method = RequestMethod.GET)
 	public Iterable<Post> getSubPostFromPost(
 			@RequestHeader Long id) {
@@ -61,6 +63,7 @@ public class PostController {
 		return posts;
 	}
 
+	@CrossOrigin
 	@RequestMapping(path = "/createPost", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<String> addNewPost(
 			@RequestParam String title,
@@ -95,6 +98,7 @@ public class PostController {
 		return new ResponseEntity<>("Post añadido satisfactoriamente al foro", HttpStatus.CREATED);
 	}
 
+	@CrossOrigin
 	@RequestMapping(path = "/createSubPost", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<String> addNewSubPost(
 			@RequestParam String content, 

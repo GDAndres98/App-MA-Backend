@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,7 +28,7 @@ public class TagController {
 	@Autowired private ArticleRepository articleRepository;
 	@Autowired private ProblemRepository problemRepository;
 
-	
+	@CrossOrigin
 	@RequestMapping("/getAllTags")
 	public Iterable<Tag> getAllTags () {
 		
@@ -35,6 +36,7 @@ public class TagController {
 		return findAll;
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/getTagById", method=RequestMethod.GET)
 	public Tag getTagById 
 	(
@@ -46,6 +48,7 @@ public class TagController {
 		return tag.get();
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/getTagsByLevel", method=RequestMethod.GET)
 	public Iterable<Tag> getTagsByLevel 
 	(
@@ -54,6 +57,7 @@ public class TagController {
 		return findAll;
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/createTag", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> createTag
 	(
@@ -70,6 +74,7 @@ public class TagController {
 		return new ResponseEntity<>("Tag creado satisfactoriamente.", HttpStatus.CREATED);
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/deleteTagById", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> createTag
 	(
@@ -83,6 +88,7 @@ public class TagController {
 		return new ResponseEntity<>("Tag eliminado satisfactoriamente.", HttpStatus.CREATED);
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/getArticlesByTagId", method=RequestMethod.GET)
 	public Iterable<Article> getArticlesByTagId 
 	(
@@ -95,6 +101,7 @@ public class TagController {
 		
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/addTagtoArticle", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> addTagtoArticle
 	(
@@ -117,6 +124,7 @@ public class TagController {
 		return new ResponseEntity<>("Tag Agregado correctamente.", HttpStatus.ACCEPTED);
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/removeTagofArticle", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> removeTagofArticle
 	(
@@ -139,7 +147,7 @@ public class TagController {
 		return new ResponseEntity<>("Tag Desasociado correctamente.", HttpStatus.ACCEPTED);
 	}
 	
-	
+	@CrossOrigin
 	@RequestMapping(path="/getProblemsByTagId", method=RequestMethod.GET)
 	public Iterable<Problem> getProblemsByTagId 
 	(
@@ -152,6 +160,7 @@ public class TagController {
 		
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/addTagtoProblem", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> addTagtoProblem
 	(
@@ -174,6 +183,7 @@ public class TagController {
 		return new ResponseEntity<>("Tag Agregado correctamente.", HttpStatus.ACCEPTED);
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/removeTagofProblem", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> removeTagofProblem
 	(

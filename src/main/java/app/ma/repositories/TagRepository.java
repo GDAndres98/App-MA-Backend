@@ -3,7 +3,6 @@ package app.ma.repositories;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import app.ma.entities.Section;
 import app.ma.entities.Tag;
 
 @Repository

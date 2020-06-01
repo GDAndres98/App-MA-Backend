@@ -3,9 +3,8 @@ package app.ma.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import app.ma.entities.*;
+import app.ma.entities.Section;
 
 @Repository
 public interface SectionRepository extends CrudRepository<Section, Long> {

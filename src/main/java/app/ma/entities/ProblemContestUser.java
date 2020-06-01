@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 
-import app.ma.compositeKey.ProblemContestKey;
 import app.ma.compositeKey.ProblemContestUserKey;
 
 @Entity

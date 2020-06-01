@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,15 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.ma.entities.Article;
-import app.ma.entities.Tag;
-import app.ma.entities.User;
 import app.ma.repositories.ArticleRepository;
-import app.ma.repositories.TagRepository;
 
 @RestController
 public class ArticleController {
 	@Autowired	private ArticleRepository articleRepository;
 	
+	@CrossOrigin
 	@RequestMapping("/getAllArticles")
 	public Iterable<Article> getAllArticles () {
 		
@@ -30,6 +29,7 @@ public class ArticleController {
 		return findAll;
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/getArticleById", method=RequestMethod.GET)
 	public Article getArticleByID 
 	(
@@ -41,6 +41,7 @@ public class ArticleController {
 		return article.get();
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/createArticle", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> createArticle 
 	(

@@ -1,13 +1,11 @@
 package app.ma.repositories;
 
 import java.util.List;
-import java.util.Set;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import app.ma.entities.*;
+import app.ma.entities.Post;
 
 @Repository
 public interface PostRepository extends CrudRepository<Post, Long> {

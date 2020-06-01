@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "problem")
@@ -42,6 +45,10 @@ public class Problem {
 	@ManyToMany(mappedBy = "problems")
 	private Set<Tag> tags = new HashSet<Tag>();
 
+	@JsonIgnore
+    @OneToMany(mappedBy="problem", cascade = CascadeType.REMOVE)
+    private Set<TestCase> testCases;
+	
 	@CreationTimestamp
 	private Date createAt;
 
@@ -110,6 +117,14 @@ public class Problem {
 
 	public void setTags(Set<Tag> tags) {
 		this.tags = tags;
+	}
+	
+	public Set<TestCase> getTestCases() {
+		return testCases;
+	}
+
+	public void setTestCases(Set<TestCase> testCases) {
+		this.testCases = testCases;
 	}
 
 	public Date getCreateAt() {

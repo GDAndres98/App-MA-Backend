@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import app.ma.entities.Article;
 import app.ma.entities.Course;
 import app.ma.entities.Section;
-import app.ma.entities.User;
 import app.ma.repositories.ArticleRepository;
 import app.ma.repositories.CourseRepository;
 import app.ma.repositories.SectionRepository;
@@ -27,7 +27,7 @@ public class SectionController {
 	@Autowired private CourseRepository  courseRepository;
 	@Autowired private ArticleRepository articleRepository;
 
-	
+	@CrossOrigin
 	@RequestMapping("/getAllSections")
 	public Iterable<Section> getAllSections () {
 		
@@ -35,7 +35,7 @@ public class SectionController {
 		return findAll;
 	}
 	
-	
+	@CrossOrigin
 	@RequestMapping(path="/getSectionById", method=RequestMethod.GET)
 	public Section getSectionById 
 	(
@@ -47,6 +47,7 @@ public class SectionController {
 		return section.get();
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/getSectionsByCourseId", method=RequestMethod.GET)
 	public Iterable<Section> getSectionsByCourseId 
 	(
@@ -55,6 +56,7 @@ public class SectionController {
 		return sections;
 	}
 	
+	@CrossOrigin
 	@RequestMapping(path="/createSection", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> createSection 
 	(
@@ -76,7 +78,7 @@ public class SectionController {
 		return new ResponseEntity<>("Seccion creada satisfactoriamente.", HttpStatus.CREATED);
 	}
 	
-	
+	@CrossOrigin
 	@RequestMapping(path="/addArticleToSection", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> addArticleToSection
 	(

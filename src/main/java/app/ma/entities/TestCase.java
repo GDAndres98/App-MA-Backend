@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "test_case")
@@ -32,6 +32,7 @@ public class TestCase {
 	private Long tcDifficulty;
 
 	@ManyToOne
+	@JsonIgnoreProperties({ "testCases" })
 	@JoinColumn(name = "problem", nullable = false)
 	private Problem problem;
 
