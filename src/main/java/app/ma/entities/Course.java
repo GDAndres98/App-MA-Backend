@@ -1,8 +1,10 @@
 package app.ma.entities;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,6 +41,10 @@ public class Course {
 	@JsonIgnore
 	Set<UserCourse> students;
 
+    @OneToMany(mappedBy="postedAt", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private Set<Section> sections = new HashSet<>();
+	
 	@CreationTimestamp
 	private Date createAt;
 	@UpdateTimestamp
@@ -100,4 +106,8 @@ public class Course {
 		return updateAt;
 	}
 
+	public void addSection(Section section) {
+		sections.add(section);
+	}
+	
 }
