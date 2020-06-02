@@ -102,9 +102,9 @@ public class UserController {
 			@RequestParam String 	email		,
 			@RequestParam String 	password	,
 			@RequestParam String 	profilePic	) {
-		
+
 		if(emailIsUsed(email)) return new ResponseEntity<>("Email en uso.", HttpStatus.BAD_REQUEST);
-		if(usernameIsUsed(username)) return new ResponseEntity<>("Username en uso", HttpStatus.BAD_REQUEST);
+		if(usernameIsUsed(username)) return new ResponseEntity<>("Nombre de usuario en uso.", HttpStatus.BAD_REQUEST);
 		User newUser = new User(username);
 		newUser.setFirstName(firstName);
 		newUser.setLastName(lastName);
@@ -121,6 +121,8 @@ public class UserController {
 		return new ResponseEntity<>("Usuario creado correctamente.", HttpStatus.CREATED);
 	}
 	
+	
+
 	@CrossOrigin
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(path="/createProfessor", method=RequestMethod.POST) 
@@ -134,7 +136,7 @@ public class UserController {
 			@RequestParam String 	profilePic	) {
 		
 		if(emailIsUsed(email)) return new ResponseEntity<>("Email en uso.", HttpStatus.BAD_REQUEST);
-		if(usernameIsUsed(username)) return new ResponseEntity<>("Username en uso", HttpStatus.BAD_REQUEST);
+		if(usernameIsUsed(username)) return new ResponseEntity<>("Nombre de usuario en uso.", HttpStatus.BAD_REQUEST);
 
 		User newUser = new User(username);
 		newUser.setFirstName(firstName);
@@ -185,8 +187,8 @@ public class UserController {
 	public boolean emailIsUsed(String email) {
 		return userRepository.countByEmail(email) != 0;
 	}
-	public boolean usernameIsUsed(String username) {
+	
+	private boolean usernameIsUsed(String username) {
 		return userRepository.countByUsername(username) != 0;
 	}
-	
 }

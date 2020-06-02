@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import app.ma.compositeKey.UserCourseKey;
 import app.ma.entities.Course;
 import app.ma.entities.Role;
+import app.ma.entities.Section;
 import app.ma.entities.User;
 import app.ma.entities.UserCourse;
 import app.ma.repositories.CourseRepository;
+import app.ma.repositories.SectionRepository;
 import app.ma.repositories.UserCourseRepository;
 import app.ma.repositories.UserRepository;
 
@@ -32,6 +34,8 @@ public class CourseController {
 	private UserRepository userRepository;
 	@Autowired
 	private UserCourseRepository userCourseRepository;
+	@Autowired
+	private SectionRepository sectionRepository;
 	
 	@CrossOrigin
 	@RequestMapping("/getAllCourses")
@@ -116,6 +120,26 @@ public class CourseController {
 		return userRepository.findByCourses_Course_Id(id);
 	}
 	
+	@CrossOrigin
+	@RequestMapping(path="/addSectionToCourse", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> addSectionToCourse
+	(
+			@RequestParam Long 		sectionId,  
+			@RequestParam Long 		courseId) {
+		Optional<Section> opSection = sectionRepository.findById(sectionId);
+		if(!opSection.isPresent()) return new ResponseEntity<>("Sección no existe.", HttpStatus.BAD_REQUEST);
+		Optional<Course> opCourse = courseRepository.findById(courseId);
+		if(!opCourse.isPresent()) return new ResponseEntity<>("Curso no existe.", HttpStatus.BAD_REQUEST);
+		Course course = opCourse.get();
+		Section section = opSection.get();
+		
+		course.addSection(section);
+		section.setPostedAt(course);
+		
+		courseRepository.save(course);
+
+		return new ResponseEntity<>("Sección Agregada correctamente.", HttpStatus.ACCEPTED);
+	}
 	
 	
 	
