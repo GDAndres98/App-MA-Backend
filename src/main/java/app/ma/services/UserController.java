@@ -165,9 +165,6 @@ public class UserController {
 		return user;
 	}
 	
-	@CrossOrigin
-	@RequestMapping(path="/createRoles", method=RequestMethod.POST)
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	private void createRoles() {
 		Role student = new Role();
 		student.setName("student");
