@@ -1,12 +1,20 @@
 package app.ma.services;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,6 +48,26 @@ public class ArticleController {
 			return null;
 		return article.get();
 	}
+	
+	@CrossOrigin
+	@RequestMapping(path="/getAllArticlesPagination", method=RequestMethod.GET)
+    public ResponseEntity<Page<Article>> getAllArticlesPagination(
+                        @RequestParam(defaultValue = "0") Integer pageNo, 
+                        @RequestParam(defaultValue = "10") Integer pageSize,
+                        @RequestParam(defaultValue = "id") String sortBy) 
+    {
+		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+		 
+        Page<Article> pagedResult = articleRepository.findAll(paging);
+         
+//        if(pagedResult.hasContent()) {
+//            return new ResponseEntity<List<Article>>(pagedResult.getContent(), new HttpHeaders(), HttpStatus.OK); 
+//        } else {
+//            return new ResponseEntity<List<Article>>(new ArrayList<Article>(), new HttpHeaders(), HttpStatus.OK); 
+//        }
+        return new ResponseEntity<Page<Article>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
+ 
+    }
 	
 	@CrossOrigin
 	@RequestMapping(path="/createArticle", method=RequestMethod.POST) 

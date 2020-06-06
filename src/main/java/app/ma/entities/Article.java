@@ -57,7 +57,13 @@ public class Article {
 	// -------------------------------------------------------------------
 
 	public Article() {
-
+	}
+	
+	public Article(String title, String author, String markdownURL, Date dateWritten) {
+		setTitle(title);
+		setAuthor(author);
+		setMarkdownURL(markdownURL);
+		setDateWritten(dateWritten);
 	}
 
 	public Long getId() {

@@ -64,8 +64,6 @@ public class User {
 	@ManyToMany(mappedBy = "users")
 	private Set<Role> role = new HashSet<>();
 	
-	
-
 
 
 	@CreationTimestamp
