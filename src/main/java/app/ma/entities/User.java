@@ -60,11 +60,9 @@ public class User {
 
 	@OneToMany(mappedBy = "user")
 	Set<ProblemContestUser> problemContestUser;
-	
+
 	@ManyToMany(mappedBy = "users")
 	private Set<Role> role = new HashSet<>();
-	
-
 
 	@CreationTimestamp
 	private Date createAt;
@@ -75,9 +73,20 @@ public class User {
 
 	// -------------------------------------------------------------------------
 
-	public User() {}
+	public User() {
+	}
+
+	public User(String username, String firstName, String lastName, String profilePicUrl, String email,
+			String password) {
+		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.profilePicUrl = profilePicUrl;
+		this.email = email;
+		this.password = password;
+	}
+
 	public User(String username) {
-		super();
 		this.username = username;
 	}
 
@@ -169,7 +178,6 @@ public class User {
 		this.problemContestUser = problemContestUser;
 	}
 
-
 	public Date getCreateAt() {
 		return createAt;
 	}
@@ -177,7 +185,7 @@ public class User {
 	public Date getUpdateAt() {
 		return updateAt;
 	}
-	
+
 	public Set<Role> getRole() {
 		return role;
 	}
@@ -185,7 +193,7 @@ public class User {
 	public void setRole(Set<Role> role) {
 		this.role = role;
 	}
-	
+
 	public void addRole(Role rol) {
 		this.role.add(rol);
 	}

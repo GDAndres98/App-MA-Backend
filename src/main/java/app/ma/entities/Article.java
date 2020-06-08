@@ -31,8 +31,8 @@ public class Article {
 	private String title;
 	@Column(nullable = false)
 	private String author;
-	@Column(nullable = false)
-	private String markdownURL;
+	@Column(nullable = false, length = 4000)
+	private String markdown;
 	@Column(nullable = false)
 	private Date dateWritten;
 
@@ -62,7 +62,7 @@ public class Article {
 	public Article(String title, String author, String markdownURL, Date dateWritten) {
 		setTitle(title);
 		setAuthor(author);
-		setMarkdownURL(markdownURL);
+		setMarkdown(markdownURL);
 		setDateWritten(dateWritten);
 	}
 
@@ -90,12 +90,12 @@ public class Article {
 		this.author = author;
 	}
 
-	public String getMarkdownURL() {
-		return markdownURL;
+	public String getMarkdown() {
+		return markdown;
 	}
 
-	public void setMarkdownURL(String markdownURL) {
-		this.markdownURL = markdownURL;
+	public void setMarkdown(String markdown) {
+		this.markdown = markdown;
 	}
 
 	public Date getDateWritten() {

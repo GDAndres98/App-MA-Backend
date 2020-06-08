@@ -57,6 +57,13 @@ public class Course {
 	public Course() {
 
 	}
+	
+	public Course(String name, String logoUrl, User professor) {
+		this.name = name;
+		this.logoUrl = logoUrl;
+		this.professor = professor;
+	}
+
 
 	public Long getId() {
 		return id;
