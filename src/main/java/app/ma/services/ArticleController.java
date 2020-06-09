@@ -39,7 +39,6 @@ public class ArticleController {
 	public Article getArticleByID 
 	(
 			@RequestHeader Long id) {
-		System.out.println(id);
 		Optional<Article> article = articleRepository.findById(id);
 		if(!article.isPresent())
 			return null;
