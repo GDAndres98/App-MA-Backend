@@ -39,7 +39,7 @@ public class ArticleController {
 	public Article getArticleByID 
 	(
 			@RequestHeader Long id) {
-		
+		System.out.println(id);
 		Optional<Article> article = articleRepository.findById(id);
 		if(!article.isPresent())
 			return null;
@@ -49,9 +49,9 @@ public class ArticleController {
 	@CrossOrigin
 	@RequestMapping(path="/getAllArticlesPagination", method=RequestMethod.GET)
     public ResponseEntity<Page<Article>> getAllArticlesPagination(
-                        @RequestParam(defaultValue = "0") Integer pageNo, 
-                        @RequestParam(defaultValue = "10") Integer pageSize,
-                        @RequestParam(defaultValue = "id") String sortBy) 
+                       @RequestHeader(defaultValue = "0") Integer pageNo, 
+                       @RequestHeader(defaultValue = "10") Integer pageSize,
+                       @RequestHeader(defaultValue = "id") String sortBy) 
     {
 		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 		 
