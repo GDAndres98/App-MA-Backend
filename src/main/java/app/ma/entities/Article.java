@@ -3,6 +3,7 @@ package app.ma.entities;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,7 +39,7 @@ public class Article {
 	private Date dateWritten;
 
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "articles")
-	private Set<Tag> tags = new HashSet<Tag>();
+	private Set<Tag> tags = new TreeSet<Tag>();
 
 	@ManyToMany(mappedBy = "articles")
 	@JsonIgnore

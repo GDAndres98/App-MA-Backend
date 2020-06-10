@@ -3,6 +3,7 @@ package app.ma.entities;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -44,7 +45,7 @@ public class Problem {
 	Set<ProblemContest> problemContest;
 
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "problems")
-	private Set<Tag> tags = new HashSet<Tag>();
+	private Set<Tag> tags = new TreeSet<Tag>();
 
 	@JsonIgnore
     @OneToMany(mappedBy="problem", cascade = CascadeType.REMOVE)

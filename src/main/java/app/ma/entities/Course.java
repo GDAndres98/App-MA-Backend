@@ -44,6 +44,7 @@ public class Course {
     @OneToMany(mappedBy="postedAt", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<Section> sections = new HashSet<>();
+    
 	
 	@CreationTimestamp
 	private Date createAt;

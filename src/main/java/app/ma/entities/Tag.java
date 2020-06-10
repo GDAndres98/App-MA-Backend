@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tag")
-public class Tag {
+public class Tag implements Comparable<Tag>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -124,6 +124,11 @@ public class Tag {
 	public void removeProblem(Problem problem) {
 		this.problems.remove(problem);
 		
+	}
+
+	@Override
+	public int compareTo(Tag o) {
+		return Long.compare(this.level, o.level);
 	}
 
 }
