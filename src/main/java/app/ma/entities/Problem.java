@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,7 +43,7 @@ public class Problem {
 	@OneToMany(mappedBy = "problem")
 	Set<ProblemContest> problemContest;
 
-	@ManyToMany(mappedBy = "problems")
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "problems")
 	private Set<Tag> tags = new HashSet<Tag>();
 
 	@JsonIgnore

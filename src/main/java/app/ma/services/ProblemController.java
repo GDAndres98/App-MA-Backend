@@ -3,6 +3,11 @@ package app.ma.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.ma.entities.Article;
 import app.ma.entities.Problem;
 import app.ma.entities.TestCase;
 import app.ma.repositories.ProblemRepository;
@@ -37,6 +43,30 @@ public class ProblemController {
 		Iterable<TestCase> findAll = testCaseRepository.findAll();
 		return findAll;
 	}
+	
+	
+	@CrossOrigin
+	@RequestMapping(path="/getAllProblemPagination", method=RequestMethod.GET)
+    public ResponseEntity<Page<Problem>> getAllProblemPagination(
+                       @RequestHeader(defaultValue = "0") Integer pageNo, 
+                       @RequestHeader(defaultValue = "10") Integer pageSize,
+                       @RequestHeader(defaultValue = "id") String sortBy) 
+    {
+		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+		 
+        Page<Problem> pagedResult = problemRepository.findAll(paging);
+         
+//        if(pagedResult.hasContent()) {
+//            return new ResponseEntity<List<Article>>(pagedResult.getContent(), new HttpHeaders(), HttpStatus.OK); 
+//        } else {
+//            return new ResponseEntity<List<Article>>(new ArrayList<Article>(), new HttpHeaders(), HttpStatus.OK); 
+//        }
+        return new ResponseEntity<Page<Problem>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
+ 
+    }
+	
+	
+	
 	
 	@CrossOrigin
 	@RequestMapping(path="/getProblemById", method=RequestMethod.GET)

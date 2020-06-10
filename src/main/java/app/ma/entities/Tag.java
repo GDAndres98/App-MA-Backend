@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,12 +33,12 @@ public class Tag {
 	@Column(nullable = false)
 	private Long level;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "tag_problem", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "problem_id"))
 	@JsonIgnore
 	private Set<Problem> problems = new HashSet<Problem>();
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "tag_article", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "article_id"))
 	@JsonIgnore
 	private Set<Article> articles = new HashSet<Article>();
@@ -52,7 +53,11 @@ public class Tag {
 	// -------------------------------------------------------------------
 
 	public Tag() {
-
+	}
+	
+	public Tag(String name, long level) {
+		setName(name);
+		setLevel(level);
 	}
 
 	public Long getId() {

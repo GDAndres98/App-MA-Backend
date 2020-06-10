@@ -62,13 +62,10 @@ public class TagController {
 	public @ResponseBody ResponseEntity<String> createTag
 	(
 			@RequestParam String 	name, 
-			@RequestParam Long 	level) {
+			@RequestParam Long 		level) {
 		if(name.trim().isEmpty()) return new ResponseEntity<>("Nombre en blanco.", HttpStatus.BAD_REQUEST);
 		
-		Tag tag = new Tag();
-		tag.setName(name);
-		tag.setLevel(level);
-		
+		Tag tag = new Tag(name, level);
 		tagRepository.save(tag);
 		
 		return new ResponseEntity<>("Tag creado satisfactoriamente.", HttpStatus.CREATED);

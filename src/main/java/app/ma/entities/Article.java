@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,7 +37,7 @@ public class Article {
 	@Column(nullable = false)
 	private Date dateWritten;
 
-	@ManyToMany(mappedBy = "articles")
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "articles")
 	private Set<Tag> tags = new HashSet<Tag>();
 
 	@ManyToMany(mappedBy = "articles")
