@@ -31,8 +31,8 @@ public class Problem {
 	private String title;
 	@Column(nullable = false)
 	private String author;
-	@Column(nullable = false)
-	private String markdownURL;
+	@Column(nullable = false, length = 4000)
+	private String markdown;
 	@Column(nullable = false)
 	private Long timeLimit;
 	@Column(nullable = false)
@@ -62,6 +62,14 @@ public class Problem {
 	public Problem() {
 
 	}
+	
+	public Problem(String title, String author, String markdown, Long timeLimit, Long memoryLimit) {
+		this.title = title;
+		this.author = author;
+		this.markdown = markdown;
+		this.timeLimit = timeLimit;
+		this.memoryLimit = memoryLimit;
+	}
 
 	public Long getId() {
 		return id;
@@ -87,12 +95,12 @@ public class Problem {
 		this.author = author;
 	}
 
-	public String getMarkdownURL() {
-		return markdownURL;
+	public String getMarkdown() {
+		return markdown;
 	}
 
-	public void setMarkdownURL(String markdownURL) {
-		this.markdownURL = markdownURL;
+	public void setMarkdown(String markdownl) {
+		this.markdown = markdownl;
 	}
 
 	public Long getTimeLimit() {

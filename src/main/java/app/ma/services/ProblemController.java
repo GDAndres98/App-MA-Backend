@@ -73,7 +73,7 @@ public class ProblemController {
 		
 		problem.setTitle(title);
 		problem.setAuthor(author);
-		problem.setMarkdownURL(markdownURL);
+		problem.setMarkdown(markdownURL);
 		problem.setTimeLimit(timeLimit);
 		problem.setMemoryLimit(memoryLimit);
 		

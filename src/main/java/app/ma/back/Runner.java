@@ -14,10 +14,12 @@ import org.springframework.stereotype.Component;
 
 import app.ma.entities.Article;
 import app.ma.entities.Course;
+import app.ma.entities.Problem;
 import app.ma.entities.Role;
 import app.ma.entities.User;
 import app.ma.repositories.ArticleRepository;
 import app.ma.repositories.CourseRepository;
+import app.ma.repositories.ProblemRepository;
 import app.ma.repositories.RoleRepository;
 import app.ma.repositories.UserRepository;
 
@@ -31,6 +33,8 @@ public class Runner implements CommandLineRunner {
 
 	@Autowired
 	private ArticleRepository articleRepository;
+	@Autowired
+	private ProblemRepository problemRepository;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -50,8 +54,6 @@ public class Runner implements CommandLineRunner {
 
 		
 		
-		
-		
 		// Artículos
 		ArrayList<Article> articulos = new ArrayList<Article>();
 		articulos.add(new Article("Servicios RESTful", "Interner Gomez", getMarkdown("articles/1.md"),
@@ -64,6 +66,7 @@ public class Runner implements CommandLineRunner {
 				"Este título es largo solo para ver cómo la pantalla al mostrarse pues... un titulo largo Este título es largo solo para ver cómo la pantalla al mostrarse pues... un titulo largo",
 				"Don Cormen", "latex.md", new Date("1998/03/12")));
 		createAllArticles(articulos);
+
 		
 		
 		// Estudiantes y Profesores
@@ -83,6 +86,15 @@ public class Runner implements CommandLineRunner {
 		cursos.add(new Course("Programación 2", "image1.png", profesores.get(1)));
 		createAllCourses(cursos);
 
+		
+		
+		// Problemas
+		ArrayList<Problem> problemas = new ArrayList<Problem>();
+		problemas.add(new Problem("New Year Transportation", "CodeForces", getMarkdown("problems/1.md"), 2000l, 256l));
+		problemas.add(new Problem("Dijkstra?", "CodeForces", getMarkdown("problems/2.md"), 1000l, 64l));
+		problemas.add(new Problem("Favorite Time", "UVa", getMarkdown("problems/3.md"), 1000l, 64l));
+		createAllProblems(problemas);
+
 	}
 
 	private String getMarkdown(String fileName) throws IOException {
@@ -93,6 +105,11 @@ public class Runner implements CommandLineRunner {
 	private void createAllArticles(ArrayList<Article> articles) {
 		for (Article e : articles)
 			articleRepository.save(e);
+	}
+
+	private void createAllProblems(ArrayList<Problem> problems) {
+		for (Problem e : problems)
+			problemRepository.save(e);
 	}
 
 	private void createAllUsers(ArrayList<User> users, Role x) {
@@ -107,6 +124,5 @@ public class Runner implements CommandLineRunner {
 		for (Course e : courses)
 			courseRepository.save(e);
 	}
-
 
 }
