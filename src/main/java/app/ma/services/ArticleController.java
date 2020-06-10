@@ -1,6 +1,7 @@
 package app.ma.services;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +85,20 @@ public class ArticleController {
 		articleRepository.save(article);
 		
 		return new ResponseEntity<>("Articulo creado correctamente.", HttpStatus.CREATED);
+	}
+	
+	
+	
+	@CrossOrigin
+	@RequestMapping(path="/getSearchArticle", method=RequestMethod.GET)
+	public ResponseEntity<List<Article>> getSearchArticle
+	(
+			@RequestHeader String prefix) {
+		List<Article> article = articleRepository.findFirst5ByTitleStartsWithIgnoreCaseOrderByTitleAsc(prefix);
+		System.out.println("HELP");
+		for(Article e: article)
+			System.out.println(e.getTitle());
+		 return new ResponseEntity<List<Article>>(article, new HttpHeaders(), HttpStatus.OK);
 	}
 	
 	
