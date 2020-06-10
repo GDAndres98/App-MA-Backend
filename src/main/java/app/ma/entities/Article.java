@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -39,7 +40,8 @@ public class Article {
 	private Date dateWritten;
 
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "articles")
-	private Set<Tag> tags = new TreeSet<Tag>();
+	@OrderBy(value = "level ASC")
+	private Set<Tag> tags = new HashSet<Tag>();
 
 	@ManyToMany(mappedBy = "articles")
 	@JsonIgnore

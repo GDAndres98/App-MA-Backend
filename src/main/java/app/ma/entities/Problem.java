@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -45,7 +46,8 @@ public class Problem {
 	Set<ProblemContest> problemContest;
 
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "problems")
-	private Set<Tag> tags = new TreeSet<Tag>();
+	@OrderBy(value = "level ASC")
+	private Set<Tag> tags = new HashSet<Tag>();
 
 	@JsonIgnore
     @OneToMany(mappedBy="problem", cascade = CascadeType.REMOVE)
