@@ -36,13 +36,13 @@ public class ArticleController {
 	
 	@CrossOrigin
 	@RequestMapping(path="/getArticleById", method=RequestMethod.GET)
-	public Article getArticleByID 
+	public ResponseEntity<Article> getArticleByID 
 	(
 			@RequestHeader Long id) {
 		Optional<Article> article = articleRepository.findById(id);
 		if(!article.isPresent())
-			return null;
-		return article.get();
+			return new ResponseEntity<Article>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);;
+		 return new ResponseEntity<Article>(article.get(), new HttpHeaders(), HttpStatus.OK);
 	}
 	
 	@CrossOrigin
