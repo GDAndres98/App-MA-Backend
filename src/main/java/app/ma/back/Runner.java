@@ -141,6 +141,8 @@ public class Runner implements CommandLineRunner {
 		addTagtoProblem(6l, 12l, 2l, 3l);
 		addTagtoProblem(7l, 13l, 7l, 12l);
 		addTagtoProblem(8l, 1l, 8l, 11l);
+		addTagtoProblem(9l, 2l, 3l, 4l);
+
 		
 	}
 	

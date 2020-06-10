@@ -1,5 +1,6 @@
 package app.ma.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,8 +63,17 @@ public class ProblemController {
 //            return new ResponseEntity<List<Article>>(new ArrayList<Article>(), new HttpHeaders(), HttpStatus.OK); 
 //        }
         return new ResponseEntity<Page<Problem>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
- 
+
     }
+	
+	@CrossOrigin
+	@RequestMapping(path="/getSearchProblem", method=RequestMethod.GET)
+	public ResponseEntity<List<Problem>> getSearchProblem
+	(
+			@RequestHeader String prefix) {
+		List<Problem> problem= problemRepository.findFirst5ByTitleStartsWithIgnoreCaseOrderByTitleAsc(prefix);
+		 return new ResponseEntity<List<Problem>>(problem, new HttpHeaders(), HttpStatus.OK);
+	}
 	
 	
 	

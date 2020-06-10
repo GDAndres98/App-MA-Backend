@@ -95,9 +95,6 @@ public class ArticleController {
 	(
 			@RequestHeader String prefix) {
 		List<Article> article = articleRepository.findFirst5ByTitleStartsWithIgnoreCaseOrderByTitleAsc(prefix);
-		System.out.println("HELP");
-		for(Article e: article)
-			System.out.println(e.getTitle());
 		 return new ResponseEntity<List<Article>>(article, new HttpHeaders(), HttpStatus.OK);
 	}
 	
