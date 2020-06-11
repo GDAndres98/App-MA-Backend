@@ -5,29 +5,39 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
+import app.ma.compositeKey.UserCourseKey;
 import app.ma.entities.Article;
 import app.ma.entities.Course;
 import app.ma.entities.Problem;
 import app.ma.entities.Role;
 import app.ma.entities.Tag;
 import app.ma.entities.User;
+import app.ma.entities.UserCourse;
 import app.ma.repositories.ArticleRepository;
 import app.ma.repositories.CourseRepository;
 import app.ma.repositories.ProblemRepository;
 import app.ma.repositories.RoleRepository;
 import app.ma.repositories.TagRepository;
+import app.ma.repositories.UserCourseRepository;
 import app.ma.repositories.UserRepository;
 
 @Component
@@ -40,7 +50,8 @@ public class Runner implements CommandLineRunner {
 	@Autowired private ProblemRepository problemRepository;
 	@Autowired private UserRepository userRepository;
 	@Autowired private CourseRepository courseRepository;
-	@Autowired private TagRepository tagRepository;
+	@Autowired private TagRepository tagRepository;	
+	@Autowired private UserCourseRepository userCourseRepository;
 
 
 	@Override
@@ -69,10 +80,19 @@ public class Runner implements CommandLineRunner {
 		createAllUsers(profesores, professor);
 
 		ArrayList<Course> cursos = new ArrayList<Course>();
-		cursos.add(new Course("Programación 1", "image1.png", profesores.get(0)));
-		cursos.add(new Course("Programación 2", "image1.png", profesores.get(1)));
+		cursos.add(new Course("Programación 1", "code", profesores.get(0)));
+		cursos.add(new Course("Paradigmas de Programación", "boxes", profesores.get(1)));
+		cursos.add(new Course("Estructura de Datos", "dice-d20", profesores.get(1)));
 		createAllCourses(cursos);
-
+		
+		// Registro de estudiantes a clases
+		
+		addStudentToCourse(1l, 1l);
+		addStudentToCourse(1l, 2l);
+		addStudentToCourse(2l, 1l);
+		addStudentToCourse(2l, 2l);
+		addStudentToCourse(2l, 3l);
+		
 		
 		//Tags
 		
@@ -144,6 +164,23 @@ public class Runner implements CommandLineRunner {
 		addTagtoProblem(9l, 2l, 3l, 4l);
 
 		
+	}
+	
+
+	public void addStudentToCourse
+	(
+			Long 	studentId, 
+			Long 	courseId) {
+		
+		Course course = courseRepository.findById(courseId).get();
+		User student  = userRepository.findById(studentId).get();
+		
+		UserCourseKey key = new UserCourseKey(course.getId(), student.getId());
+		UserCourse userCourse = new UserCourse();
+		userCourse.setId(key);
+		userCourse.setCourse(course);
+		userCourse.setStudent(student);
+		userCourseRepository.save(userCourse);
 	}
 	
 	
