@@ -1,8 +1,10 @@
 package app.ma.services;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,11 +23,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.ma.entities.Article;
+import app.ma.entities.Tag;
 import app.ma.repositories.ArticleRepository;
+import app.ma.repositories.TagRepository;
 
 @RestController
 public class ArticleController {
 	@Autowired	private ArticleRepository articleRepository;
+	@Autowired	private TagRepository tagRepository;
 	
 	@CrossOrigin
 	@RequestMapping("/getAllArticles")
@@ -98,6 +103,27 @@ public class ArticleController {
 		 return new ResponseEntity<List<Article>>(article, new HttpHeaders(), HttpStatus.OK);
 	}
 	
-	
+	@CrossOrigin
+	@RequestMapping(path="/getArticlesWithTags", method=RequestMethod.GET)
+	public ResponseEntity<Iterable<Article>>  getArticlesWithTags
+	(
+			@RequestHeader List<Long> tagsIds,
+            @RequestHeader(defaultValue = "0") Integer pageNo, 
+            @RequestHeader(defaultValue = "10") Integer pageSize,
+            @RequestHeader(defaultValue = "id") String sortBy) {
+		
+		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+		 
+		
+		Set<Tag> tags= new HashSet<Tag>();
+		for(Long e: tagsIds) {
+			Optional<Tag> tag = tagRepository.findById(e);
+			tags.add(tag.get());
+		}
+		
+		Page<Article> pagedResult = articleRepository.findAllArticlesWithTags(tags, Long.valueOf(tags.size()), paging);
+		
+		 return new ResponseEntity<Iterable<Article>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
+	}
 	
 }

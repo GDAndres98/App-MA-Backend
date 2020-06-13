@@ -92,6 +92,8 @@ public class Runner implements CommandLineRunner {
 		tags.add(new Tag("Segment Tree", 2));				// ID: 12
 		tags.add(new Tag("Sumas de Minkowsky", 2));			// ID: 13
 		tags.add(new Tag("Redes y protocolos", 2));			// ID: 14
+		tags.add(new Tag("Fuerza Bruta", 2));				// ID: 15
+		tags.add(new Tag("TODOS", 3));						// ID: 16
 
 		createTags(tags);
 
@@ -101,22 +103,31 @@ public class Runner implements CommandLineRunner {
 		ArrayList<Article> articulos = new ArrayList<Article>();
 /*1*/	articulos.add(new Article("Servicios RESTful", "Interner Gomez", getMarkdown("articles/1.md"), new Date("2020/05/18")));
 /*2*/	articulos.add(new Article("Algoritmos Avaros", "Don Cormen", getMarkdown("articles/2.md"), new Date("1998/03/12")));
-/*3*/	articulos.add(new Article("Grafos para ruta mas corta", "Don Cormen", "latex.md", new Date("2009/12/31")));
-/*4*/	articulos.add(new Article("Grafos en General", "Don Cormen", "latex.md", new Date("2011/03/12")));
-/*5*/	articulos.add(new Article(
+/*3*/	articulos.add(new Article("Grafos para ruta mas corta", "Don Cormen", getMarkdown("articles/1.md"), new Date("2009/12/31")));
+/*4*/	articulos.add(new Article("Grafos en General", "Don Cormen", getMarkdown("articles/1.md"), new Date("2011/03/12")));
+/*5*/	articulos.add(new Article("Geometria", "Don Cormen", getMarkdown("articles/1.md"), new Date("2011/03/12")));
+/*6*/	articulos.add(new Article("Arbol de expansión minima", "Dimitrius Papadopoulos", getMarkdown("articles/1.md"), new Date("2011/03/12")));
+/*7*/	articulos.add(new Article("El famoso algoritmo de Dijkstra para buscar el camino de dos nodos de un grafo", "El Mr Dijkstra", getMarkdown("articles/1.md"), new Date("1960/03/12")));
+/*8*/	articulos.add(new Article("Algoritmos para contar números", "No tengo ni idea", getMarkdown("articles/1.md"), new Date("1001/03/12")));
+/*9*/	articulos.add(new Article("Counting Sort", "Dimitrius Papadopoulos", getMarkdown("articles/1.md"), new Date("1998/03/12")));
+/*10*/	articulos.add(new Article(
 				"Este título es largo solo para ver cómo la pantalla al mostrarse pues... un titulo largo Este título es largo solo para ver cómo la pantalla al mostrarse pues... un titulo largo",
-				"Don Cormen", "latex.md", new Date("1998/03/12")));
+				"Don Cormen", getMarkdown("articles/1.md"), new Date("1998/03/12")));
 		
 		createAllArticles(articulos);
 
 		
 		// Artículos-Tags
-		addTagtoArticle(1l, 14l);
-		addTagtoArticle(2l, 6l, 1l);
-		addTagtoArticle(3l, 1l, 2l, 6l);
-		addTagtoArticle(4l, 1l, 6l);
-		addTagtoArticle(5l, 10l, 11l);
-		
+		addTagtoArticle(1l, 16l, 14l);
+		addTagtoArticle(2l, 16l, 6l, 1l);
+		addTagtoArticle(3l, 16l, 1l, 2l, 6l);
+		addTagtoArticle(4l, 16l, 1l, 6l);
+		addTagtoArticle(5l, 16l, 10l, 11l, 7l);
+		addTagtoArticle(6l, 16l, 10l, 11l, 7l, 13l);
+		addTagtoArticle(7l, 16l, 1l, 2l, 2l, 1l);
+		addTagtoArticle(8l, 16l, 10l, 11l);
+		addTagtoArticle(9l, 16l, 15l, 3l, 4l);
+		addTagtoArticle(10l, 16l, 15l, 1l, 2l, 3l, 4l, 5l, 6l);
 		
 		// Problemas
 		ArrayList<Problem> problemas = new ArrayList<Problem>();

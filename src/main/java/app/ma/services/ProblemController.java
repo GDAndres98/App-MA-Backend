@@ -1,7 +1,9 @@
 package app.ma.services;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,14 +21,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.ma.entities.Article;
 import app.ma.entities.Problem;
+import app.ma.entities.Tag;
 import app.ma.entities.TestCase;
 import app.ma.repositories.ProblemRepository;
+import app.ma.repositories.TagRepository;
 import app.ma.repositories.TestCaseRepository;
 
 @RestController
 public class ProblemController {
+	@Autowired	private TagRepository tagRepository;
 	@Autowired	private ProblemRepository problemRepository;
 	@Autowired	private TestCaseRepository testCaseRepository;
 	
@@ -177,5 +181,28 @@ public class ProblemController {
 		return new ResponseEntity<>("Caso de Prueba eliminado correctamente.", HttpStatus.CREATED);
 	}
 	
+	
+	@CrossOrigin
+	@RequestMapping(path="/getProblemsWithTags", method=RequestMethod.GET)
+	public ResponseEntity<Iterable<Problem>>  getArticlesWithTags
+	(
+			@RequestHeader List<Long> tagsId,
+            @RequestHeader(defaultValue = "0") Integer pageNo, 
+            @RequestHeader(defaultValue = "10") Integer pageSize,
+            @RequestHeader(defaultValue = "id") String sortBy) {
+		
+		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+		 
+		
+		Set<Tag> tags= new HashSet<Tag>();
+		for(Long e: tagsId) {
+			Optional<Tag> tag = tagRepository.findById(e);
+			tags.add(tag.get());
+		}
+		
+		Page<Problem> pagedResult = problemRepository.findAllProblemsWithTags(tags, Long.valueOf(tags.size()), paging);
+		
+		 return new ResponseEntity<Iterable<Problem>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
+	}
 
 }
