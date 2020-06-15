@@ -83,6 +83,7 @@ public class Runner implements CommandLineRunner {
 		cursos.add(new Course("Programación 1", "code", profesores.get(0)));
 		cursos.add(new Course("Paradigmas de Programación", "boxes", profesores.get(1)));
 		cursos.add(new Course("Estructura de Datos", "dice-d20", profesores.get(1)));
+		cursos.add(new Course("Automatas y algoritmos para la vida eterna por la gloria del imperio galactico ameno dorime", "empire", profesores.get(0)));
 		createAllCourses(cursos);
 		
 		// Registro de estudiantes a clases
@@ -92,6 +93,8 @@ public class Runner implements CommandLineRunner {
 		addStudentToCourse(2l, 1l);
 		addStudentToCourse(2l, 2l);
 		addStudentToCourse(2l, 3l);
+		addStudentToCourse(2l, 4l);
+
 		
 		
 		//Tags
