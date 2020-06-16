@@ -107,7 +107,7 @@ public class ArticleController {
 	@RequestMapping(path="/getArticlesWithTags", method=RequestMethod.GET)
 	public ResponseEntity<Iterable<Article>>  getArticlesWithTags
 	(
-			@RequestHeader List<Long> tagsIds,
+			@RequestHeader List<Long> tagsId,
             @RequestHeader(defaultValue = "0") Integer pageNo, 
             @RequestHeader(defaultValue = "10") Integer pageSize,
             @RequestHeader(defaultValue = "id") String sortBy) {
@@ -116,7 +116,7 @@ public class ArticleController {
 		 
 		
 		Set<Tag> tags= new HashSet<Tag>();
-		for(Long e: tagsIds) {
+		for(Long e: tagsId) {
 			Optional<Tag> tag = tagRepository.findById(e);
 			tags.add(tag.get());
 		}
