@@ -41,6 +41,8 @@ public class CourseController {
 	@RequestMapping("/getAllCourses")
 	public Iterable<Course> getAllCourses() {
 		Iterable<Course> findAll = courseRepository.findAll();
+		for(Course e: findAll)
+			System.out.println(e.getProfessor().getFirstName());
 		return findAll;
 	}
 	
