@@ -29,6 +29,7 @@ import app.ma.entities.Article;
 import app.ma.entities.Course;
 import app.ma.entities.Problem;
 import app.ma.entities.Role;
+import app.ma.entities.Section;
 import app.ma.entities.Tag;
 import app.ma.entities.User;
 import app.ma.entities.UserCourse;
@@ -36,6 +37,7 @@ import app.ma.repositories.ArticleRepository;
 import app.ma.repositories.CourseRepository;
 import app.ma.repositories.ProblemRepository;
 import app.ma.repositories.RoleRepository;
+import app.ma.repositories.SectionRepository;
 import app.ma.repositories.TagRepository;
 import app.ma.repositories.UserCourseRepository;
 import app.ma.repositories.UserRepository;
@@ -50,6 +52,7 @@ public class Runner implements CommandLineRunner {
 	@Autowired private ProblemRepository problemRepository;
 	@Autowired private UserRepository userRepository;
 	@Autowired private CourseRepository courseRepository;
+	@Autowired private SectionRepository sectionRepository;
 	@Autowired private TagRepository tagRepository;	
 	@Autowired private UserCourseRepository userCourseRepository;
 
@@ -178,6 +181,73 @@ public class Runner implements CommandLineRunner {
 		addTagtoProblem(9l, 2l, 3l, 4l);
 
 		
+		
+		
+		//Section
+		// id = 1
+		createSection("For loops", "En esta sección se va a enterder el concepto de 'for loop' ademas de sus posibles aplicaciones", 1l);
+		createSection("Funciones Recursivas", "En esta sección se va enseñar el uso de las funciones recursivas como sus posibles implementaciones.", 1l);
+		createSection("Programación dinamica", "En esta sección se va a dar un pequeño vistazo en el paradigma de la programación dinamica así como diferentes tipos de estas.", 1l);
+		createSection("Distancia minima en grafos", "En esta sección se busca presentar el problema de distancia minima en grafos mostrando todos los tipos y los algoritmos que los solucionan.", 1l);
+		
+		// id = 2
+		createSection("Programación dinamica", "En esta sección se va a dar un pequeño vistazo en el paradigma de la programación dinamica así como diferentes tipos de estas.", 2l);
+		createSection("Distancia minima en grafos", "En esta sección se busca presentar el problema de distancia minima en grafos mostrando todos los tipos y los algoritmos que los solucionan.", 2l);
+		
+		// id = 3
+		createSection("Funciones Recursivas", "En esta sección se va enseñar el uso de las funciones recursivas como sus posibles implementaciones.", 3l);
+		createSection("Programación dinamica", "En esta sección se va a dar un pequeño vistazo en el paradigma de la programación dinamica así como diferentes tipos de estas.", 3l);
+		createSection("Distancia minima en grafos", "En esta sección se busca presentar el problema de distancia minima en grafos mostrando todos los tipos y los algoritmos que los solucionan.", 3l);
+		
+		//Section-Article
+		addArticleToSection(1l, 1l);
+		addArticleToSection(2l, 1l);
+		addArticleToSection(3l, 1l);
+		addArticleToSection(4l, 1l);
+		
+		addArticleToSection(1l, 2l);
+		addArticleToSection(4l, 2l);
+		addArticleToSection(5l, 2l);
+		addArticleToSection(6l, 2l);
+		
+		addArticleToSection(10l, 3l);
+		addArticleToSection(8l, 3l);
+		addArticleToSection(9l, 3l);
+		addArticleToSection(7l, 3l);
+		addArticleToSection(2l, 3l);
+		
+	}
+	
+	
+	public void createSection 
+	(
+			String 	title	, 
+			String 	description, 
+			Long 	courseId) {
+		Optional<Course> opCourse = courseRepository.findById(courseId);
+		Course course = opCourse.get();
+		
+		Section section = new Section();
+		section.setTitle(title);
+		section.setDescription(description);
+		section.setPostedAt(course);
+		
+		sectionRepository.save(section);
+	}
+	
+	public void addArticleToSection
+	(
+			Long 		articleId,  
+			Long 		sectionId) {
+		Optional<Article> opArticle = articleRepository.findById(articleId);
+		Optional<Section> opSection = sectionRepository.findById(sectionId);
+		Section section = opSection.get();
+		Article article = opArticle.get();
+
+		section.addArticle(article);
+		article.addSection(section);
+		
+		sectionRepository.save(section);
 	}
 	
 

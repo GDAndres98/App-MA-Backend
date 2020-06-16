@@ -42,7 +42,7 @@ public class Article {
 	@OrderBy(value = "level ASC")
 	private Set<Tag> tags = new HashSet<Tag>();
 
-	@ManyToMany(mappedBy = "articles")
+	@ManyToMany(mappedBy = "articles", fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<Section> sections = new HashSet<Section>();
 

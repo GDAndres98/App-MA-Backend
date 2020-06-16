@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +19,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @Table(name = "section")
@@ -32,8 +36,9 @@ public class Section {
 	@Column(nullable = false)
 	private String description;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "section_article", joinColumns = @JoinColumn(name = "section_id"), inverseJoinColumns = @JoinColumn(name = "article_id"))
+	@JsonIgnoreProperties({"markdown", "tags"})
 	private Set<Article> articles = new HashSet<>();
 
 	@ManyToOne
