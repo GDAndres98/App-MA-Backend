@@ -27,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import app.ma.compositeKey.UserCourseKey;
 import app.ma.entities.Article;
 import app.ma.entities.Course;
+import app.ma.entities.Post;
 import app.ma.entities.Problem;
 import app.ma.entities.Role;
 import app.ma.entities.Section;
@@ -35,6 +36,7 @@ import app.ma.entities.User;
 import app.ma.entities.UserCourse;
 import app.ma.repositories.ArticleRepository;
 import app.ma.repositories.CourseRepository;
+import app.ma.repositories.PostRepository;
 import app.ma.repositories.ProblemRepository;
 import app.ma.repositories.RoleRepository;
 import app.ma.repositories.SectionRepository;
@@ -53,6 +55,7 @@ public class Runner implements CommandLineRunner {
 	@Autowired private UserRepository userRepository;
 	@Autowired private CourseRepository courseRepository;
 	@Autowired private SectionRepository sectionRepository;
+	@Autowired private PostRepository postRepository;
 	@Autowired private TagRepository tagRepository;	
 	@Autowired private UserCourseRepository userCourseRepository;
 
@@ -81,7 +84,8 @@ public class Runner implements CommandLineRunner {
 		profesores.add(new User("profesor1", "Anakin", "Skywalker", "img.png", "skyani@hotmail.com", "12345"));
 		profesores.add(new User("profesor2", "Kakashi", "Hatake", "imgcfff.png", "narutolore@hotmail.com", "123123"));
 		createAllUsers(profesores, professor);
-
+		
+		// Cursos
 		ArrayList<Course> cursos = new ArrayList<Course>();
 		cursos.add(new Course("Programación 1", "code", profesores.get(0)));
 		cursos.add(new Course("Paradigmas de Programación", "boxes", profesores.get(1)));
@@ -97,10 +101,19 @@ public class Runner implements CommandLineRunner {
 		addStudentToCourse(2l, 2l);
 		addStudentToCourse(2l, 3l);
 		addStudentToCourse(2l, 4l);
+		
+		// Post
+		addPostToCourse(1l, 1l, "Complejidad en arboles de busqueda", "Entiendo que la búsqueda en estos arboles es de O(log n) "
+				+ "pero no tengo claro la complejidad al eliminar o modificar. help.");
+		
+		addPostToCourse(2l, 1l, "Complejidad en arboles de busqueda", "Entiendo que la búsqueda en estos arboles es de O(log n) "
+				+ "pero no tengo claro la complejidad al eliminar o modificar. help.");
+		
+		addPostToCourse(1l, 1l, "Este no trae na", "Este no trae na");
 
 		
 		
-		//Tags
+		// Tags
 		
 		ArrayList<Tag> tags = new ArrayList<>();
 		
@@ -216,6 +229,9 @@ public class Runner implements CommandLineRunner {
 		addArticleToSection(7l, 3l);
 		addArticleToSection(2l, 3l);
 		
+		
+		
+		
 	}
 	
 	
@@ -267,7 +283,23 @@ public class Runner implements CommandLineRunner {
 		userCourseRepository.save(userCourse);
 	}
 	
-	
+	public void addPostToCourse
+	(
+			Long 	studentId, 
+			Long 	courseId,
+			String title,
+			String content) {
+		
+		UserCourseKey key = new UserCourseKey(courseId,studentId);
+
+		Optional<UserCourse> opCourseStudent = userCourseRepository.findById(key);
+		Post post = new Post();
+		post.setTitle(title);
+		post.setContent(content);
+		post.setUserCourse(opCourseStudent.get());
+
+		postRepository.save(post);
+	}
 	
 	
 	private void createTags(ArrayList<Tag> tags) {

@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +18,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "post")
@@ -37,7 +39,8 @@ public class Post {
 	@JoinColumns({
         @JoinColumn(name = "student_id", referencedColumnName = "student_id"),
         @JoinColumn(name = "course_id", referencedColumnName = "course_id"),
-        })	
+        })
+	@JsonIgnoreProperties({"id", "course", "student.id"})
 	private UserCourse userCourse;
 
 	@OneToOne // TODO One to one
