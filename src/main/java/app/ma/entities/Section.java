@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -38,7 +39,8 @@ public class Section {
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "section_article", joinColumns = @JoinColumn(name = "section_id"), inverseJoinColumns = @JoinColumn(name = "article_id"))
-	@JsonIgnoreProperties({"markdown", "tags"})
+	@JsonIgnoreProperties({"tags"})
+	@OrderBy("title")
 	private Set<Article> articles = new HashSet<>();
 
 	@ManyToOne
