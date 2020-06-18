@@ -4,6 +4,11 @@ import java.util.LinkedList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.ma.compositeKey.UserCourseKey;
+import app.ma.entities.Article;
 import app.ma.entities.Course;
 import app.ma.entities.Post;
 import app.ma.entities.User;
@@ -36,31 +42,44 @@ public class PostController {
 	@Autowired
 	private UserCourseRepository userCourseRepository;
 
+	
+	@CrossOrigin
+	@RequestMapping(path="/getPostById", method=RequestMethod.GET)
+	public ResponseEntity<Post> getPostById 
+	(
+			@RequestHeader Long id) {
+		Optional<Post> post = postRepository.findById(id);
+		if(!post.isPresent())
+			return new ResponseEntity<Post>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);;
+		 return new ResponseEntity<Post>(post.get(), new HttpHeaders(), HttpStatus.OK);
+	}
+	
 	@CrossOrigin
 	@RequestMapping(path = "/getPostsFromCourse", method = RequestMethod.GET)
-	public Iterable<Post> getPostsFromCourse(@RequestHeader Long id) {
+	public ResponseEntity<Page<Post>> getPostsFromCourse(
+			@RequestHeader Long id,
+            @RequestHeader(defaultValue = "0") Integer pageNo, 
+            @RequestHeader(defaultValue = "10") Integer pageSize,
+            @RequestHeader(defaultValue = "id") String sortBy) {
 
-		Iterable<Post> posts = postRepository.findByUserCourse_Course_IdAndParentIsNullOrderByCreationDateAsc(id);
+		Pageable paging = PageRequest.of(pageNo, pageSize);
+        Page<Post> pagedResult = postRepository.findByUserCourse_Course_IdAndParentIsNullOrderByCreationDateDesc(id, paging);
 		
-		return posts;
+		return new ResponseEntity<Page<Post>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
 	}
 
 	@CrossOrigin
 	@RequestMapping(path = "/getSubPostFromPost", method = RequestMethod.GET)
-	public Iterable<Post> getSubPostFromPost(
-			@RequestHeader Long id) {
-		
-		LinkedList<Post> posts = new LinkedList<Post>();
-		
-		Optional<Post> opPost = postRepository.findById(id);
-		if (!opPost.isPresent())
-			return posts;
-		System.out.println();
-		Post child = opPost.get();
-		while((child = child.getChild()) != null)
-			posts.add(child);
+	public ResponseEntity<Page<Post>> getSubPostFromPost(
+			@RequestHeader Long id,
+            @RequestHeader(defaultValue = "0") Integer pageNo, 
+            @RequestHeader(defaultValue = "10") Integer pageSize,
+            @RequestHeader(defaultValue = "id") String sortBy) {
 
-		return posts;
+		Pageable paging = PageRequest.of(pageNo, pageSize);
+		Page<Post> pagedResult= postRepository.findByParent_IdOrderByCreationDateAsc(id, paging);
+
+		return new ResponseEntity<Page<Post>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
 	}
 
 	@CrossOrigin
@@ -129,7 +148,6 @@ public class PostController {
 		reply.setContent(content);
 		reply.setParent(post);
 		reply.setUserCourse(opCourseStudent.get());
-		post.setChild(reply);
 		postRepository.save(reply);
 		postRepository.save(post);
 

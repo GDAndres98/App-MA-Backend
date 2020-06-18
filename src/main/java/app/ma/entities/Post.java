@@ -1,6 +1,7 @@
 package app.ma.entities;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,9 +29,9 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 4000)
 	private String title;
-	@Column(nullable = false)
+	@Column(nullable = false, length = 4000)
 	private String content;
 	@Column(nullable = false)
 	private Date creationDate = new Date(System.currentTimeMillis());
@@ -40,7 +41,7 @@ public class Post {
         @JoinColumn(name = "student_id", referencedColumnName = "student_id"),
         @JoinColumn(name = "course_id", referencedColumnName = "course_id"),
         })
-	@JsonIgnoreProperties({"id", "course", "student.id"})
+	@JsonIgnoreProperties({"course"})
 	private UserCourse userCourse;
 
 	@OneToOne // TODO One to one
@@ -48,11 +49,6 @@ public class Post {
 	@JsonIgnore
 	private Post parent;
 	
-	@OneToOne // TODO One to one
-	@JoinColumn(name = "child", nullable = true)
-	@JsonIgnore
-	private Post child;
-
 	@CreationTimestamp
 	private Date createAt;
 	@UpdateTimestamp
@@ -112,14 +108,6 @@ public class Post {
 	
 	public void setParent(Post parent) {
 		this.parent = parent;
-	}
-
-	public Post getChild() {
-		return child;
-	}
-
-	public void setChild(Post child) {
-		this.child = child;
 	}
 
 	public Date getCreateAt() {

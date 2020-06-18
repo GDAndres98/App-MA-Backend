@@ -75,7 +75,7 @@ public class Runner implements CommandLineRunner {
 		
 		// Estudiantes y Profesores
 		ArrayList<User> estudiantes = new ArrayList<User>();
-		estudiantes.add(new User("GDAndres98", "Andrés", "Osorio", "img.png", "gd_andres98@hotmail.com", "12345"));
+		estudiantes.add(new User("GDAndres98", "Andrés Gustavo", "Osorio Jiménez", "img.png", "gd_andres98@hotmail.com", "12345"));
 		estudiantes
 				.add(new User("Alex_gal", "Marlon", "Estupiñán", "imgcfff.png", "maestupinan2@hotmail.com", "123123"));
 		estudiantes.add(new User("nomovie2", "Ashoka", "Tano", "imgcfff.png", "nomovie2@hotmail.com", "123456"));
@@ -103,14 +103,21 @@ public class Runner implements CommandLineRunner {
 		addStudentToCourse(2l, 4l);
 		
 		// Post
-		addPostToCourse(1l, 1l, "Complejidad en arboles de busqueda", "Entiendo que la búsqueda en estos arboles es de O(log n) "
-				+ "pero no tengo claro la complejidad al eliminar o modificar. help.");
 		
-		addPostToCourse(2l, 1l, "Complejidad en arboles de busqueda", "Entiendo que la búsqueda en estos arboles es de O(log n) "
-				+ "pero no tengo claro la complejidad al eliminar o modificar. help.");
+		ArrayList<Post> posts = new ArrayList<>();
 		
-		addPostToCourse(1l, 1l, "Este no trae na", "Este no trae na");
+		posts.add(addPostToCourse(1l, 1l, "Complejidad en arboles de busqueda", "Entiendo que la búsqueda en estos arboles es de O(log n) "
+				+ "pero no tengo claro la complejidad al eliminar o modificar. help."));
+		
+		posts.add(addPostToCourse(2l, 1l, "Dudas sobre grafos", "Me esta fallando el Dijkstra, sospecho que es por que tiene aristas negativas."));
+		addReplyToPost(posts.get(1), 2l, 1l, "Ayuda por favor.");
+		addReplyToPost(posts.get(1), 1l, 1l, "Efectivamente, el algoritmo de Dijkstra no es posible usarlo con aristas negativas ya que en algunos momentos, el algoritmo va a tratar de encontrar una mejor solución entrando a un ciclo de estas aristas. Para estos casos podría usar el algoritmo de Bellman-Fort.");
+		
+		posts.add(addPostToCourse(1l, 1l, "Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na", "Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae naEste no trae na"));
 
+		posts.add(addPostToCourse(2l, 1l, "Fecha 1", "fecha",  new Date("1998/03/12")));
+		posts.add(addPostToCourse(2l, 1l, "Fecha 2", "fecha",  new Date("2011/03/12")));
+		posts.add(addPostToCourse(2l, 1l, "Fecha 3", "fecha",  new Date("2002/03/12")));
 		
 		
 		// Tags
@@ -234,7 +241,9 @@ public class Runner implements CommandLineRunner {
 		
 	}
 	
-	
+
+
+
 	public void createSection 
 	(
 			String 	title	, 
@@ -283,7 +292,7 @@ public class Runner implements CommandLineRunner {
 		userCourseRepository.save(userCourse);
 	}
 	
-	public void addPostToCourse
+	public Post addPostToCourse
 	(
 			Long 	studentId, 
 			Long 	courseId,
@@ -298,6 +307,46 @@ public class Runner implements CommandLineRunner {
 		post.setContent(content);
 		post.setUserCourse(opCourseStudent.get());
 
+		postRepository.save(post);
+		return post;
+	}
+	
+	private Post addPostToCourse(Long studentId, Long courseId, String title, String content, Date date) {
+		UserCourseKey key = new UserCourseKey(courseId, studentId);
+
+		Optional<UserCourse> opCourseStudent = userCourseRepository.findById(key);
+		Post post = new Post();
+		post.setTitle(title);
+		post.setContent(content);
+		post.setCreationDate(date);
+		post.setUserCourse(opCourseStudent.get());
+		postRepository.save(post);
+		return post;
+	}
+	
+	public void addReplyToPost
+	(
+			Post 	post, 
+			Long 	studentId, 
+			Long 	courseId,
+			String content) {
+		
+		Optional<Course> opCourse = courseRepository.findById(courseId);
+		Optional<User> opStudent = userRepository.findById(studentId);
+
+		Course course = opCourse.get();
+		User student = opStudent.get();
+
+		UserCourseKey key = new UserCourseKey(course.getId(), student.getId());
+
+		Optional<UserCourse> opCourseStudent = userCourseRepository.findById(key);
+
+		Post reply = new Post();
+		reply.setTitle("Reply");
+		reply.setContent(content);
+		reply.setParent(post);
+		reply.setUserCourse(opCourseStudent.get());
+		postRepository.save(reply);
 		postRepository.save(post);
 	}
 	
