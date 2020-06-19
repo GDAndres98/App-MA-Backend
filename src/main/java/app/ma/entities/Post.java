@@ -1,11 +1,9 @@
 package app.ma.entities;
 
-
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -37,18 +36,20 @@ public class Post {
 	private Date creationDate = new Date(System.currentTimeMillis());
 
 	@ManyToOne
-	@JoinColumns({
-        @JoinColumn(name = "student_id", referencedColumnName = "student_id"),
-        @JoinColumn(name = "course_id", referencedColumnName = "course_id"),
-        })
-	@JsonIgnoreProperties({"course"})
+	@JoinColumns({ 
+		@JoinColumn(name = "student_id", referencedColumnName = "student_id"),
+		@JoinColumn(name = "course_id", referencedColumnName = "course_id"), })
+	@JsonIgnoreProperties({ "course" })
 	private UserCourse userCourse;
 
 	@OneToOne // TODO One to one
 	@JoinColumn(name = "parent", nullable = true)
 	@JsonIgnore
 	private Post parent;
-	
+
+	@Formula(" (select count(*) from post c where c.parent =id) ")
+	public long repliesCount;
+
 	@CreationTimestamp
 	private Date createAt;
 	@UpdateTimestamp
@@ -97,7 +98,7 @@ public class Post {
 	public Post getParent() {
 		return parent;
 	}
-	
+
 	public UserCourse getUserCourse() {
 		return userCourse;
 	}
@@ -105,9 +106,17 @@ public class Post {
 	public void setUserCourse(UserCourse userCourse) {
 		this.userCourse = userCourse;
 	}
-	
+
 	public void setParent(Post parent) {
 		this.parent = parent;
+	}
+
+	public long getRepliesCount() {
+		return repliesCount;
+	}
+
+	public void setRepliesCount(long repliesCount) {
+		this.repliesCount = repliesCount;
 	}
 
 	public Date getCreateAt() {
