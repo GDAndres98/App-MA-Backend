@@ -1,5 +1,7 @@
 package app.ma.services;
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -12,8 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,18 +26,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.ma.compositeKey.ProblemContestKey;
+import app.ma.entities.Contest;
 import app.ma.entities.Problem;
+import app.ma.entities.ProblemContest;
 import app.ma.entities.Tag;
 import app.ma.entities.TestCase;
+import app.ma.repositories.ContestRepository;
+import app.ma.repositories.ProblemContestRepository;
 import app.ma.repositories.ProblemRepository;
 import app.ma.repositories.TagRepository;
 import app.ma.repositories.TestCaseRepository;
+import reactor.core.publisher.Flux;
 
 @RestController
 public class ProblemController {
 	@Autowired	private TagRepository tagRepository;
 	@Autowired	private ProblemRepository problemRepository;
 	@Autowired	private TestCaseRepository testCaseRepository;
+	@Autowired 	private ContestRepository contestRepository;
+	@Autowired 	private ProblemContestRepository problemContestRepository;
+
 	
 	@CrossOrigin
 	@RequestMapping("/getAllProblems")
@@ -122,6 +136,20 @@ public class ProblemController {
 		problem.setMemoryLimit(memoryLimit);
 		
 		problemRepository.save(problem);
+		
+		Contest generalContest = contestRepository.findById(1l).get();	
+		
+		
+		ProblemContest problemContest = new ProblemContest();
+		problemContest.setProblem(problem);
+		problemContest.setContest(generalContest);
+		problemContest.setId(new ProblemContestKey(problem.getId(), generalContest.getId()));
+		
+		problem.addProblemContest(problemContest);
+		generalContest.addProblemContest(problemContest);
+		problemContestRepository.save(problemContest);
+		
+		
 		
 		return new ResponseEntity<>("Problema creado correctamente.", HttpStatus.CREATED);
 	}

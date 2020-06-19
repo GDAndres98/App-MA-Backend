@@ -42,7 +42,8 @@ public class Problem {
 
 	// TODO Problem-Contest
 	@OneToMany(mappedBy = "problem")
-	Set<ProblemContest> problemContest;
+	@JsonIgnore
+	Set<ProblemContest> problemContest = new HashSet<>();
 
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "problems")
 	@OrderBy(value = "level ASC")
@@ -153,5 +154,17 @@ public class Problem {
 
 	public void removeTag(Tag tag) {
 		this.tags.remove(tag);
+	}
+
+	public void addProblemContest(ProblemContest problemContest) {
+		this.problemContest.add(problemContest);
+	}
+
+	public Set<ProblemContest> getProblemContest() {
+		return problemContest;
+	}
+
+	public void setProblemContest(Set<ProblemContest> problemContest) {
+		this.problemContest = problemContest;
 	}
 }

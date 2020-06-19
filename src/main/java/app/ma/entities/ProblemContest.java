@@ -4,6 +4,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -17,12 +18,12 @@ public class ProblemContest {
 	@EmbeddedId
 	ProblemContestKey id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("problem_id")
     @JoinColumn(name = "problem_id")
     Problem problem;
  
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("contest_id")
     @JoinColumn(name = "contest_id")
     Contest contest;
@@ -32,10 +33,10 @@ public class ProblemContest {
     
    
 	@Column(nullable = false)
-	private Long problemTestCases;
+	private Long problemTestCases = 0l;
 	
 	@Column(nullable = false)
-	private Long problemDificulty;
+	private Long problemDificulty = 0l;
     
     
 	public Contest getContest() {

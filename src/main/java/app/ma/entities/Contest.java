@@ -1,10 +1,12 @@
 package app.ma.entities;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "contest")
@@ -24,7 +28,7 @@ public class Contest {
 
 	@Column(nullable = false)
 	private String name;
-	@Column(nullable = false)
+	@Column
 	private String password;
 	@Column(nullable = false)
 	private boolean isPrivate;
@@ -40,11 +44,9 @@ public class Contest {
 	// TODO Problem-Contest
 
     @OneToMany(mappedBy = "contest")
-    Set<ProblemContest> problemContest;
-	
-    
-	
-	
+    @JsonIgnore
+    Set<ProblemContest> problemContest = new HashSet<>();
+
 
 	@CreationTimestamp
 	private Date createAt;
@@ -129,5 +131,17 @@ public class Contest {
 
 	public Date getUpdateAt() {
 		return updateAt;
+	}
+
+	public void addProblemContest(ProblemContest problemContest2) {
+		this.problemContest.add(problemContest2);
+	}
+
+	public Set<ProblemContest> getProblemContest() {
+		return problemContest;
+	}
+
+	public void setProblemContest(Set<ProblemContest> problemContest) {
+		this.problemContest = problemContest;
 	}
 }

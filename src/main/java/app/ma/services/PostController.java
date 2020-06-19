@@ -113,6 +113,8 @@ public class PostController {
 		post.setUserCourse(opCourseStudent.get());
 
 		postRepository.save(post);
+		
+		System.out.println(post.getId());
 
 		return new ResponseEntity<>("Post añadido satisfactoriamente al foro", HttpStatus.CREATED);
 	}

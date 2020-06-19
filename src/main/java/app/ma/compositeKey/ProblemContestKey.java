@@ -20,7 +20,12 @@ public class ProblemContestKey implements Serializable{
 
 	// -------------------------------------------------------------------
 
+    public ProblemContestKey() {}
 
+    public ProblemContestKey(Long problemId, Long contestId) {
+    	setProblemId(problemId);
+    	setContestId(contestId);
+	}
 	
 	
     public Long getProblemId() {

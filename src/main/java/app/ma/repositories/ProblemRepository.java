@@ -19,8 +19,11 @@ public interface ProblemRepository extends PagingAndSortingRepository<Problem, L
 	public Problem findById(long id);
 
 	public List<Problem> findFirst5ByTitleStartsWithIgnoreCaseOrderByTitleAsc(String title);
-
+	
 	@Query("select i from Problem i join i.tags t where t in :tags group by i.id having count(i.id) = :tagCount")
 	public Page<Problem> findAllProblemsWithTags(@Param("tags") Set<Tag> tags, @Param("tagCount") Long numberOfTags,
 			Pageable paging);
+	
+	public List<Problem> findByProblemContest_Contest_Id(long id);
+	
 }

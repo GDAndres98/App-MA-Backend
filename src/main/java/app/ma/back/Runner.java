@@ -24,19 +24,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import app.ma.compositeKey.ProblemContestKey;
 import app.ma.compositeKey.UserCourseKey;
 import app.ma.entities.Article;
+import app.ma.entities.Contest;
 import app.ma.entities.Course;
 import app.ma.entities.Post;
 import app.ma.entities.Problem;
+import app.ma.entities.ProblemContest;
 import app.ma.entities.Role;
 import app.ma.entities.Section;
 import app.ma.entities.Tag;
 import app.ma.entities.User;
 import app.ma.entities.UserCourse;
 import app.ma.repositories.ArticleRepository;
+import app.ma.repositories.ContestRepository;
 import app.ma.repositories.CourseRepository;
 import app.ma.repositories.PostRepository;
+import app.ma.repositories.ProblemContestRepository;
 import app.ma.repositories.ProblemRepository;
 import app.ma.repositories.RoleRepository;
 import app.ma.repositories.SectionRepository;
@@ -58,10 +63,15 @@ public class Runner implements CommandLineRunner {
 	@Autowired private PostRepository postRepository;
 	@Autowired private TagRepository tagRepository;	
 	@Autowired private UserCourseRepository userCourseRepository;
+	@Autowired private ContestRepository contestRepository;
+	@Autowired private ProblemContestRepository problemContestRepository;
 
 
 	@Override
 	public void run(String... args) throws Exception {
+		
+		createGeneralContest();
+		
 		Role student = new Role();
 		student.setName("student");
 		student.setStudent(true);
@@ -244,6 +254,21 @@ public class Runner implements CommandLineRunner {
 
 
 
+	private void createGeneralContest() {
+		Contest generalContest = new Contest();
+		generalContest.setDurationTime(new Date(0));
+		generalContest.setName("GENERAL CONTEST");
+		generalContest.setPartialVerdict(false);
+		generalContest.setPrivate(false);
+		generalContest.setVisible(false);
+		generalContest.setStartTime(new Date(0));
+		
+		contestRepository.save(generalContest);
+	}
+
+
+
+
 	public void createSection 
 	(
 			String 	title	, 
@@ -401,8 +426,19 @@ public class Runner implements CommandLineRunner {
 	}
 
 	private void createAllProblems(ArrayList<Problem> problems) {
-		for (Problem e : problems)
-			problemRepository.save(e);
+		Contest generalContest = contestRepository.findById(1l).get();	
+		for (Problem e : problems) {
+			problemRepository.save(e);			
+			ProblemContest problemContest = new ProblemContest();
+			problemContest.setProblem(e);
+			problemContest.setContest(generalContest);
+			problemContest.setId(new ProblemContestKey(e.getId(), generalContest.getId()));
+//			e.addProblemContest(problemContest);
+//			generalContest.addProblemContest(problemContest);
+			problemContestRepository.save(problemContest);
+//			problemRepository.save(e);
+//			contestRepositorCy.save(generalContest);
+		}
 	}
 
 	private void createAllUsers(ArrayList<User> users, Role x) {

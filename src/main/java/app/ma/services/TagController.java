@@ -31,7 +31,6 @@ public class TagController {
 	@CrossOrigin
 	@RequestMapping("/getAllTags")
 	public Iterable<Tag> getAllTags () {
-		
 		Iterable<Tag> findAll = tagRepository.findAll();
 		return findAll;
 	}
