@@ -12,11 +12,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import app.ma.compositeKey.ProblemContestKey;
+import app.ma.compositeKey.ProblemContestUserKey;
 import app.ma.entities.Article;
 import app.ma.entities.Problem;
 import app.ma.entities.ProblemContest;
+import app.ma.entities.ProblemContestUser;
 import app.ma.entities.Tag;
 
 @Repository
-public interface ProblemContestRepository extends CrudRepository<ProblemContest, ProblemContestKey> {
+public interface ProblemContestUserRepository extends CrudRepository<ProblemContestUser, ProblemContestUserKey> {
 }

@@ -15,6 +15,11 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import app.ma.enums.Language;
+import app.ma.enums.Veredict;
+
 @Entity
 @Table(name = "submit")
 public class Submit {
@@ -23,19 +28,20 @@ public class Submit {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 4000)
+	@JsonIgnore
 	private String sourceCodeURL;
 	@Column(nullable = false)
-	private String Language;
+	private Language Language;
 	@Column(nullable = false)
-	private String Verdict;
-	@Column(nullable = false)
+	private Veredict Verdict;
+	@Column()
 	private Long TimeConsumed;
-	@Column(nullable = false)
+	@Column()
 	private Long MemoryConsumed;
 	@Column(nullable = false)
-	private Date submitDate;
-	@Column(nullable = false)
+	private Date submitDate = new Date(System.currentTimeMillis());
+	@Column()
 	private Long casePassed;
 
 	// TODO Prob-Cont-User Prob
@@ -47,7 +53,8 @@ public class Submit {
         @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
         @JoinColumn(name = "problem_id", referencedColumnName = "problem_id"),
         @JoinColumn(name = "contest_id", referencedColumnName = "contest_id"),
-        })	
+        })
+	@JsonIgnore
 	private ProblemContestUser problemContestUser;
 	
 	
@@ -82,19 +89,19 @@ public class Submit {
 		this.sourceCodeURL = sourceCodeURL;
 	}
 
-	public String getLanguage() {
+	public Language getLanguage() {
 		return Language;
 	}
 
-	public void setLanguage(String language) {
+	public void setLanguage(Language language) {
 		Language = language;
 	}
 
-	public String getVerdict() {
+	public Veredict getVerdict() {
 		return Verdict;
 	}
 
-	public void setVerdict(String verdict) {
+	public void setVerdict(Veredict verdict) {
 		Verdict = verdict;
 	}
 
@@ -136,5 +143,13 @@ public class Submit {
 
 	public Date getUpdateAt() {
 		return updateAt;
+	}
+
+	public ProblemContestUser getProblemContestUser() {
+		return problemContestUser;
+	}
+
+	public void setProblemContestUser(ProblemContestUser problemContestUser) {
+		this.problemContestUser = problemContestUser;
 	}
 }

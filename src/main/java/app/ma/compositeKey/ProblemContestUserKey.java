@@ -26,11 +26,12 @@ public class ProblemContestUserKey implements Serializable{
 
 	// -------------------------------------------------------------------
 
+	public ProblemContestUserKey() {}
 	
-	
-
-	
-
+	public ProblemContestUserKey(Long userId, Long contestId, Long problemId) {
+		this.userId = userId;
+		this.problemContest = new ProblemContestKey(problemId, contestId);
+	}
 
 	@Override
     public boolean equals(Object obj) {
