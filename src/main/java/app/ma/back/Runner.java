@@ -123,7 +123,6 @@ public class Runner implements CommandLineRunner {
 		addReplyToPost(posts.get(1), 2l, 1l, "Ayuda por favor.");
 		addReplyToPost(posts.get(1), 1l, 1l, "Efectivamente, el algoritmo de Dijkstra no es posible usarlo con aristas negativas ya que en algunos momentos, el algoritmo va a tratar de encontrar una mejor solución entrando a un ciclo de estas aristas. Para estos casos podría usar el algoritmo de Bellman-Fort.");
 		
-		posts.add(addPostToCourse(1l, 1l, "Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na", "Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae na Este no trae naEste no trae na"));
 
 		posts.add(addPostToCourse(2l, 1l, "Fecha 1", "fecha",  new Date("1998/03/12")));
 		posts.add(addPostToCourse(2l, 1l, "Fecha 2", "fecha",  new Date("2011/03/12")));
