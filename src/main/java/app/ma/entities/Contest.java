@@ -1,5 +1,6 @@
 package app.ma.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +18,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "contest")
@@ -47,6 +49,14 @@ public class Contest {
     @JsonIgnore
     Set<ProblemContest> problemContest = new HashSet<>();
 
+	@JsonIgnoreProperties(value = {"author", "markdown", "tags"})
+	public ArrayList<Problem> getProblem() {
+		ArrayList<Problem> problems = new ArrayList<Problem>();
+		for(ProblemContest e: problemContest)
+			problems.add(e.problem);
+		return problems;
+	}
+	
 
 	@CreationTimestamp
 	private Date createAt;

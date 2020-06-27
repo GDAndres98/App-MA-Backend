@@ -1,5 +1,6 @@
 package app.ma.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ public class SubmitController {
 			@RequestParam Language language) {
 		Optional<ProblemContestUser> pcuOptional = pcuRepository.findById(new ProblemContestUserKey(idUser, idContest, idProblem));
 		ProblemContestUser pcu;
+		System.out.println(language);
 		if(!pcuOptional.isPresent()) {
 			pcu = new ProblemContestUser(idUser, idContest, idProblem);
 			pcuRepository.save(pcu);
@@ -64,7 +66,7 @@ public class SubmitController {
 		Submit submit = new Submit();
 		submit.setLanguage(language);
 		submit.setSourceCodeURL(source);
-		submit.setVerdict(Veredict.In_Queue);
+		submit.setVeredict(Veredict.In_Queue);
 		submit.setProblemContestUser(pcu);
 		
 		submitRepository.save(submit);
@@ -78,10 +80,32 @@ public class SubmitController {
             @RequestHeader(defaultValue = "0") Integer pageNo, 
             @RequestHeader(defaultValue = "10") Integer pageSize,
             @RequestHeader(defaultValue = "submitDate") String sortBy,
+            @RequestHeader(defaultValue = "true") Boolean ascending,
             @RequestHeader Long userId) {
-		Pageable paging = PageRequest.of(pageNo,  pageSize, Sort.by(sortBy));
+		Sort sort = Sort.by(sortBy);
+		sort = ascending? sort.ascending(): sort.descending();
+		Pageable paging = PageRequest.of(pageNo,  pageSize, sort);
 		Page<Submit> pagedResult = submitRepository.findByProblemContestUser_User_Id(userId, paging);
         return new ResponseEntity<Page<Submit>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
 	}
+	
+	@RequestMapping("/getSourceCode")
+	public ResponseEntity<String> getSourceCode(@RequestHeader Long submitId) {
+		Optional<Submit> opSumit= submitRepository.findById(submitId);
+		if(!opSumit.isPresent()) return new ResponseEntity<String>("Submit no existe.", HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<String>(opSumit.get().getSourceCodeURL(), HttpStatus.OK);
+	}
+	
+	@RequestMapping("/getLastProblemAttempt")
+	public ResponseEntity<List<Submit>> getLastProblemAttempt(
+			@RequestHeader Long userId,
+			@RequestHeader(defaultValue = "1") Long contestId,
+			@RequestHeader Long problemId) {
+		List<Submit> submit= submitRepository.findFirst10ByProblemContestUser_User_IdAndProblemContestUser_ProblemContest_Contest_IdAndProblemContestUser_ProblemContest_Problem_IdOrderBySubmitDateDesc(userId, contestId, problemId);
+		if(submit == null) return new ResponseEntity<List<Submit>>(submit, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<List<Submit>>(submit, HttpStatus.OK);
+	}
+	
+	
 	
 }

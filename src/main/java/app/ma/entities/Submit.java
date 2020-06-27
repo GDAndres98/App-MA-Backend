@@ -1,6 +1,7 @@
 package app.ma.entities;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import app.ma.enums.Language;
 import app.ma.enums.Veredict;
@@ -32,9 +34,9 @@ public class Submit {
 	@JsonIgnore
 	private String sourceCodeURL;
 	@Column(nullable = false)
-	private Language Language;
+	private Language language;
 	@Column(nullable = false)
-	private Veredict Verdict;
+	private Veredict veredict;
 	@Column()
 	private Long TimeConsumed;
 	@Column()
@@ -43,11 +45,13 @@ public class Submit {
 	private Date submitDate = new Date(System.currentTimeMillis());
 	@Column()
 	private Long casePassed;
-
+	
 	// TODO Prob-Cont-User Prob
 	// TODO Prob-Cont-User Cont
 	// TODO Prob-Cont-User User
 	
+
+
 	@ManyToOne
 	@JoinColumns({
         @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
@@ -65,6 +69,12 @@ public class Submit {
 	@UpdateTimestamp
 	private Date updateAt;
 
+	@JsonIgnoreProperties(value = {"author", "markdown", "tags"})
+	public Problem getProblem() {
+		return this.problemContestUser.problemContest.problem;
+	}
+	
+	
 	// ****************************************************************
 
 	// -------------------------------------------------------------------
@@ -90,20 +100,23 @@ public class Submit {
 	}
 
 	public Language getLanguage() {
-		return Language;
+		return language;
 	}
 
 	public void setLanguage(Language language) {
-		Language = language;
+		this.language = language;
 	}
 
-	public Veredict getVerdict() {
-		return Verdict;
+
+	public Veredict getVeredict() {
+		return veredict;
 	}
 
-	public void setVerdict(Veredict verdict) {
-		Verdict = verdict;
+
+	public void setVeredict(Veredict veredict) {
+		this.veredict = veredict;
 	}
+
 
 	public Long getTimeConsumed() {
 		return TimeConsumed;
