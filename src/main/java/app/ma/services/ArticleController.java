@@ -99,7 +99,7 @@ public class ArticleController {
 	public ResponseEntity<List<Article>> getSearchArticle
 	(
 			@RequestHeader String prefix) {
-		List<Article> article = articleRepository.findFirst5ByTitleStartsWithIgnoreCaseOrderByTitleAsc(prefix);
+		List<Article> article = articleRepository.findFirst5ByTitleContainsIgnoreCaseOrderByTitleAsc(prefix);
 		 return new ResponseEntity<List<Article>>(article, new HttpHeaders(), HttpStatus.OK);
 	}
 	

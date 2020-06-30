@@ -2,8 +2,10 @@ package app.ma.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,10 +25,13 @@ import app.ma.compositeKey.ProblemContestKey;
 import app.ma.compositeKey.ProblemContestUserKey;
 import app.ma.entities.Article;
 import app.ma.entities.Course;
+import app.ma.entities.MyJob;
+import app.ma.entities.ProblemContest;
 import app.ma.entities.ProblemContestUser;
 import app.ma.entities.Submit;
 import app.ma.enums.Language;
 import app.ma.enums.Veredict;
+import app.ma.repositories.ProblemContestRepository;
 import app.ma.repositories.ProblemContestUserRepository;
 import app.ma.repositories.SubmitRepository;
 
@@ -36,6 +41,11 @@ public class SubmitController {
 	
 	@Autowired private SubmitRepository submitRepository;
 	@Autowired private ProblemContestUserRepository pcuRepository;
+	@Autowired private ProblemContestRepository pcRepository;
+
+    @Autowired
+    @Qualifier("singleThreaded")
+    private ExecutorService executorService;
 	
 	
 	@RequestMapping("/getAllSubmits")
@@ -57,11 +67,13 @@ public class SubmitController {
 		System.out.println(language);
 		if(!pcuOptional.isPresent()) {
 			pcu = new ProblemContestUser(idUser, idContest, idProblem);
+			ProblemContest pc = pcRepository.findById(new ProblemContestKey(idProblem, idContest)).get();
+			pcu.setProblemContest(pc);
 			pcuRepository.save(pcu);
 		}
-		else
-			pcu = pcuOptional.get();
-		
+		else {
+			pcu = pcuOptional.get();			
+		}
 		
 		Submit submit = new Submit();
 		submit.setLanguage(language);
@@ -71,6 +83,8 @@ public class SubmitController {
 		
 		submitRepository.save(submit);
 		
+		
+		executorService.execute(new MyJob(submit, this.submitRepository));
 		return new ResponseEntity<>("Envio creado correctamente.", HttpStatus.CREATED);
 	}
 	

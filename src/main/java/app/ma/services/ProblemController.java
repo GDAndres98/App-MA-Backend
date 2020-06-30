@@ -89,7 +89,7 @@ public class ProblemController {
 	public ResponseEntity<List<Problem>> getSearchProblem
 	(
 			@RequestHeader String prefix) {
-		List<Problem> problem= problemRepository.findFirst5ByTitleStartsWithIgnoreCaseOrderByTitleAsc(prefix);
+		List<Problem> problem= problemRepository.findFirst5ByTitleContainsIgnoreCaseOrderByTitleAsc(prefix);
 		 return new ResponseEntity<List<Problem>>(problem, new HttpHeaders(), HttpStatus.OK);
 	}
 	

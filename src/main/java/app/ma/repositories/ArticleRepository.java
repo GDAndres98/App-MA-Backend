@@ -18,7 +18,7 @@ public interface ArticleRepository extends PagingAndSortingRepository<Article, L
 
 	public Article findById(long id);
 
-	public List<Article> findFirst5ByTitleStartsWithIgnoreCaseOrderByTitleAsc(String title);
+	public List<Article> findFirst5ByTitleContainsIgnoreCaseOrderByTitleAsc(String title);
 
 	@Query("select i from Article i join i.tags t where t in :tags group by i.id having count(i.id) = :tagCount")
 	public Page<Article> findAllArticlesWithTags(@Param("tags") Set<Tag> tags, @Param("tagCount") Long numberOfTags,

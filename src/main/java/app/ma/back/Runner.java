@@ -8,10 +8,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -29,11 +31,13 @@ import app.ma.compositeKey.UserCourseKey;
 import app.ma.entities.Article;
 import app.ma.entities.Contest;
 import app.ma.entities.Course;
+import app.ma.entities.MyJob;
 import app.ma.entities.Post;
 import app.ma.entities.Problem;
 import app.ma.entities.ProblemContest;
 import app.ma.entities.Role;
 import app.ma.entities.Section;
+import app.ma.entities.Submit;
 import app.ma.entities.Tag;
 import app.ma.entities.User;
 import app.ma.entities.UserCourse;
@@ -45,6 +49,7 @@ import app.ma.repositories.ProblemContestRepository;
 import app.ma.repositories.ProblemRepository;
 import app.ma.repositories.RoleRepository;
 import app.ma.repositories.SectionRepository;
+import app.ma.repositories.SubmitRepository;
 import app.ma.repositories.TagRepository;
 import app.ma.repositories.UserCourseRepository;
 import app.ma.repositories.UserRepository;
@@ -65,10 +70,18 @@ public class Runner implements CommandLineRunner {
 	@Autowired private UserCourseRepository userCourseRepository;
 	@Autowired private ContestRepository contestRepository;
 	@Autowired private ProblemContestRepository problemContestRepository;
+	@Autowired private SubmitRepository submitRepository;
+
+	
+    @Autowired
+    @Qualifier("singleThreaded")
+    private ExecutorService executorService;
 
 
 	@Override
 	public void run(String... args) throws Exception {
+		
+		executorService.execute(new MyJob(new Submit(), submitRepository));
 		
 		createGeneralContest();
 		

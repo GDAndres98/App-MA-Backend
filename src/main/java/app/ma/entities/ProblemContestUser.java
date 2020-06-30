@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -49,6 +50,15 @@ public class ProblemContestUser {
 	public void setId(ProblemContestUserKey id) {
 		this.id = id;
 	}
+
+	public ProblemContest getProblemContest() {
+		return problemContest;
+	}
+
+	public void setProblemContest(ProblemContest problemContest) {
+		this.problemContest = problemContest;
+	}
+	
 
 
 }
