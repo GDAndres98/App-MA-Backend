@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -37,8 +38,10 @@ public class Contest {
 	@Column(nullable = false)
 	private boolean isVisible;
 	@Column(nullable = false)
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date startTime;
 	@Column(nullable = false)
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date endTime;
 	@Column(nullable = false)
 	private boolean isPartialVerdict;

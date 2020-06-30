@@ -33,6 +33,8 @@ public class ContestController {
 	(
 			@RequestHeader Long id) {
 		Optional<Contest> contest = contestRepository.findById(id);
+		System.out.println(contest.get().getStartTime());
+		System.out.println(contest.get().getEndTime());
 		if(!contest.isPresent())
 			return new ResponseEntity<Contest>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);
 		 return new ResponseEntity<Contest>(contest.get(), new HttpHeaders(), HttpStatus.OK);
