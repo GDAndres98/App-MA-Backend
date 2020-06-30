@@ -39,7 +39,7 @@ public class Contest {
 	@Column(nullable = false)
 	private Date startTime;
 	@Column(nullable = false)
-	private Date durationTime;
+	private Date endTime;
 	@Column(nullable = false)
 	private boolean isPartialVerdict;
 
@@ -119,12 +119,12 @@ public class Contest {
 		this.startTime = startTime;
 	}
 
-	public Date getDurationTime() {
-		return durationTime;
+	public Date getEndTime() {
+		return endTime;
 	}
 
-	public void setDurationTime(Date durationTime) {
-		this.durationTime = durationTime;
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
 
 	public boolean isPartialVerdict() {

@@ -280,7 +280,7 @@ public class Runner implements CommandLineRunner {
 		Contest publicContest = new Contest();
 		publicContest.setName(name);
 		publicContest.setStartTime(begin);
-		publicContest.setDurationTime(end);
+		publicContest.setEndTime(end);
 		publicContest.setPartialVerdict(false);
 		publicContest.setPrivate(false);
 		publicContest.setVisible(false);
@@ -293,7 +293,7 @@ public class Runner implements CommandLineRunner {
 	private void createGeneralContest() {
 		Contest generalContest = new Contest();
 		generalContest.setId(1l);
-		generalContest.setDurationTime(new Date(0));
+		generalContest.setEndTime(new Date(0));
 		generalContest.setName("GENERAL CONTEST");
 		generalContest.setPartialVerdict(false);
 		generalContest.setPrivate(false);
