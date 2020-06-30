@@ -28,7 +28,7 @@ public class ContestController {
 	@Autowired 	private ProblemRepository problemRepository;
 	@Autowired 	private ProblemContestRepository problemContestRepository;
 	
-	@RequestMapping(path="/getContestId", method=RequestMethod.GET)
+	@RequestMapping(path="/getContestById", method=RequestMethod.GET)
 	public ResponseEntity<Contest> getContestId
 	(
 			@RequestHeader Long id) {
