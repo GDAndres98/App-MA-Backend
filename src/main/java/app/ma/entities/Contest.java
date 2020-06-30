@@ -39,24 +39,23 @@ public class Contest {
 	@Column(nullable = false)
 	private Date startTime;
 	@Column(nullable = false)
-	private Date durationTime;
+	private Date endTime;
 	@Column(nullable = false)
 	private boolean isPartialVerdict;
 
 	// TODO Problem-Contest
 
-    @OneToMany(mappedBy = "contest")
-    @JsonIgnore
-    Set<ProblemContest> problemContest = new HashSet<>();
+	@OneToMany(mappedBy = "contest")
+	@JsonIgnore
+	Set<ProblemContest> problemContest = new HashSet<>();
 
-	@JsonIgnoreProperties(value = {"author", "markdown", "tags"})
+	@JsonIgnoreProperties(value = { "author", "markdown", "tags" })
 	public ArrayList<Problem> getProblem() {
 		ArrayList<Problem> problems = new ArrayList<Problem>();
-		for(ProblemContest e: problemContest)
+		for (ProblemContest e : problemContest)
 			problems.add(e.problem);
 		return problems;
 	}
-	
 
 	@CreationTimestamp
 	private Date createAt;
@@ -70,6 +69,7 @@ public class Contest {
 	public Contest() {
 
 	}
+
 
 	public Long getId() {
 		return id;
@@ -119,12 +119,12 @@ public class Contest {
 		this.startTime = startTime;
 	}
 
-	public Date getDurationTime() {
-		return durationTime;
+	public Date getEndTime() {
+		return endTime;
 	}
 
-	public void setDurationTime(Date durationTime) {
-		this.durationTime = durationTime;
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
 
 	public boolean isPartialVerdict() {

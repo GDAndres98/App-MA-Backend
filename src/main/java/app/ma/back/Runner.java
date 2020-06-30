@@ -259,6 +259,20 @@ public class Runner implements CommandLineRunner {
 		addArticleToSection(2l, 3l);
 		
 		
+		ArrayList<Contest> competencias = new ArrayList<Contest>();
+		competencias.add(createPublicContest("Entrenamiento Junio 25", new Date(2020, 5, 25, 18, 30), new Date(2020, 6, 9, 18, 30)));
+		addProblemToContest(problemas.get(0), competencias.get(0));
+		addProblemToContest(problemas.get(1), competencias.get(0));
+		addProblemToContest(problemas.get(3), competencias.get(0));
+		competencias.add(createPublicContest("CCPL Round 6", new Date(2020, 4, 25, 18, 30), new Date(2020, 5, 9, 18, 30)));
+		addProblemToContest(problemas.get(4), competencias.get(1));
+		addProblemToContest(problemas.get(5), competencias.get(1));
+		addProblemToContest(problemas.get(6), competencias.get(1));
+		competencias.add(createPublicContest("CCPL Round 8", new Date(2020, 6, 25, 18, 30), new Date(2020, 7, 9, 18, 30)));
+		addProblemToContest(problemas.get(4), competencias.get(2));
+		addProblemToContest(problemas.get(5), competencias.get(2));
+		addProblemToContest(problemas.get(6), competencias.get(2));
+		
 		
 		
 	}
@@ -266,9 +280,33 @@ public class Runner implements CommandLineRunner {
 
 
 
+	private void addProblemToContest(Problem problem, Contest contest) {
+		ProblemContest problemContest = new ProblemContest();
+		problemContest.setProblem(problem);
+		problemContest.setContest(contest);
+		problemContest.setId(new ProblemContestKey(problem.getId(), contest.getId()));
+		problemContestRepository.save(problemContest);
+	}
+
+
+	private Contest createPublicContest(String name, Date begin, Date end) {
+		Contest publicContest = new Contest();
+		publicContest.setName(name);
+		publicContest.setStartTime(begin);
+		publicContest.setEndTime(end);
+		publicContest.setPartialVerdict(false);
+		publicContest.setPrivate(false);
+		publicContest.setVisible(false);
+		
+		contestRepository.save(publicContest);
+		return publicContest;
+	}
+
+
 	private void createGeneralContest() {
 		Contest generalContest = new Contest();
-		generalContest.setDurationTime(new Date(0));
+		generalContest.setId(1l);
+		generalContest.setEndTime(new Date(0));
 		generalContest.setName("GENERAL CONTEST");
 		generalContest.setPartialVerdict(false);
 		generalContest.setPrivate(false);
