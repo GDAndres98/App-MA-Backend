@@ -103,6 +103,22 @@ public class SubmitController {
         return new ResponseEntity<Page<Submit>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
 	}
 	
+	
+	@RequestMapping("/getContestSubmits")
+	public ResponseEntity<Page<Submit>> getContestSubmits(
+            @RequestHeader(defaultValue = "0") Integer pageNo, 
+            @RequestHeader(defaultValue = "10") Integer pageSize,
+            @RequestHeader(defaultValue = "submitDate") String sortBy,
+            @RequestHeader(defaultValue = "true") Boolean ascending,
+            @RequestHeader Long contestId) {
+		Sort sort = Sort.by(sortBy);
+		sort = ascending? sort.ascending(): sort.descending();
+		Pageable paging = PageRequest.of(pageNo,  pageSize, sort);
+		Page<Submit> pagedResult = submitRepository.findByProblemContestUser_ProblemContest_Contest_Id(contestId, paging);
+        return new ResponseEntity<Page<Submit>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
+	}
+	
+	
 	@RequestMapping("/getSourceCode")
 	public ResponseEntity<String> getSourceCode(@RequestHeader Long submitId) {
 		Optional<Submit> opSumit= submitRepository.findById(submitId);
