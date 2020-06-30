@@ -45,18 +45,17 @@ public class Contest {
 
 	// TODO Problem-Contest
 
-    @OneToMany(mappedBy = "contest")
-    @JsonIgnore
-    Set<ProblemContest> problemContest = new HashSet<>();
+	@OneToMany(mappedBy = "contest")
+	@JsonIgnore
+	Set<ProblemContest> problemContest = new HashSet<>();
 
-	@JsonIgnoreProperties(value = {"author", "markdown", "tags"})
+	@JsonIgnoreProperties(value = { "author", "markdown", "tags" })
 	public ArrayList<Problem> getProblem() {
 		ArrayList<Problem> problems = new ArrayList<Problem>();
-		for(ProblemContest e: problemContest)
+		for (ProblemContest e : problemContest)
 			problems.add(e.problem);
 		return problems;
 	}
-	
 
 	@CreationTimestamp
 	private Date createAt;
@@ -70,6 +69,7 @@ public class Contest {
 	public Contest() {
 
 	}
+
 
 	public Long getId() {
 		return id;
