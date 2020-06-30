@@ -256,9 +256,9 @@ public class Runner implements CommandLineRunner {
 		addProblemToContest(problemas.get(5), competencias.get(1));
 		addProblemToContest(problemas.get(6), competencias.get(1));
 		competencias.add(createPublicContest("CCPL Round 8", new Date(2020, 6, 25, 18, 30), new Date(2020, 7, 9, 18, 30)));
-		addProblemToContest(problemas.get(4), competencias.get(1));
-		addProblemToContest(problemas.get(5), competencias.get(1));
-		addProblemToContest(problemas.get(6), competencias.get(1));
+		addProblemToContest(problemas.get(4), competencias.get(2));
+		addProblemToContest(problemas.get(5), competencias.get(2));
+		addProblemToContest(problemas.get(6), competencias.get(2));
 		
 		
 		
