@@ -69,11 +69,18 @@ public class Submit {
 	@UpdateTimestamp
 	private Date updateAt;
 
-	@JsonIgnoreProperties(value = {"author", "markdown", "tags"})
 	
+	@JsonIgnoreProperties(value = {"author", "markdown", "tags"})
 	public Problem getProblem() {
 		return this.problemContestUser.problemContest.problem;
 	}
+	
+	
+	public String getUsername() {
+		return this.problemContestUser.user.getUsername();
+	}
+
+	
 	
 	
 	// ****************************************************************
