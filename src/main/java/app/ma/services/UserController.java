@@ -93,6 +93,16 @@ public class UserController {
 	}
 	
 	@CrossOrigin
+	@RequestMapping(path="/isAdmin", method=RequestMethod.GET)
+	public Boolean idAdmin
+	(
+			@RequestHeader Long id) {
+		Optional<User> userOp = this.userRepository.findById(id);
+		if(!userOp.isPresent()) return false;
+		return userOp.get().getAdmin();
+	}	
+	
+	@CrossOrigin
 	@RequestMapping(path="/createStudent", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> addNewUser 
 	(

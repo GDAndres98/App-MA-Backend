@@ -94,6 +94,11 @@ public class Runner implements CommandLineRunner {
 		professor.setName("professor");
 		professor.setProfessor(true);
 		roleRepository.save(professor);
+		
+		Role admin = new Role();
+		admin.setName("admin");
+		admin.setAdmin(true);
+		roleRepository.save(admin);
 
 		
 		// Estudiantes y Profesores
@@ -107,6 +112,7 @@ public class Runner implements CommandLineRunner {
 		profesores.add(new User("profesor1", "Anakin", "Skywalker", "img.png", "skyani@hotmail.com", "12345"));
 		profesores.add(new User("profesor2", "Kakashi", "Hatake", "imgcfff.png", "narutolore@hotmail.com", "123123"));
 		createAllUsers(profesores, professor);
+		addAdminRoleToStudent(estudiantes.get(1), admin);
 		
 		// Cursos
 		ArrayList<Course> cursos = new ArrayList<Course>();
@@ -277,6 +283,16 @@ public class Runner implements CommandLineRunner {
 		
 	}
 	
+
+
+
+	private void addAdminRoleToStudent(User user, Role admin) {
+		user.addRole(admin);
+		admin.addUser(user);
+		this.userRepository.save(user);
+		this.roleRepository.save(admin);
+	}
+
 
 
 

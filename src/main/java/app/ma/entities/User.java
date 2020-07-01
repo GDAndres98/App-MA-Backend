@@ -216,4 +216,12 @@ public class User {
 		this.professorClass = professorClass;
 	}
 
+	public Boolean getAdmin() {
+		Boolean b = false;
+		for(Role role: this.role)
+			b |= role.isAdmin();
+		System.out.println(b);
+		return b;
+	}
+
 }

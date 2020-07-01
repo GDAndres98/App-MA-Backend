@@ -42,6 +42,9 @@ public class Role {
 	
 	@Column(nullable = false, columnDefinition = "boolean default false")
 	private boolean isProfessor = false;
+	
+	@Column(nullable = false, columnDefinition = "boolean default false")
+	private boolean isAdmin = false;
 
 	@ManyToMany
 	@JoinTable(name = "role_user", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
@@ -106,6 +109,16 @@ public class Role {
 
 	public void addUser(User newUser) {
 		this.users.add(newUser);
+	}
+
+
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 
 }
