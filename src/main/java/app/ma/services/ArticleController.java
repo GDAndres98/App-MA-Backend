@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.ma.entities.Article;
+import app.ma.entities.Section;
 import app.ma.entities.Tag;
 import app.ma.repositories.ArticleRepository;
 import app.ma.repositories.TagRepository;
@@ -47,7 +48,7 @@ public class ArticleController {
 			@RequestHeader Long id) {
 		Optional<Article> article = articleRepository.findById(id);
 		if(!article.isPresent())
-			return new ResponseEntity<Article>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);;
+				return new ResponseEntity<Article>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);;
 		 return new ResponseEntity<Article>(article.get(), new HttpHeaders(), HttpStatus.OK);
 	}
 	
@@ -78,7 +79,10 @@ public class ArticleController {
 			@RequestParam String 	title		, 
 			@RequestParam String 	author		, 
 			@RequestParam String 	markdownURL	, 
-			@RequestParam Date		dateWritten) {
+			@RequestParam Date		dateWritten ,
+			@RequestParam(required = false) List<Long>  tags) {
+		
+		
 		
 		Article article = new Article();
 		
@@ -89,8 +93,84 @@ public class ArticleController {
 		
 		articleRepository.save(article);
 		
+		if(tags != null) {
+			Iterable<Tag> tagsOp = tagRepository.findAllById(tags);
+			
+			for(Tag e: tagsOp){
+				article.addTag(e);
+				e.addArticle(article);
+				tagRepository.save(e);
+			}
+		}
+		articleRepository.save(article);
+		
 		return new ResponseEntity<>("Articulo creado correctamente.", HttpStatus.CREATED);
 	}
+	
+	@CrossOrigin
+	@RequestMapping(path="/updateArticle", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> updateArticle 
+	(
+			@RequestParam Long 		id			, 
+			@RequestParam String 	title		, 
+			@RequestParam String 	author		, 
+			@RequestParam String 	markdownURL	, 
+			@RequestParam Date		dateWritten ,
+			@RequestParam(required = false) List<Long>  tags) {
+		
+		Optional<Article> articleOp = this.articleRepository.findById(id);
+		if(!articleOp.isPresent())
+			return new ResponseEntity<String>("Artículo no existe", new HttpHeaders(), HttpStatus.NOT_FOUND);
+		Article article = articleOp.get();
+		article.setAuthor(author);
+		article.setDateWritten(dateWritten);
+		article.setTitle(title);
+		article.setMarkdown(markdownURL);
+		article.setTags(new HashSet<Tag>());
+
+		if(tags != null) {
+			Iterable<Tag> tagsOp = tagRepository.findAllById(tags);
+			
+			for(Tag e: tagsOp){
+				article.addTag(e);
+				e.addArticle(article);
+				tagRepository.save(e);
+			}
+		}
+		try {			
+			articleRepository.save(article);
+		} catch (Exception e) {
+			return new ResponseEntity<String>("Falló en actualizar artículo", new HttpHeaders(), HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<>("Articulo actualizado correctamente.", HttpStatus.OK);
+	}
+	
+	
+	@CrossOrigin
+	@RequestMapping(path="/deleteArticle", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> deleteArticle 
+	(
+			@RequestParam Long 		id) {
+		
+		Optional<Article> articleOp = this.articleRepository.findById(id);
+		if(!articleOp.isPresent())
+			return new ResponseEntity<String>("Artículo no existe", new HttpHeaders(), HttpStatus.NOT_FOUND);	
+		Article article = articleOp.get();
+		
+		for (Tag b : article.getTags())
+			b.deleteArticle(article);
+		for (Section b : article.getSections())
+			b.deleteArticle(article);
+		
+		this.articleRepository.save(article);
+		this.articleRepository.deleteById(id);
+		
+		return new ResponseEntity<>("Articulo eliminado correctamente.", HttpStatus.OK);
+	}
+	
+	
+	
 	
 	
 	
