@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -129,6 +130,10 @@ public class Tag implements Comparable<Tag>{
 	@Override
 	public int compareTo(Tag o) {
 		return Long.compare(this.level, o.level);
+	}
+
+	public void deleteArticle(Article article) {
+		this.articles.remove(article);
 	}
 
 }

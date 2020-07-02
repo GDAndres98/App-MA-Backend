@@ -124,4 +124,8 @@ public class Section {
 		articles.add(article);
 	}
 
+	public void deleteArticle(Article article) {
+		this.articles.remove(article);
+	}
+
 }
