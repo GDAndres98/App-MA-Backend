@@ -1,11 +1,12 @@
 package app.ma.objects;
 
+
 public class ProblemInContest {
 	private Long id;
 	private String letter;
 	private String title;
 
-	public ProblemInContest(Long id,  String title, String letter) {
+	public ProblemInContest(Long id, String title, String letter) {
 		this.id = id;
 		this.title = title;
 		this.letter = letter;

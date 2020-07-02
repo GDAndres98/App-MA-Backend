@@ -7,7 +7,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +18,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import app.ma.objects.ProblemInContest;
 
@@ -54,12 +52,13 @@ public class Contest {
 	@JsonIgnore
 	Set<ProblemContest> problemContest = new HashSet<>();
 
+	
+	
 	public ArrayList<ProblemInContest> getProblems() {
 		ArrayList<ProblemInContest> problems = new ArrayList<ProblemInContest>();
 		for (ProblemContest e : problemContest) {
 			problems.add(new ProblemInContest(e.problem.getId(), e.problem.getTitle(), e.getLetter()));
 		}
-		System.out.println(problems.toString());
 		return problems;
 	}
 
