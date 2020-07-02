@@ -21,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import app.ma.objects.ProblemInContest;
+
 @Entity
 @Table(name = "contest")
 public class Contest {
@@ -52,11 +54,12 @@ public class Contest {
 	@JsonIgnore
 	Set<ProblemContest> problemContest = new HashSet<>();
 
-	@JsonIgnoreProperties(value = { "author", "markdown", "tags" })
-	public ArrayList<Problem> getProblem() {
-		ArrayList<Problem> problems = new ArrayList<Problem>();
-		for (ProblemContest e : problemContest)
-			problems.add(e.problem);
+	public ArrayList<ProblemInContest> getProblems() {
+		ArrayList<ProblemInContest> problems = new ArrayList<ProblemInContest>();
+		for (ProblemContest e : problemContest) {
+			problems.add(new ProblemInContest(e.problem.getId(), e.problem.getTitle(), e.getLetter()));
+		}
+		System.out.println(problems.toString());
 		return problems;
 	}
 
@@ -66,6 +69,7 @@ public class Contest {
 	private Date updateAt;
 
 	// ****************************************************************
+	
 
 	// -------------------------------------------------------------------
 

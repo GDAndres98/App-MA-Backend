@@ -267,17 +267,17 @@ public class Runner implements CommandLineRunner {
 		
 		ArrayList<Contest> competencias = new ArrayList<Contest>();
 		competencias.add(createPublicContest("Entrenamiento Junio 25", new Date(120, 5, 25, 18, 30), new Date(120, 6, 9, 18, 30)));
-		addProblemToContest(problemas.get(0), competencias.get(0));
-		addProblemToContest(problemas.get(1), competencias.get(0));
-		addProblemToContest(problemas.get(3), competencias.get(0));
+		addProblemToContest(problemas.get(0), competencias.get(0), "A");
+		addProblemToContest(problemas.get(1), competencias.get(0), "B");
+		addProblemToContest(problemas.get(3), competencias.get(0), "C");
 		competencias.add(createPublicContest("CCPL Round 6", new Date(120, 4, 25, 18, 30), new Date(120, 5, 9, 18, 30)));
-		addProblemToContest(problemas.get(4), competencias.get(1));
-		addProblemToContest(problemas.get(5), competencias.get(1));
-		addProblemToContest(problemas.get(6), competencias.get(1));
+		addProblemToContest(problemas.get(4), competencias.get(1), "A");
+		addProblemToContest(problemas.get(5), competencias.get(1), "B");
+		addProblemToContest(problemas.get(6), competencias.get(1), "C");
 		competencias.add(createPublicContest("CCPL Round 8", new Date(120, 6, 25, 18, 30), new Date(120, 7, 9, 18, 30)));
-		addProblemToContest(problemas.get(4), competencias.get(2));
-		addProblemToContest(problemas.get(5), competencias.get(2));
-		addProblemToContest(problemas.get(6), competencias.get(2));
+		addProblemToContest(problemas.get(4), competencias.get(2), "A");
+		addProblemToContest(problemas.get(5), competencias.get(2), "B");
+		addProblemToContest(problemas.get(6), competencias.get(2), "C");
 		
 		
 		
@@ -296,10 +296,11 @@ public class Runner implements CommandLineRunner {
 
 
 
-	private void addProblemToContest(Problem problem, Contest contest) {
+	private void addProblemToContest(Problem problem, Contest contest, String string) {
 		ProblemContest problemContest = new ProblemContest();
 		problemContest.setProblem(problem);
 		problemContest.setContest(contest);
+		problemContest.setLetter(string);
 		problemContest.setId(new ProblemContestKey(problem.getId(), contest.getId()));
 		problemContestRepository.save(problemContest);
 	}

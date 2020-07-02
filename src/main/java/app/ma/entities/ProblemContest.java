@@ -1,4 +1,5 @@
 package app.ma.entities;
+
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -18,27 +19,28 @@ public class ProblemContest {
 	@EmbeddedId
 	ProblemContestKey id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @MapsId("problem_id")
-    @JoinColumn(name = "problem_id")
-    Problem problem;
- 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @MapsId("contest_id")
-    @JoinColumn(name = "contest_id")
-    Contest contest;
-    
-    @OneToMany(mappedBy = "problemContest")
-    Set<ProblemContestUser> problemContestUser;
-    
-   
+	@ManyToOne(fetch = FetchType.EAGER)
+	@MapsId("problem_id")
+	@JoinColumn(name = "problem_id")
+	Problem problem;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@MapsId("contest_id")
+	@JoinColumn(name = "contest_id")
+	Contest contest;
+
+	@Column
+	String letter;
+
+	@OneToMany(mappedBy = "problemContest")
+	Set<ProblemContestUser> problemContestUser;
+
 	@Column(nullable = false)
 	private Long problemTestCases = 0l;
-	
+
 	@Column(nullable = false)
 	private Long problemDificulty = 0l;
-    
-    
+
 	public Contest getContest() {
 		return contest;
 	}
@@ -55,7 +57,6 @@ public class ProblemContest {
 		this.problem = problem;
 	}
 
-    
 	public ProblemContestKey getId() {
 		return id;
 	}
@@ -64,10 +65,14 @@ public class ProblemContest {
 		this.id = id;
 	}
 
+	public String getLetter() {
+		return letter;
+	}
 
+	public void setLetter(String letter) {
+		this.letter = letter;
+	}
 
-
-    
 //    @OneToMany(mappedBy="userCourse")
 //    private Set<Post> post;
 }

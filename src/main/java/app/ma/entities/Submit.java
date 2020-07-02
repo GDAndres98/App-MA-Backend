@@ -75,6 +75,13 @@ public class Submit {
 	}
 	
 	
+	public String getUsername() {
+		return this.problemContestUser.user.getUsername();
+	}
+
+	
+	
+	
 	// ****************************************************************
 
 	// -------------------------------------------------------------------
