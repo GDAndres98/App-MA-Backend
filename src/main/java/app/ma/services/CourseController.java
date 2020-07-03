@@ -48,10 +48,10 @@ public class CourseController {
 	
 	@CrossOrigin
 	@RequestMapping(path = "/getCourseById", method = RequestMethod.GET)
-	public Course getCourseById(@RequestHeader Long id) {
+	public ResponseEntity<Course> getCourseById(@RequestHeader Long id) {
 		Optional<Course> course = courseRepository.findById(id);
-		if(!course.isPresent()) return null;
-		return course.get();
+		if(!course.isPresent()) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(course.get(), HttpStatus.OK);
 	}
 	
 	@CrossOrigin
@@ -80,6 +80,39 @@ public class CourseController {
 		courseRepository.save(course);
 		return new ResponseEntity<>("Curso \""+ name + "\" creado satisfactoriamente.", HttpStatus.CREATED);
 	}
+	
+	@CrossOrigin
+	@RequestMapping(path="/editCourse", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> editCourse
+	(
+			@RequestParam String 	name	, 
+			@RequestParam String 	image	, 
+			@RequestParam Long 		professorId,
+			@RequestParam Long 		courseId) {
+		
+		Optional<Course> opCourse = courseRepository.findById(courseId);
+		if(!opCourse.isPresent())
+			return new ResponseEntity<>("Curso no existe.", HttpStatus.BAD_REQUEST);
+		
+		Optional<User> opProfessor = userRepository.findById(professorId);
+		if(!opProfessor.isPresent())
+			return new ResponseEntity<>("Usuario no existe.", HttpStatus.BAD_REQUEST);
+		User professor = opProfessor.get();
+		
+		boolean haveRole = false;
+		for(Role r: professor.getRole())
+			haveRole |= r.isProfessor();
+		if(!haveRole)
+			return new ResponseEntity<>("Usuario no es profesor.", HttpStatus.UNAUTHORIZED);
+		Course course = opCourse.get();
+		course.setName(name);
+		course.setLogoUrl(image);
+		course.setProfessor(professor);
+		
+		courseRepository.save(course);
+		return new ResponseEntity<>("Curso \""+ name + "\" actualizado satisfactoriamente.", HttpStatus.OK);
+	}
+	
 	
 	@CrossOrigin
 	@RequestMapping(path="/addStudentToCourse", method=RequestMethod.POST) 
@@ -114,6 +147,36 @@ public class CourseController {
 		userCourseRepository.save(userCourse);
 
 		return new ResponseEntity<>("Estudiante añadido satisfactoriamente a la clase.", HttpStatus.CREATED);
+	}
+	@CrossOrigin
+	@RequestMapping(path="/removeStudentToCourse", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> removeStudentToCourse
+	(
+			@RequestParam Long 	studentId, 
+			@RequestParam Long 	courseId) {
+		
+		Optional<Course> opCourse = courseRepository.findById(courseId);
+		if(!opCourse.isPresent()) return new ResponseEntity<>("Curso no existe.", HttpStatus.BAD_REQUEST);
+		Optional<User> opStudent  = userRepository.findById(studentId);
+		if(!opStudent.isPresent()) return new ResponseEntity<>("Estudiante no existe.", HttpStatus.BAD_REQUEST);
+
+		Course course = opCourse.get();
+		User student  = opStudent.get();
+		
+		boolean haveRole = false;
+		for(Role r: student.getRole())
+			haveRole |= r.isStudent();
+		
+		if(!haveRole)  
+			return new ResponseEntity<>("Usuario no es un estudiante.", HttpStatus.UNAUTHORIZED);
+		
+		UserCourseKey key = new UserCourseKey(course.getId(), student.getId());
+		if(!userCourseRepository.existsById(key))
+			return new ResponseEntity<>("El estudiante no está en la clase.", HttpStatus.CONFLICT);
+		
+		userCourseRepository.deleteById(key);
+
+		return new ResponseEntity<>("Estudiante removido satisfactoriamente de la clase.", HttpStatus.CREATED);
 	}
 	
 	@CrossOrigin

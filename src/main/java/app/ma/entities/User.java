@@ -220,7 +220,20 @@ public class User {
 		Boolean b = false;
 		for(Role role: this.role)
 			b |= role.isAdmin();
-		System.out.println(b);
+		return b;
+	}
+
+	public boolean isProfesor() {
+		Boolean b = false;
+		for(Role role: this.role)
+			b |= role.isProfessor();
+		return b;
+	}
+
+	public boolean isStudent() {
+		Boolean b = false;
+		for(Role role: this.role)
+			b |= role.isStudent();
 		return b;
 	}
 

@@ -2,6 +2,7 @@ package app.ma.entities;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -29,7 +30,7 @@ public class UserCourse {
     @JoinColumn(name = "course_id")
     Course course;
     
-    @OneToMany(mappedBy="userCourse")
+    @OneToMany(mappedBy="userCourse", cascade = CascadeType.REMOVE)
 	@JsonIgnore
     private Set<Post> post;
     
