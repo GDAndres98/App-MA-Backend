@@ -1,6 +1,5 @@
 package app.ma.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,10 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.ma.entities.Contest;
 import app.ma.entities.Problem;
+import app.ma.objects.ContestScoreboard;
 import app.ma.objects.ContestStats;
-import app.ma.objects.ProblemInContest;
 import app.ma.repositories.ContestRepository;
 import app.ma.repositories.ProblemContestRepository;
+import app.ma.repositories.ProblemContestUserRepository;
 import app.ma.repositories.ProblemRepository;
 import app.ma.repositories.SubmitRepository;
 
@@ -31,6 +31,21 @@ public class ContestController {
 	@Autowired 	private SubmitRepository submitRepository;
 	@Autowired 	private ProblemRepository problemRepository;
 	@Autowired 	private ProblemContestRepository problemContestRepository;
+	@Autowired 	private ProblemContestUserRepository problemContestUserRepository;
+	
+	
+	@RequestMapping(path = "/getScoreboard", method = RequestMethod.GET)
+	public ResponseEntity<ContestScoreboard> getScoreboard(
+			@RequestHeader Long id) {
+
+		Optional<Contest> contest = contestRepository.findById(id);
+		if (!contest.isPresent())
+			return new ResponseEntity<ContestScoreboard>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);
+
+		ContestScoreboard contestScoreBoard = new ContestScoreboard(contest.get(), problemContestUserRepository);
+
+		return new ResponseEntity<ContestScoreboard>(contestScoreBoard, new HttpHeaders(), HttpStatus.OK);
+	}
 	
 	
 	@RequestMapping(path="/getAllProblemsFromContest", method=RequestMethod.GET)
