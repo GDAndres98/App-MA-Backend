@@ -78,7 +78,7 @@ public class SubmitController {
 		Submit submit = new Submit();
 		submit.setLanguage(language);
 		submit.setSourceCodeURL(source);
-		submit.setVeredict(Veredict.In_Queue);
+		submit.setVeredict(Veredict.IN_QUEUE);
 		submit.setProblemContestUser(pcu);
 		
 		submitRepository.save(submit);
