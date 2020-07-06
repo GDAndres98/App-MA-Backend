@@ -39,11 +39,9 @@ public class Contest {
 	@Column
 	private String password;
 	
-	@JsonView(JSONView.ContestSummary.class)
 	@Column(nullable = false)
 	private boolean isPrivate;
 
-	@JsonView(JSONView.ContestSummary.class)
 	@Column(nullable = false)
 	private boolean isVisible;
 	
@@ -90,7 +88,6 @@ public class Contest {
 
 	}
 
-
 	public Long getId() {
 		return id;
 	}
@@ -115,6 +112,7 @@ public class Contest {
 		this.password = password;
 	}
 
+	@JsonView(JSONView.ContestSummary.class)
 	public boolean isPrivate() {
 		return isPrivate;
 	}
@@ -123,6 +121,7 @@ public class Contest {
 		this.isPrivate = isPrivate;
 	}
 
+	@JsonView(JSONView.ContestSummary.class)
 	public boolean isVisible() {
 		return isVisible;
 	}

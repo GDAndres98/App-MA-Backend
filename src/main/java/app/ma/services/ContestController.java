@@ -159,7 +159,7 @@ public class ContestController {
 		
 		return new ResponseEntity<List<Contest>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(path="/getPastContests", method=RequestMethod.GET)
 	public ResponseEntity<Page<Contest>> getPastContests(
             @RequestHeader(defaultValue = "0") Integer pageNo, 
@@ -171,7 +171,7 @@ public class ContestController {
 		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 		 
         Page<Contest> pagedResult = contestRepository.findByEndTimeLessThanAndIsVisibleIsTrue(currentDate, paging);
-		
+		System.out.println(pagedResult.getTotalElements());
 		return new ResponseEntity<Page<Contest>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
 	}
 	
