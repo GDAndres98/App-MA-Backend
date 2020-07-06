@@ -521,7 +521,9 @@ public class Runner implements CommandLineRunner {
 			x.addUser(e);
 			e.addRole(x);
 			userRepository.save(e);
+
 		}
+		roleRepository.save(x);
 	}
 
 	private void createAllCourses(ArrayList<Course> courses) {

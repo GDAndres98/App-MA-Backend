@@ -2,6 +2,7 @@ package app.ma.services;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -27,9 +28,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.ma.compositeKey.ProblemContestKey;
+import app.ma.entities.Article;
 import app.ma.entities.Contest;
 import app.ma.entities.Problem;
 import app.ma.entities.ProblemContest;
+import app.ma.entities.Section;
 import app.ma.entities.Tag;
 import app.ma.entities.TestCase;
 import app.ma.repositories.ContestRepository;
@@ -98,14 +101,14 @@ public class ProblemController {
 	
 	@CrossOrigin
 	@RequestMapping(path="/getProblemById", method=RequestMethod.GET)
-	public Problem getProblemByID 
+	public ResponseEntity<Problem> getProblemByID 
 	(
 			@RequestHeader Long id) {
 		
 		Optional<Problem> problem = problemRepository.findById(id);
 		if(!problem.isPresent())
-			return null;
-		return problem.get();
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);
+		 return new ResponseEntity<Problem>(problem.get(), new HttpHeaders(), HttpStatus.OK);
 	}
 	
 	@CrossOrigin
@@ -125,7 +128,8 @@ public class ProblemController {
 			@RequestParam String 	author		, 
 			@RequestParam String 	markdownURL	, 
 			@RequestParam Long 		timeLimit	, 
-			@RequestParam Long  	memoryLimit) {
+			@RequestParam Long  	memoryLimit,
+			@RequestParam(required = false) List<Long>  tags) {
 		
 		Problem problem = new Problem();
 		
@@ -150,9 +154,62 @@ public class ProblemController {
 		problemContestRepository.save(problemContest);
 		
 		
+		if(tags != null) {
+			Iterable<Tag> tagsOp = tagRepository.findAllById(tags);
+			
+			for(Tag e: tagsOp){
+				problem.addTag(e);
+				e.addProblem(problem);
+				tagRepository.save(e);
+			}
+		}
+		problemRepository.save(problem);
+		
 		
 		return new ResponseEntity<>("Problema creado correctamente.", HttpStatus.CREATED);
 	}
+	
+	@CrossOrigin
+	@RequestMapping(path="/updateProblem", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> updateProblem 
+	(
+			@RequestParam Long 		id			, 
+			@RequestParam String 	title		, 
+			@RequestParam String 	author		, 
+			@RequestParam String 	markdownURL	, 
+			@RequestParam Long 		timeLimit	, 
+			@RequestParam Long  	memoryLimit,
+			@RequestParam(required = false) List<Long>  tags) {
+		
+		Optional<Problem> problemOp = this.problemRepository.findById(id);
+		if(!problemOp.isPresent())
+			return new ResponseEntity<String>("Problema no existe", new HttpHeaders(), HttpStatus.NOT_FOUND);
+		Problem problem = problemOp.get();
+		problem.setAuthor(author);
+		problem.setTitle(title);
+		problem.setMarkdown(markdownURL);
+		problem.setTimeLimit(timeLimit);
+		problem.setMemoryLimit(memoryLimit);
+		problem.setTags(new HashSet<Tag>());
+
+		if(tags != null) {
+			Iterable<Tag> tagsOp = tagRepository.findAllById(tags);
+			
+			for(Tag e: tagsOp){
+				problem.addTag(e);
+				e.addProblem(problem);
+				tagRepository.save(e);
+			}
+		}
+		try {			
+			problemRepository.save(problem);
+		} catch (Exception e) {
+			return new ResponseEntity<String>("Falló en actualizar problema", new HttpHeaders(), HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<>("Problema actualizado correctamente.", HttpStatus.OK);
+	}
+	
 	
 	@CrossOrigin
 	@RequestMapping(path="/removeProblem", method=RequestMethod.POST) 

@@ -103,6 +103,38 @@ public class UserController {
 	}	
 	
 	@CrossOrigin
+	@RequestMapping(path="/getProfesorById", method=RequestMethod.GET)
+	public ResponseEntity<User> getProfesorById 
+	(
+			@RequestHeader Long id) {
+		
+		Optional<User> profesorOp = this.userRepository.findById(id);
+		if(!profesorOp.isPresent())
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		User profesor = profesorOp.get();
+		
+		if(!profesor.isProfesor())
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(profesor, HttpStatus.OK);
+	}
+	
+	@CrossOrigin
+	@RequestMapping(path="/getStudentById", method=RequestMethod.GET)
+	public ResponseEntity<User> getStudentById 
+	(
+			@RequestHeader Long id) {
+		
+		Optional<User> studentOp = this.userRepository.findById(id);
+		if(!studentOp.isPresent())
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		User student = studentOp.get();
+		
+		if(!student.isStudent())
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(student, HttpStatus.OK);
+	}
+	
+	@CrossOrigin
 	@RequestMapping(path="/createStudent", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> addNewUser 
 	(
