@@ -18,31 +18,45 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import app.ma.objects.ProblemInContest;
+import app.ma.objects.JSONView;
 
 @Entity
 @Table(name = "contest")
 public class Contest {
-
+	
+	@JsonView(JSONView.ContestSummary.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	
+	@JsonView(JSONView.ContestSummary.class)
 	@Column(nullable = false)
 	private String name;
+	
 	@Column
 	private String password;
+	
+	@JsonView(JSONView.ContestSummary.class)
 	@Column(nullable = false)
 	private boolean isPrivate;
+
+	@JsonView(JSONView.ContestSummary.class)
 	@Column(nullable = false)
 	private boolean isVisible;
+	
+	@JsonView(JSONView.ContestSummary.class)
 	@Column(nullable = false)
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date startTime;
+	
+	@JsonView(JSONView.ContestSummary.class)
 	@Column(nullable = false)
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date endTime;
+	
 	@Column(nullable = false)
 	private boolean isPartialVerdict;
 

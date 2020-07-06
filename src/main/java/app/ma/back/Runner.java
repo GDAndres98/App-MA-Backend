@@ -270,14 +270,22 @@ public class Runner implements CommandLineRunner {
 		addProblemToContest(problemas.get(0), competencias.get(0), "A");
 		addProblemToContest(problemas.get(1), competencias.get(0), "B");
 		addProblemToContest(problemas.get(3), competencias.get(0), "C");
-		competencias.add(createPublicContest("CCPL Round 6", new Date(120, 4, 25, 18, 30), new Date(120, 5, 9, 18, 30)));
+		competencias.add(createPublicContest("CCPL Round 6", new Date(120, 6, 25, 18, 30), new Date(120, 7, 9, 18, 30)));
 		addProblemToContest(problemas.get(4), competencias.get(1), "A");
 		addProblemToContest(problemas.get(5), competencias.get(1), "B");
 		addProblemToContest(problemas.get(6), competencias.get(1), "C");
-		competencias.add(createPublicContest("CCPL Round 8", new Date(120, 6, 25, 18, 30), new Date(120, 7, 9, 18, 30)));
+		competencias.add(createPublicContest("CCPL Round 8", new Date(120, 7, 1, 18, 30), new Date(120, 7, 30, 18, 30)));
 		addProblemToContest(problemas.get(4), competencias.get(2), "A");
 		addProblemToContest(problemas.get(5), competencias.get(2), "B");
 		addProblemToContest(problemas.get(6), competencias.get(2), "C");
+		competencias.add(createPublicContest("CCPL Round 9", new Date(120, 6, 25, 18, 30), new Date(120, 7, 9, 18, 30)));
+		addProblemToContest(problemas.get(4), competencias.get(3), "A");
+		addProblemToContest(problemas.get(5), competencias.get(3), "B");
+		addProblemToContest(problemas.get(6), competencias.get(3), "C");
+		competencias.add(createPublicContest("CCPL Round 10", new Date(120, 6, 25, 18, 30), new Date(120, 7, 9, 18, 30)));
+		addProblemToContest(problemas.get(4), competencias.get(4), "A");
+		addProblemToContest(problemas.get(5), competencias.get(4), "B");
+		addProblemToContest(problemas.get(6), competencias.get(4), "C");
 		
 		
 		
@@ -312,8 +320,8 @@ public class Runner implements CommandLineRunner {
 		publicContest.setStartTime(begin);
 		publicContest.setEndTime(end);
 		publicContest.setPartialVerdict(false);
-		publicContest.setPrivate(false);
-		publicContest.setVisible(false);
+		publicContest.setPrivate(name.length()<13);
+		publicContest.setVisible(true);
 		
 		contestRepository.save(publicContest);
 		return publicContest;
