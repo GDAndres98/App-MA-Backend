@@ -101,14 +101,14 @@ public class ProblemController {
 	
 	@CrossOrigin
 	@RequestMapping(path="/getProblemById", method=RequestMethod.GET)
-	public Problem getProblemByID 
+	public ResponseEntity<Problem> getProblemByID 
 	(
 			@RequestHeader Long id) {
 		
 		Optional<Problem> problem = problemRepository.findById(id);
 		if(!problem.isPresent())
-			return null;
-		return problem.get();
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);
+		 return new ResponseEntity<Problem>(problem.get(), new HttpHeaders(), HttpStatus.OK);
 	}
 	
 	@CrossOrigin
