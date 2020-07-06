@@ -97,7 +97,7 @@ public class ContestController {
 		
 		Map<Long, String> map = new HashMap<>();
 		for(int i = 0; i < problems.size(); i++)
-			map.put(problems.get(i), ('A' + i) + "");
+			map.put(problems.get(i), (char)('A' + i) + "");
 		
 		
 		Iterable<Problem> problemList = this.problemRepository.findAllById(problems);
