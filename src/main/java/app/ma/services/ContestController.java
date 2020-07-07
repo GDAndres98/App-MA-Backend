@@ -219,7 +219,7 @@ public class ContestController {
 		return new ResponseEntity<ContestStats>(contestStats, new HttpHeaders(), HttpStatus.OK);
 	}
 	
-	@RequestMapping(path="/getContestById", method=RequestMethod.GET)
+	@RequestMapping(path="/getContestAdminById", method=RequestMethod.GET)
 	public ResponseEntity<Contest> getContestById(
 			@RequestHeader Long id) {
 		Optional<Contest> contest = contestRepository.findById(id);
@@ -279,8 +279,8 @@ public class ContestController {
 	}
 	
 	
-	@RequestMapping(path = "/getContestByIdAux", method = RequestMethod.GET)
-	public ResponseEntity<ContestStats> getContestAux(
+	@RequestMapping(path = "/getContestById", method = RequestMethod.GET)
+	public ResponseEntity<ContestStats> getContestById(
 			@RequestHeader Long id,
 			@RequestHeader(defaultValue = "public") String password) {
 		Optional<Contest> contest = contestRepository.findById(id);
