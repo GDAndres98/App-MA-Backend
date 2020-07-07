@@ -329,6 +329,7 @@ public class Runner implements CommandLineRunner {
 		publicContest.setEndTime(end);
 		publicContest.setPartialVerdict(false);
 		publicContest.setPrivate(name.length()<13);
+		publicContest.setPassword("12345");
 		publicContest.setVisible(true);
 		
 		contestRepository.save(publicContest);
