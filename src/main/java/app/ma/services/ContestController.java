@@ -89,6 +89,9 @@ public class ContestController {
 			@RequestParam Date 		endTime	, 
 			@RequestParam(required = false) List<Long>  problems) {
 		
+		System.out.println(startTime.toString());
+		System.out.println((new Date()).toString());
+		System.out.println("XSDSXDSX");
 		Contest contest = new Contest();
 		contest.setName(name);
 		if(isPrivate) {
@@ -98,7 +101,7 @@ public class ContestController {
 		
 		if(startTime.after(endTime)) 
 			return new ResponseEntity<String>("ERROR: Hora de inicio despues de la hora final ", new HttpHeaders(), HttpStatus.CONFLICT);
-		if(startTime.before(new Date(System.currentTimeMillis())))
+		if(startTime.before(new Date()))
 			return new ResponseEntity<String>("ERROR: Hora de inicio no valida", new HttpHeaders(), HttpStatus.CONFLICT);
 		contest.setStartTime(startTime);
 		contest.setEndTime(endTime);
@@ -139,11 +142,13 @@ public class ContestController {
 			@RequestParam Date 		startTime	, 
 			@RequestParam Date 		endTime	, 
 			@RequestParam(required = false) List<Long>  problems) {
-		
+		System.out.println("EDIT");
+		System.out.println(startTime.toString());
+		System.out.println((new Date()).toString());
 		
 		if(startTime.after(endTime)) 
 			return new ResponseEntity<String>("ERROR: Hora de inicio despues de la hora final ", new HttpHeaders(), HttpStatus.CONFLICT);
-		if(startTime.before(new Date(System.currentTimeMillis())))
+		if(startTime.before(new Date()))
 			return new ResponseEntity<String>("ERROR: Hora de inicio no valida", new HttpHeaders(), HttpStatus.CONFLICT);
 		
 		Optional<Contest> opContest = this.contestRepository.findById(id);

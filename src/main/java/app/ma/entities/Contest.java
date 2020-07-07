@@ -48,12 +48,10 @@ public class Contest {
 	
 	@JsonView(JSONView.ContestSummary.class)
 	@Column(nullable = false)
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date startTime;
 	
 	@JsonView(JSONView.ContestSummary.class)
 	@Column(nullable = false)
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date endTime;
 	
 	@Column(nullable = false)
