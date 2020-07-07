@@ -19,31 +19,43 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import app.ma.objects.ProblemInContest;
+import app.ma.objects.JSONView;
 
 @Entity
 @Table(name = "contest")
 public class Contest {
-
+	
+	@JsonView(JSONView.ContestSummary.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	
+	@JsonView(JSONView.ContestSummary.class)
 	@Column(nullable = false)
 	private String name;
+	
 	@Column
 	private String password;
+	
 	@Column(nullable = false)
 	private boolean isPrivate;
+
 	@Column(nullable = false)
 	private boolean isVisible;
+	
+	@JsonView(JSONView.ContestSummary.class)
 	@Column(nullable = false)
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date startTime;
+	
+	@JsonView(JSONView.ContestSummary.class)
 	@Column(nullable = false)
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date endTime;
+	
 	@Column(nullable = false)
 	private boolean isPartialVerdict;
 
@@ -77,7 +89,6 @@ public class Contest {
 
 	}
 
-
 	public Long getId() {
 		return id;
 	}
@@ -102,6 +113,7 @@ public class Contest {
 		this.password = password;
 	}
 
+	@JsonView(JSONView.ContestSummary.class)
 	public boolean isPrivate() {
 		return isPrivate;
 	}
@@ -110,6 +122,7 @@ public class Contest {
 		this.isPrivate = isPrivate;
 	}
 
+	@JsonView(JSONView.ContestSummary.class)
 	public boolean isVisible() {
 		return isVisible;
 	}

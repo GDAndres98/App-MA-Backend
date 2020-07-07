@@ -1,5 +1,6 @@
 package app.ma.services;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,6 +11,10 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +26,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
+import app.ma.entities.Article;
 import app.ma.compositeKey.ProblemContestKey;
 import app.ma.entities.Contest;
 import app.ma.entities.Problem;
@@ -28,6 +36,7 @@ import app.ma.entities.ProblemContest;
 import app.ma.entities.Tag;
 import app.ma.objects.ContestScoreboard;
 import app.ma.objects.ContestStats;
+import app.ma.objects.JSONView;
 import app.ma.repositories.ContestRepository;
 import app.ma.repositories.ProblemContestRepository;
 import app.ma.repositories.ProblemContestUserRepository;
@@ -220,7 +229,43 @@ public class ContestController {
 		return new ResponseEntity<Contest>(contest.get(), new HttpHeaders(), HttpStatus.OK);
 	}
 	
+	@JsonView(JSONView.ContestSummary.class)
+	@RequestMapping(path="/getRunningContests", method=RequestMethod.GET)
+	public ResponseEntity<List<Contest>> getRunningContests() {
+		
+		Date currentDate = new Date();
+		 
+		List<Contest> pagedResult = contestRepository.findByStartTimeLessThanAndEndTimeGreaterThanAndIsVisibleIsTrue(currentDate,currentDate);
+		
+		return new ResponseEntity<List<Contest>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
+	}
 	
+	@JsonView(JSONView.ContestSummary.class)
+	@RequestMapping(path="/getFutureContests", method=RequestMethod.GET)
+	public ResponseEntity<List<Contest>> getFutureContests() {
+		
+		Date currentDate = new Date();
+		 
+		List<Contest> pagedResult = contestRepository.findByStartTimeGreaterThanAndIsVisibleIsTrue(currentDate);
+		
+		return new ResponseEntity<List<Contest>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
+	}
+
+	@RequestMapping(path="/getPastContests", method=RequestMethod.GET)
+	public ResponseEntity<Page<Contest>> getPastContests(
+            @RequestHeader(defaultValue = "0") Integer pageNo, 
+            @RequestHeader(defaultValue = "10") Integer pageSize,
+            @RequestHeader(defaultValue = "id") String sortBy) {
+		
+		Date currentDate = new Date();
+		
+		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+		 
+        Page<Contest> pagedResult = contestRepository.findByEndTimeLessThanAndIsVisibleIsTrue(currentDate, paging);
+		System.out.println(pagedResult.getTotalElements());
+		return new ResponseEntity<Page<Contest>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
+	}
+
 	@RequestMapping(path="/getScoreboardByContestId", method=RequestMethod.GET)
 	public ResponseEntity<ContestStats> getScoreboardByContestId(
 			@RequestHeader Long id) {
