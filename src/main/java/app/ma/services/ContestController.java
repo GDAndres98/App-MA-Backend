@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -97,6 +98,8 @@ public class ContestController {
 		
 		if(startTime.after(endTime)) 
 			return new ResponseEntity<String>("ERROR: Hora de inicio despues de la hora final ", new HttpHeaders(), HttpStatus.CONFLICT);
+		if(startTime.before(new Date(System.currentTimeMillis())))
+			return new ResponseEntity<String>("ERROR: Hora de inicio no valida", new HttpHeaders(), HttpStatus.CONFLICT);
 		contest.setStartTime(startTime);
 		contest.setEndTime(endTime);
 		contest.setVisible(true);
@@ -125,9 +128,87 @@ public class ContestController {
 		return new ResponseEntity<>("Competencia creada correctamente.", HttpStatus.CREATED);
 	}
 	
+	@CrossOrigin
+	@RequestMapping(path="/editContest", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> editContest
+	(
+			@RequestParam Long 		id, 
+			@RequestParam String 	name		, 
+			@RequestParam Boolean 	isPrivate	,
+			@RequestParam(required = false) String 	password,
+			@RequestParam Date 		startTime	, 
+			@RequestParam Date 		endTime	, 
+			@RequestParam(required = false) List<Long>  problems) {
+		
+		
+		if(startTime.after(endTime)) 
+			return new ResponseEntity<String>("ERROR: Hora de inicio despues de la hora final ", new HttpHeaders(), HttpStatus.CONFLICT);
+		if(startTime.before(new Date(System.currentTimeMillis())))
+			return new ResponseEntity<String>("ERROR: Hora de inicio no valida", new HttpHeaders(), HttpStatus.CONFLICT);
+		
+		Optional<Contest> opContest = this.contestRepository.findById(id);
+		if(!opContest.isPresent())
+			return new ResponseEntity<String>("ERROR: Competencia no existe", new HttpHeaders(), HttpStatus.NOT_FOUND);
+		
+		Contest contest = opContest.get();
+		contest.setName(name);
+		if(isPrivate) {
+			contest.setPrivate(true);
+			contest.setPassword(password);
+		}
+		contest.setStartTime(startTime);
+		contest.setEndTime(endTime);
+		contest.setVisible(true);
+		contest.setPartialVerdict(false);
+		
+		this.contestRepository.save(contest);
+		
+		this.problemContestRepository.deleteAll(contest.getProblemContest());
+		contest.setProblemContest(new HashSet<ProblemContest>());
+		
+		Map<Long, String> map = new HashMap<>();
+		for(int i = 0; i < problems.size(); i++)
+			map.put(problems.get(i), (char)('A' + i) + "");
+		
+		
+		Iterable<Problem> problemList = this.problemRepository.findAllById(problems);
+				
+		for(Problem p: problemList) {
+			ProblemContest problemContest = new ProblemContest();
+			problemContest.setContest(contest);
+			problemContest.setProblem(p);
+			problemContest.setId(new ProblemContestKey(p.getId(), contest.getId()));
+			problemContest.setLetter(map.get(p.getId()));
+			this.problemContestRepository.save(problemContest);
+		}
+		this.contestRepository.save(contest);
+		
+		
+		return new ResponseEntity<>("Competencia creada correctamente.", HttpStatus.CREATED);
+	}
 	
-	@RequestMapping(path="/getContestById", method=RequestMethod.GET)
-	public ResponseEntity<ContestStats> testf(
+	@CrossOrigin
+	@RequestMapping(path="/deleteContest", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> deleteContest
+	(
+			@RequestParam Long 		id) {
+		
+		
+		Optional<Contest> opContest = this.contestRepository.findById(id);
+		if(!opContest.isPresent())
+			return new ResponseEntity<String>("ERROR: Competencia no existe", new HttpHeaders(), HttpStatus.NOT_FOUND);
+
+		if(opContest.get().getStartTime().before(new Date()))
+			return new ResponseEntity<String>("ERROR: Compentencia en curso o finalizada", new HttpHeaders(), HttpStatus.NOT_FOUND);
+
+		this.contestRepository.deleteById(id);
+		
+		return new ResponseEntity<>("Competencia eliminada correctamente.", HttpStatus.CREATED);
+	}
+	
+	
+	@RequestMapping(path="/getContestStatsById", method=RequestMethod.GET)
+	public ResponseEntity<ContestStats> getContestStatsById(
 			@RequestHeader Long id) {
 		Optional<Contest> contest = contestRepository.findById(id);
 		if(!contest.isPresent())
@@ -136,6 +217,16 @@ public class ContestController {
 		ContestStats contestStats = new ContestStats(contest.get(), submitRepository);
 		
 		return new ResponseEntity<ContestStats>(contestStats, new HttpHeaders(), HttpStatus.OK);
+	}
+	
+	@RequestMapping(path="/getContestById", method=RequestMethod.GET)
+	public ResponseEntity<Contest> getContestById(
+			@RequestHeader Long id) {
+		Optional<Contest> contest = contestRepository.findById(id);
+		if(!contest.isPresent())
+			return new ResponseEntity<Contest>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);
+				
+		return new ResponseEntity<Contest>(contest.get(), new HttpHeaders(), HttpStatus.OK);
 	}
 	
 	@JsonView(JSONView.ContestSummary.class)
@@ -174,7 +265,7 @@ public class ContestController {
 		System.out.println(pagedResult.getTotalElements());
 		return new ResponseEntity<Page<Contest>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(path="/getScoreboardByContestId", method=RequestMethod.GET)
 	public ResponseEntity<ContestStats> getScoreboardByContestId(
 			@RequestHeader Long id) {
