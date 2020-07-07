@@ -224,7 +224,7 @@ public class ContestController {
 		return new ResponseEntity<ContestStats>(contestStats, new HttpHeaders(), HttpStatus.OK);
 	}
 	
-	@RequestMapping(path="/getContestById", method=RequestMethod.GET)
+	@RequestMapping(path="/getContestAdminById", method=RequestMethod.GET)
 	public ResponseEntity<Contest> getContestById(
 			@RequestHeader Long id) {
 		Optional<Contest> contest = contestRepository.findById(id);
@@ -282,4 +282,38 @@ public class ContestController {
 		
 		return new ResponseEntity<ContestStats>(contestStats, new HttpHeaders(), HttpStatus.OK);
 	}
+	
+	
+	@RequestMapping(path = "/getContestById", method = RequestMethod.GET)
+	public ResponseEntity<ContestStats> getContestById(
+			@RequestHeader Long id,
+			@RequestHeader(defaultValue = "public") String password) {
+		Optional<Contest> contest = contestRepository.findById(id);
+		if (!contest.isPresent())
+			return new ResponseEntity<ContestStats>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);
+
+		Contest result = contest.get();
+
+		if (result.isPrivate() && !result.getPassword().equals(password))
+			return new ResponseEntity<ContestStats>(null, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+
+		ContestStats contestStats = new ContestStats(result, submitRepository);
+
+		return new ResponseEntity<ContestStats>(contestStats, new HttpHeaders(), HttpStatus.OK);
+	}
+	
+	
+	@JsonView(JSONView.ContestSummary.class)
+	@RequestMapping(path = "/getContestPreviewById", method = RequestMethod.GET)
+	public ResponseEntity<Contest> getContestPreviewById(
+			@RequestHeader Long id, String password) {
+		Optional<Contest> contest = contestRepository.findById(id);
+		if (!contest.isPresent())
+			return new ResponseEntity<Contest>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);
+
+		Contest contestStats = contest.get();
+
+		return new ResponseEntity<Contest>(contestStats, new HttpHeaders(), HttpStatus.OK);
+	}
+	
 }
