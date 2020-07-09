@@ -101,6 +101,15 @@ public class UserController {
 		if(!userOp.isPresent()) return false;
 		return userOp.get().getAdmin();
 	}	
+	@CrossOrigin
+	@RequestMapping(path="/isProfesor", method=RequestMethod.GET)
+	public Boolean isProfesor
+	(
+			@RequestHeader Long id) {
+		Optional<User> userOp = this.userRepository.findById(id);
+		if(!userOp.isPresent()) return false;
+		return userOp.get().isProfesor();
+	}
 	
 	@CrossOrigin
 	@RequestMapping(path="/getProfesorById", method=RequestMethod.GET)
