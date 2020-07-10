@@ -47,6 +47,9 @@ public class Section {
 	@JoinColumn(name = "posted_at", nullable = false)
 	private Course postedAt;
 
+	@Column
+	private Long orderSection;
+	
 	@OneToOne // TODO One to one
 	@JoinColumn(nullable = true)
 	private Contest problems;
@@ -127,5 +130,14 @@ public class Section {
 	public void deleteArticle(Article article) {
 		this.articles.remove(article);
 	}
+
+	public Long getOrderSection() {
+		return orderSection;
+	}
+
+	public void setOrderSection(Long orderSection) {
+		this.orderSection = orderSection;
+	}
+
 
 }

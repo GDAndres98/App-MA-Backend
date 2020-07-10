@@ -108,7 +108,7 @@ public class Runner implements CommandLineRunner {
 		ArrayList<User> estudiantes = new ArrayList<User>();
 		estudiantes.add(new User("GDAndres98", "Andrés Gustavo", "Osorio Jiménez", "img.png", "gd_andres98@hotmail.com", "12345"));
 		estudiantes
-				.add(new User("Alex_gal", "Marlon", "Estupiñán", "imgcfff.png", "maestupinan2@hotmail.com", "123123"));
+				.add(new User("Alex_gal", "Marlon Alexander", "Estupiñán Galindo", "imgcfff.png", "maestupinan2@hotmail.com", "123123"));
 		estudiantes.add(new User("nomovie2", "Ashoka", "Tano", "imgcfff.png", "nomovie2@hotmail.com", "123456"));
 		createAllUsers(estudiantes, student);
 		ArrayList<User> profesores = new ArrayList<User>();
@@ -236,19 +236,19 @@ public class Runner implements CommandLineRunner {
 		
 		//Section
 		// id = 1
-		createSection("For loops", "En esta sección se va a enterder el concepto de 'for loop' ademas de sus posibles aplicaciones", 1l);
-		createSection("Funciones Recursivas", "En esta sección se va enseñar el uso de las funciones recursivas como sus posibles implementaciones.", 1l);
-		createSection("Programación dinamica", "En esta sección se va a dar un pequeño vistazo en el paradigma de la programación dinamica así como diferentes tipos de estas.", 1l);
-		createSection("Distancia minima en grafos", "En esta sección se busca presentar el problema de distancia minima en grafos mostrando todos los tipos y los algoritmos que los solucionan.", 1l);
+		createSection("For loops", "En esta sección se va a enterder el concepto de 'for loop' ademas de sus posibles aplicaciones", 1l, 0l);
+		createSection("Funciones Recursivas", "En esta sección se va enseñar el uso de las funciones recursivas como sus posibles implementaciones.", 1l, 1l);
+		createSection("Programación dinamica", "En esta sección se va a dar un pequeño vistazo en el paradigma de la programación dinamica así como diferentes tipos de estas.", 1l, 2l);
+		createSection("Distancia minima en grafos", "En esta sección se busca presentar el problema de distancia minima en grafos mostrando todos los tipos y los algoritmos que los solucionan.", 1l, 3l);
 		
 		// id = 2
-		createSection("Programación dinamica", "En esta sección se va a dar un pequeño vistazo en el paradigma de la programación dinamica así como diferentes tipos de estas.", 2l);
-		createSection("Distancia minima en grafos", "En esta sección se busca presentar el problema de distancia minima en grafos mostrando todos los tipos y los algoritmos que los solucionan.", 2l);
+		createSection("Programación dinamica", "En esta sección se va a dar un pequeño vistazo en el paradigma de la programación dinamica así como diferentes tipos de estas.", 2l, 0l);
+		createSection("Distancia minima en grafos", "En esta sección se busca presentar el problema de distancia minima en grafos mostrando todos los tipos y los algoritmos que los solucionan.", 2l, 1l);
 		
 		// id = 3
-		createSection("Funciones Recursivas", "En esta sección se va enseñar el uso de las funciones recursivas como sus posibles implementaciones.", 3l);
-		createSection("Programación dinamica", "En esta sección se va a dar un pequeño vistazo en el paradigma de la programación dinamica así como diferentes tipos de estas.", 3l);
-		createSection("Distancia minima en grafos", "En esta sección se busca presentar el problema de distancia minima en grafos mostrando todos los tipos y los algoritmos que los solucionan.", 3l);
+		createSection("Funciones Recursivas", "En esta sección se va enseñar el uso de las funciones recursivas como sus posibles implementaciones.", 3l, 0l);
+		createSection("Programación dinamica", "En esta sección se va a dar un pequeño vistazo en el paradigma de la programación dinamica así como diferentes tipos de estas.", 3l, 1l);
+		createSection("Distancia minima en grafos", "En esta sección se busca presentar el problema de distancia minima en grafos mostrando todos los tipos y los algoritmos que los solucionan.", 3l, 2l);
 		
 		//Section-Article
 		addArticleToSection(1l, 1l);
@@ -420,7 +420,8 @@ public class Runner implements CommandLineRunner {
 	(
 			String 	title	, 
 			String 	description, 
-			Long 	courseId) {
+			Long 	courseId,
+			Long 	order) {
 		Optional<Course> opCourse = courseRepository.findById(courseId);
 		Course course = opCourse.get();
 		
@@ -428,6 +429,7 @@ public class Runner implements CommandLineRunner {
 		section.setTitle(title);
 		section.setDescription(description);
 		section.setPostedAt(course);
+		section.setOrderSection(order);
 		
 		sectionRepository.save(section);
 	}
@@ -599,8 +601,9 @@ public class Runner implements CommandLineRunner {
 	}
 
 	private void createAllCourses(ArrayList<Course> courses) {
-		for (Course e : courses)
+		for (Course e : courses) {
 			courseRepository.save(e);
+		}
 	}
 
 }

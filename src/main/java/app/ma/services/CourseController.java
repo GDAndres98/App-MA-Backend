@@ -206,6 +206,24 @@ public class CourseController {
 		return new ResponseEntity<>("Sección Agregada correctamente.", HttpStatus.ACCEPTED);
 	}
 	
+	@CrossOrigin
+	@RequestMapping(path = "/getProfesorCourseById", method = RequestMethod.GET)
+	public ResponseEntity<Iterable<Course>> getProfesorCourseById(@RequestHeader Long id) {
+		List<Course> courses = this.courseRepository.findByProfessor_Id(id);
+		if(courses == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Iterable<Course>>(courses, HttpStatus.OK);
+	}
+	
+	@CrossOrigin
+	@RequestMapping(path="/hasCoursePermision", method=RequestMethod.GET)
+	public Boolean hasCoursePermision
+	(
+			@RequestHeader Long courseId,
+			@RequestHeader Long userId) {
+		Optional<Course> opCourse = this.courseRepository.findById(courseId);
+		if(!opCourse.isPresent()) return false;
+		return opCourse.get().getProfessor().getId() == userId;
+	}
 	
 	
 	

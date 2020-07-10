@@ -63,9 +63,11 @@ public class User {
 	Set<UserCourse> courses;
 
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	Set<ProblemContestUser> problemContestUser;
 
 	@ManyToMany(mappedBy = "users")
+	@JsonIgnore
 	private Set<Role> role = new HashSet<>();
 	
 	@OneToMany(fetch = FetchType.EAGER)
@@ -235,6 +237,10 @@ public class User {
 		for(Role role: this.role)
 			b |= role.isStudent();
 		return b;
+	}
+
+	public void addCourse(Course course) {
+		this.professorClass.add(course);
 	}
 
 }

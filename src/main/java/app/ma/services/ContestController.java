@@ -78,7 +78,6 @@ public class ContestController {
 		 return new ResponseEntity<List<Problem>>(problems, new HttpHeaders(), HttpStatus.OK);
 	}
 
-	@CrossOrigin
 	@RequestMapping(path="/createContest", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> createContest
 	(
@@ -131,7 +130,6 @@ public class ContestController {
 		return new ResponseEntity<>("Competencia creada correctamente.", HttpStatus.CREATED);
 	}
 	
-	@CrossOrigin
 	@RequestMapping(path="/editContest", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> editContest
 	(
@@ -192,7 +190,6 @@ public class ContestController {
 		return new ResponseEntity<>("Competencia creada correctamente.", HttpStatus.CREATED);
 	}
 	
-	@CrossOrigin
 	@RequestMapping(path="/deleteContest", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> deleteContest
 	(
