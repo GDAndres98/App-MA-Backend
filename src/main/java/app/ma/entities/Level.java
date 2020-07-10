@@ -29,6 +29,8 @@ public class Level {
 
 	@Column(nullable = false)
 	private String name;
+	@Column
+	private String logo;
 	@Column(nullable = false)
 	private Long number;
 
@@ -36,9 +38,9 @@ public class Level {
 	@JoinColumn(nullable = false)
 	private Contest problems;
 	
-	@JsonIgnore
     @OneToMany(mappedBy="level")
     private Set<Article> articles = new HashSet<>();
+    
 
 	@CreationTimestamp
 	private Date createAt;
@@ -52,7 +54,7 @@ public class Level {
 	public Level() {
 
 	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -69,6 +71,14 @@ public class Level {
 		this.name = name;
 	}
 
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+	
 	public Long getNumber() {
 		return number;
 	}
@@ -92,7 +102,15 @@ public class Level {
 	public Date getUpdateAt() {
 		return updateAt;
 	}
+	
+	public Set<Article> getArticles() {
+		return articles;
+	}
 
+	public void setArticles(Set<Article> articles) {
+		this.articles = articles;
+	}
+	
 	public void addArticle(Article article) {
 		this.articles.add(article);
 	}
