@@ -13,16 +13,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import app.ma.entities.Article;
 import app.ma.entities.Level;
+import app.ma.entities.User;
+import app.ma.objects.JSONView;
 import app.ma.repositories.ArticleRepository;
 import app.ma.repositories.LevelRepository;
+import app.ma.repositories.ProblemContestUserRepository;
+import app.ma.repositories.UserRepository;
 
 @RestController
 public class LevelController {
 	@Autowired	private LevelRepository levelRepository;
+	@Autowired	private UserRepository userRepository;
 	@Autowired	private ArticleRepository articleRepository;
+	@Autowired	private ProblemContestUserRepository problemContestUserRepository;
 	
+
+	@JsonView(JSONView.LevelSummary.class)
 	@CrossOrigin
 	@RequestMapping("/getAllLevels")
 	public Iterable<Level> getAllLevels () {
@@ -33,7 +43,7 @@ public class LevelController {
 	
 	@CrossOrigin
 	@RequestMapping(path="/getLevelById", method=RequestMethod.GET)
-	public Level getLevelById 
+	public Level getLevelByUserId 
 	(
 			@RequestHeader Long id) {
 		
@@ -41,6 +51,39 @@ public class LevelController {
 		if(!level.isPresent())
 			return null;
 		return level.get();
+	}
+	
+	@CrossOrigin
+	@RequestMapping(path="/getLevelByUserId", method=RequestMethod.GET)
+	public ResponseEntity<Long> getLevelById 
+	(
+			@RequestHeader Long id) {
+		Long levelNumber = 1l;
+		Optional<User> opUser = userRepository.findById(id);
+		if (!opUser.isPresent())
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		User user = opUser.get();
+
+		boolean hasToChangeLevel = user.getLevel() == null;
+		if (!hasToChangeLevel) {
+			Level cur = user.getLevel();
+			levelNumber = cur.getNumber();
+			int problems = cur.getProblems().getProblems().size();
+			int problemsSolved = problemContestUserRepository.findSolvedProblems(cur.getProblems().getId(), user.getId()).size();
+			if (problemsSolved == problems) {
+				hasToChangeLevel = true;
+				levelNumber++;
+				if(levelNumber>levelRepository.count())
+					hasToChangeLevel=false;
+			}
+		}
+		
+		if(hasToChangeLevel) {
+			user.setLevel(levelRepository.findByNumber(levelNumber));
+			userRepository.save(user);
+		}
+
+		return new ResponseEntity<>(levelNumber, HttpStatus.ACCEPTED);
 	}
 	
 	@CrossOrigin

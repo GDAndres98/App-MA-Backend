@@ -18,19 +18,26 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import app.ma.objects.JSONView;
 
 @Entity
 @Table(name = "level")
 public class Level {
 
+	@JsonView(JSONView.LevelSummary.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@JsonView(JSONView.LevelSummary.class)
 	@Column(nullable = false)
 	private String name;
+	@JsonView(JSONView.LevelSummary.class)
 	@Column
 	private String logo;
+	@JsonView(JSONView.LevelSummary.class)
 	@Column(nullable = false)
 	private Long number;
 

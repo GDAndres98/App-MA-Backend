@@ -11,6 +11,7 @@ import app.ma.entities.Level;
 public interface LevelRepository extends CrudRepository<Level, Long> {
 
 	public Level findById(long id);
+	public Level findByNumber(long id);
 	public List<Level> findAllByOrderByNumberAsc();
 
 }

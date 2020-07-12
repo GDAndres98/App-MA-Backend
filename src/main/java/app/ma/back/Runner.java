@@ -289,7 +289,7 @@ public class Runner implements CommandLineRunner {
 		addProblemToContest(problemas.get(4), competencias.get(4), "A");
 		addProblemToContest(problemas.get(5), competencias.get(4), "B");
 		addProblemToContest(problemas.get(6), competencias.get(4), "C");
-		competencias.add(createPublicContest("CCPL Round 10", new Date(120, 5, 25, 18, 30), new Date(120, 6, 9, 18, 30)));
+		competencias.add(createPublicContest("CCPL Round 10", new Date(120, 5, 25, 18, 30), new Date(120, 8, 9, 18, 30)));
 		addProblemToContest(problemas.get(4), competencias.get(5), "A");
 		addProblemToContest(problemas.get(5), competencias.get(5), "B");
 		addProblemToContest(problemas.get(6), competencias.get(5), "C");
@@ -353,7 +353,7 @@ public class Runner implements CommandLineRunner {
 		Contest publicContest = new Contest();
 		publicContest.setName(name);
 		publicContest.setStartTime(new Date(0));
-		publicContest.setEndTime(new Date(0));
+		publicContest.setEndTime(new Date(220, 8, 9, 18, 30));
 		publicContest.setPartialVerdict(false);
 		publicContest.setPrivate(false);
 		publicContest.setVisible(false);
