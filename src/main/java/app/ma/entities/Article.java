@@ -48,6 +48,7 @@ public class Article {
 	private Set<Section> sections = new HashSet<Section>();
 
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "level", nullable = true) // TODO 
 	private Level level = null;
 

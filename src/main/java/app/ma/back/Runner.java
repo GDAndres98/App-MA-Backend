@@ -31,6 +31,7 @@ import app.ma.compositeKey.UserCourseKey;
 import app.ma.entities.Article;
 import app.ma.entities.Contest;
 import app.ma.entities.Course;
+import app.ma.entities.Level;
 import app.ma.entities.MyJob;
 import app.ma.entities.Post;
 import app.ma.entities.Problem;
@@ -44,6 +45,7 @@ import app.ma.entities.UserCourse;
 import app.ma.repositories.ArticleRepository;
 import app.ma.repositories.ContestRepository;
 import app.ma.repositories.CourseRepository;
+import app.ma.repositories.LevelRepository;
 import app.ma.repositories.PostRepository;
 import app.ma.repositories.ProblemContestRepository;
 import app.ma.repositories.ProblemRepository;
@@ -71,6 +73,7 @@ public class Runner implements CommandLineRunner {
 	@Autowired private ContestRepository contestRepository;
 	@Autowired private ProblemContestRepository problemContestRepository;
 	@Autowired private SubmitRepository submitRepository;
+	@Autowired private LevelRepository levelRepository;
 
 	
     @Autowired
@@ -275,25 +278,49 @@ public class Runner implements CommandLineRunner {
 		addProblemToContest(problemas.get(5), competencias.get(1), "B");
 		addProblemToContest(problemas.get(6), competencias.get(1), "C");
 		competencias.add(createPublicContest("CCPL Round 6", new Date(120, 2, 25, 18, 30), new Date(120, 3, 9, 18, 30)));
-		addProblemToContest(problemas.get(4), competencias.get(1), "A");
-		addProblemToContest(problemas.get(5), competencias.get(1), "B");
-		addProblemToContest(problemas.get(6), competencias.get(1), "C");
-		competencias.add(createPublicContest("CCPL Round 8", new Date(120, 3, 1, 18, 30), new Date(120, 4, 30, 18, 30)));
 		addProblemToContest(problemas.get(4), competencias.get(2), "A");
 		addProblemToContest(problemas.get(5), competencias.get(2), "B");
 		addProblemToContest(problemas.get(6), competencias.get(2), "C");
-		competencias.add(createPublicContest("CCPL Round 9", new Date(120, 4, 25, 18, 30), new Date(120, 5, 9, 18, 30)));
+		competencias.add(createPublicContest("CCPL Round 8", new Date(120, 3, 1, 18, 30), new Date(120, 4, 30, 18, 30)));
 		addProblemToContest(problemas.get(4), competencias.get(3), "A");
 		addProblemToContest(problemas.get(5), competencias.get(3), "B");
 		addProblemToContest(problemas.get(6), competencias.get(3), "C");
-		competencias.add(createPublicContest("CCPL Round 10", new Date(120, 5, 25, 18, 30), new Date(120, 6, 9, 18, 30)));
+		competencias.add(createPublicContest("CCPL Round 9", new Date(120, 4, 25, 18, 30), new Date(120, 5, 9, 18, 30)));
 		addProblemToContest(problemas.get(4), competencias.get(4), "A");
 		addProblemToContest(problemas.get(5), competencias.get(4), "B");
 		addProblemToContest(problemas.get(6), competencias.get(4), "C");
-		competencias.add(createPublicContest("CCPL Round 11", new Date(120, 7, 25, 18, 30), new Date(120, 8, 9, 18, 30)));
+		competencias.add(createPublicContest("CCPL Round 10", new Date(120, 5, 25, 18, 30), new Date(120, 8, 9, 18, 30)));
 		addProblemToContest(problemas.get(4), competencias.get(5), "A");
 		addProblemToContest(problemas.get(5), competencias.get(5), "B");
 		addProblemToContest(problemas.get(6), competencias.get(5), "C");
+		competencias.add(createPublicContest("CCPL Round 11", new Date(120, 7, 25, 18, 30), new Date(120, 8, 9, 18, 30)));
+		addProblemToContest(problemas.get(4), competencias.get(6), "A");
+		addProblemToContest(problemas.get(5), competencias.get(6), "B");
+		addProblemToContest(problemas.get(6), competencias.get(6), "C");
+		
+		
+		
+		
+		
+		ArrayList<Level> niveles = new ArrayList<Level>();
+		competencias.add(createLevelContest("Level1"));
+		addProblemToContest(problemas.get(0), competencias.get(7), "A");
+		addProblemToContest(problemas.get(1), competencias.get(7), "B");
+		addProblemToContest(problemas.get(2), competencias.get(7), "C");
+		niveles.add(createLevel("Nivel 1", "cat", 1, competencias.get(7)));
+		addArticleToLevel(articulos.get(0), niveles.get(0));
+		addArticleToLevel(articulos.get(1), niveles.get(0));
+		addArticleToLevel(articulos.get(2), niveles.get(0));
+		
+		
+		competencias.add(createLevelContest("Level2"));
+		addProblemToContest(problemas.get(3), competencias.get(8), "A");
+		addProblemToContest(problemas.get(4), competencias.get(8), "B");
+		addProblemToContest(problemas.get(5), competencias.get(8), "C");
+		niveles.add(createLevel("Nivel 2", "dog", 2, competencias.get(8)));
+		addArticleToLevel(articulos.get(3), niveles.get(1));
+		addArticleToLevel(articulos.get(4), niveles.get(1));
+		addArticleToLevel(articulos.get(5), niveles.get(1));
 		
 		
 		
@@ -309,8 +336,43 @@ public class Runner implements CommandLineRunner {
 		this.roleRepository.save(admin);
 	}
 
+	
+	public void addArticleToLevel
+	(
+			Article 		article,  
+			Level 		level) {
+		level.addArticle(article);
+		article.setLevel(level);
+		
+		levelRepository.save(level);
+		articleRepository.save(article);
+	}
 
 
+	private Contest createLevelContest(String name) {
+		Contest publicContest = new Contest();
+		publicContest.setName(name);
+		publicContest.setStartTime(new Date(0));
+		publicContest.setEndTime(new Date(220, 8, 9, 18, 30));
+		publicContest.setPartialVerdict(false);
+		publicContest.setPrivate(false);
+		publicContest.setVisible(false);
+		
+		contestRepository.save(publicContest);
+		return publicContest;
+	}
+	
+
+	private Level createLevel(String name, String logo, long number, Contest contest) {
+		Level level = new Level();
+		level.setName(name);
+		level.setLogo(logo);
+		level.setNumber(number);
+		level.setProblems(contest);
+		
+		levelRepository.save(level);
+		return level;
+	}
 
 	private void addProblemToContest(Problem problem, Contest contest, String string) {
 		ProblemContest problemContest = new ProblemContest();
@@ -320,6 +382,7 @@ public class Runner implements CommandLineRunner {
 		problemContest.setId(new ProblemContestKey(problem.getId(), contest.getId()));
 		problemContestRepository.save(problemContest);
 	}
+	
 
 
 	private Contest createPublicContest(String name, Date begin, Date end) {

@@ -13,11 +13,15 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Formula;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import app.ma.compositeKey.ProblemContestUserKey;
+import app.ma.objects.JSONView;
 
 @Entity
 public class ProblemContestUser {
 
+	
 	@EmbeddedId
 	ProblemContestUserKey id;
 
@@ -75,5 +79,5 @@ public class ProblemContestUser {
 	public User getUser() {
 		return user;
 	}
-
+	
 }

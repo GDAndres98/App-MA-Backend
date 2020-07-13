@@ -303,7 +303,7 @@ public class ContestController {
 	@JsonView(JSONView.ContestSummary.class)
 	@RequestMapping(path = "/getContestPreviewById", method = RequestMethod.GET)
 	public ResponseEntity<Contest> getContestPreviewById(
-			@RequestHeader Long id, String password) {
+			@RequestHeader Long id) {
 		Optional<Contest> contest = contestRepository.findById(id);
 		if (!contest.isPresent())
 			return new ResponseEntity<Contest>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);
@@ -313,4 +313,32 @@ public class ContestController {
 		return new ResponseEntity<Contest>(contestStats, new HttpHeaders(), HttpStatus.OK);
 	}
 	
+	@RequestMapping(path = "/getSolvedProblems", method = RequestMethod.GET)
+	public ResponseEntity<Iterable<Long>> getSolvedProblemsByContestId(
+			@RequestHeader Long contestId,
+			@RequestHeader Long userId,
+			@RequestHeader List<Long> problemsId) {
+		
+		System.out.println(problemsId);
+		
+		List<Long> problemsSolved = problemContestUserRepository.findSolvedProblems(contestId, userId);
+		
+//		Iterable<Long> problemsSolved = problemContestUserRepository.findByProblemContest_Contest_IdAndUser_IdAndSolDateNotNull(contestId, userId);
+//		
+//		for (Long x: problemsSolved) {
+//			System.out.println(x);
+//		}
+		
+		return new ResponseEntity<Iterable<Long>>(problemsSolved, new HttpHeaders(), HttpStatus.OK);
+	}
 }
+
+
+
+
+
+
+
+
+
+
