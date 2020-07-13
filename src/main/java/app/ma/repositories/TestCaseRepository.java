@@ -9,6 +9,6 @@ import app.ma.entities.TestCase;
 public interface TestCaseRepository extends CrudRepository<TestCase, Long> {
 
 	public TestCase findById(long id);
-	public Iterable<TestCase> findByProblem_Id(long id);
+	public Iterable<TestCase> findByProblem_IdOrderByOrderTestCase(long id);
 
 }

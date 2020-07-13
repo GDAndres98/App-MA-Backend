@@ -167,4 +167,8 @@ public class Problem {
 	public void setProblemContest(Set<ProblemContest> problemContest) {
 		this.problemContest = problemContest;
 	}
+
+	public void addTestCase(TestCase tc) {	
+		this.testCases.add(tc);
+	}
 }

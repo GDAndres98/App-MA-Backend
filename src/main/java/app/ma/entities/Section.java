@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -50,9 +51,15 @@ public class Section {
 	@Column
 	private Long orderSection;
 	
-	@OneToOne // TODO One to one
+	@Column(length = 4000)
+	private String attached;
+	
+	@ManyToMany
 	@JoinColumn(nullable = true)
-	private Contest problems;
+	@JsonIgnoreProperties({"tags"})
+	@OrderBy("title")
+	private Set<Problem> problems;
+	
 
 	@CreationTimestamp
 	private Date createAt;
@@ -107,14 +114,6 @@ public class Section {
 		this.postedAt = postedAt;
 	}
 
-	public Contest getProblems() {
-		return problems;
-	}
-
-	public void setProblems(Contest problems) {
-		this.problems = problems;
-	}
-
 	public Date getCreateAt() {
 		return createAt;
 	}
@@ -137,6 +136,30 @@ public class Section {
 
 	public void setOrderSection(Long orderSection) {
 		this.orderSection = orderSection;
+	}
+
+	public String getAttached() {
+		return attached;
+	}
+
+	public void setAttached(String attached) {
+		this.attached = attached;
+	}
+
+	public Set<Problem> getProblems() {
+		return problems;
+	}
+
+	public void setProblems(Set<Problem> problems) {
+		this.problems = problems;
+	}
+
+	public void addProblem(Problem problem) {
+		this.problems.add(problem);
+	}
+
+	public void deleteProblem(Problem problem) {
+		this.problems.remove(problem);
 	}
 
 

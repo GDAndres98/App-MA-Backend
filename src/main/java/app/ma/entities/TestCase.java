@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -32,14 +33,19 @@ public class TestCase {
 	private Long tcDifficulty;
 
 	@ManyToOne
-	@JsonIgnoreProperties({ "testCases" })
+	@JsonIgnore
 	@JoinColumn(name = "problem", nullable = false)
 	private Problem problem;
+	
+	@Column(nullable = false)
+	private Long orderTestCase;
 
 	@CreationTimestamp
 	private Date createAt;
 	@UpdateTimestamp
 	private Date updateAt;
+	
+	
 
 	// ****************************************************************
 
@@ -95,6 +101,14 @@ public class TestCase {
 
 	public Date getUpdateAt() {
 		return updateAt;
+	}
+
+	public Long getOrderTestCase() {
+		return orderTestCase;
+	}
+
+	public void setOrderTestCase(Long orderTestCase) {
+		this.orderTestCase = orderTestCase;
 	}
 
 }
