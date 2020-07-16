@@ -3,6 +3,7 @@ package app.ma.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -79,6 +80,17 @@ public class LevelController {
 		return level.get();
 	}
 	
+	@CrossOrigin
+	@RequestMapping(path="/getStageById", method=RequestMethod.GET)
+	public ResponseEntity<Stage> getStageById 
+	(
+			@RequestHeader Long id) {
+		
+		Optional<Stage> stage = stageRepository.findById(id);
+		if(!stage.isPresent())
+				return new ResponseEntity<Stage>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);;
+		 return new ResponseEntity<Stage>(stage.get(), new HttpHeaders(), HttpStatus.OK);
+	}
 	
 	@CrossOrigin
 	@RequestMapping(path="/getLevelByUserIdAndStageId", method=RequestMethod.GET)
