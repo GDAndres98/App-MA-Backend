@@ -61,9 +61,8 @@ public class LevelController {
 	@JsonView(JSONView.LevelSummary.class)
 	@CrossOrigin
 	@RequestMapping("/getAllLevelsByStage")
-	public Iterable<Level> getAllLevels (
+	public Iterable<Level> getAllLevelsByStage (
 			@RequestHeader Long id) {
-		
 		Iterable<Level> findAll = levelRepository.findByStage_IdOrderByNumberAsc(id);
 		return findAll;
 	}

@@ -304,9 +304,13 @@ public class Runner implements CommandLineRunner {
 		
 		
 		ArrayList<Stage> stages = new ArrayList<Stage>();
-		stages.add(createStage(1l,"Introducción", "journal-whills","Aqui te enseñaremos todo lo basico que debes saber sobre la programación competitiva y resolveras tus primeros problemas!"));
-		stages.add(createStage(3l,"Recursión", "sitemap", "Recurrencia, recursión o recursividad es la forma en la cual se especifica un proceso basado en su propia definición. ​ La recursión tiene esta característica discernible en términos de autorreferencialidad, autopoiesis, fractalidad, o, en otras palabras, construcción a partir de un mismo tipo."));
-		
+		stages.add(createStage(1l,"Introducción", "fas fa-journal-whills","Aqui te enseñaremos todo lo basico que debes saber sobre la programación competitiva y resolveras tus primeros problemas!"));
+		stages.add(createStage(2l,"C++", "fab fa-cuttlefish","Aqui puedes aprender sobre C++"));
+		stages.add(createStage(2l,"Java", "fab fa-java","Aqui puedes aprender sobre Java"));
+		stages.add(createStage(2l,"Python", "fab fa-python","Aqui puedes aprender sobre Python"));
+		stages.add(createStage(3l,"Geometría", "fas fa-shapes", "La geometría es una rama de las matemáticas que se ocupa del estudio de las propiedades de las figuras en el plano o el espacio, ​ incluyendo: puntos, rectas, planos, politopos. Es la base teórica de la geometría descriptiva o del dibujo técnico."));
+		stages.add(createStage(3l,"Grafos", "fas fa-globe", "En matemáticas y ciencias de la computación, un grafo ​ es un conjunto de objetos llamados vértices o nodos unidos por enlaces llamados aristas o arcos, que permiten representar relaciones binarias entre elementos de un conjunto.​Son objeto de estudio de la teoría de grafos."));
+		stages.add(createStage(3l,"Recursión", "fas fa-sitemap", "Recurrencia, recursión o recursividad es la forma en la cual se especifica un proceso basado en su propia definición. ​ La recursión tiene esta característica discernible en términos de autorreferencialidad, autopoiesis, fractalidad, o, en otras palabras, construcción a partir de un mismo tipo."));
 		
 		ArrayList<Level> niveles = new ArrayList<Level>();
 		competencias.add(createLevelContest("Level1"));
