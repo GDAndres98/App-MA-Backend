@@ -3,6 +3,7 @@ package app.ma.entities;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -37,7 +38,7 @@ public class ProblemContest {
 	Date limitDate;
 	
 
-	@OneToMany(mappedBy = "problemContest")
+	@OneToMany(mappedBy = "problemContest", cascade = CascadeType.REMOVE)
 	Set<ProblemContestUser> problemContestUser;
 
 	@Column(nullable = false)

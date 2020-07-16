@@ -238,6 +238,42 @@ public class CourseController {
 	}
 	
 	@CrossOrigin
+	@RequestMapping(path="/editHomework", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> editHomework
+	(
+			@RequestParam Long 	contestId, 
+			@RequestParam Long 	problemId,
+			@RequestParam Date 	limitDate) {
+		
+		Optional<Contest> opContest = contestRepository.findById(contestId);
+		if(!opContest.isPresent()) return new ResponseEntity<>("Competencia no existe.", HttpStatus.BAD_REQUEST);
+		Optional<Problem> opProblem = problemRepository.findById(problemId);
+		if(!opProblem.isPresent()) return new ResponseEntity<>("Problema no existe.", HttpStatus.BAD_REQUEST);
+		
+		ProblemContest problemContest = problemContestRepository.findById(new ProblemContestKey(problemId, contestId)).get();
+		problemContest.setLimitDate(limitDate);
+		
+		this.problemContestRepository.save(problemContest);
+		return new ResponseEntity<>("Tarea editada exitosamente.", HttpStatus.OK);
+	}
+	
+	@CrossOrigin
+	@RequestMapping(path="/deleteHomework", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> deleteHomework
+	(
+			@RequestParam Long 	contestId, 
+			@RequestParam Long 	problemId) {
+		
+		Optional<Contest> opContest = contestRepository.findById(contestId);
+		if(!opContest.isPresent()) return new ResponseEntity<>("Competencia no existe.", HttpStatus.BAD_REQUEST);
+		Optional<Problem> opProblem = problemRepository.findById(problemId);
+		if(!opProblem.isPresent()) return new ResponseEntity<>("Problema no existe.", HttpStatus.BAD_REQUEST);
+		
+		this.problemContestRepository.deleteById(new ProblemContestKey(problemId, contestId));
+		return new ResponseEntity<>("Tarea eliminada exitosamente.", HttpStatus.OK);
+	}
+	
+	@CrossOrigin
 	@RequestMapping(path = "/getCourseStudentsById", method = RequestMethod.GET)
 	public List<User> getAllCourseStudentsById(@RequestHeader Long id) {
 		return userRepository.findByCourses_Course_Id(id);
