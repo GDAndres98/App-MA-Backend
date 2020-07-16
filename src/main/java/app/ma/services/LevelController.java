@@ -15,18 +15,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import app.ma.compositeKey.UserCourseKey;
+import app.ma.compositeKey.UserStageKey;
 import app.ma.entities.Article;
 import app.ma.entities.Level;
+import app.ma.entities.Stage;
 import app.ma.entities.User;
+import app.ma.entities.UserCourse;
+import app.ma.entities.UserStage;
 import app.ma.objects.JSONView;
 import app.ma.repositories.ArticleRepository;
 import app.ma.repositories.LevelRepository;
 import app.ma.repositories.ProblemContestUserRepository;
+import app.ma.repositories.StageRepository;
 import app.ma.repositories.UserRepository;
+import app.ma.repositories.UserStageRepository;
 
 @RestController
 public class LevelController {
 	@Autowired	private LevelRepository levelRepository;
+	@Autowired	private StageRepository stageRepository;
+	@Autowired	private UserStageRepository userStageRepository;
 	@Autowired	private UserRepository userRepository;
 	@Autowired	private ArticleRepository articleRepository;
 	@Autowired	private ProblemContestUserRepository problemContestUserRepository;
@@ -42,6 +51,24 @@ public class LevelController {
 	}
 	
 	@CrossOrigin
+	@RequestMapping("/getAllStages")
+	public Iterable<Stage> getAllStages () {
+		
+		Iterable<Stage> findAll = stageRepository.findAllByOrderByNumberAsc();
+		return findAll;
+	}
+	
+	@JsonView(JSONView.LevelSummary.class)
+	@CrossOrigin
+	@RequestMapping("/getAllLevelsByStage")
+	public Iterable<Level> getAllLevels (
+			@RequestHeader Long id) {
+		
+		Iterable<Level> findAll = levelRepository.findByStage_IdOrderByNumberAsc(id);
+		return findAll;
+	}
+	
+	@CrossOrigin
 	@RequestMapping(path="/getLevelById", method=RequestMethod.GET)
 	public Level getLevelByUserId 
 	(
@@ -53,35 +80,52 @@ public class LevelController {
 		return level.get();
 	}
 	
+	
 	@CrossOrigin
-	@RequestMapping(path="/getLevelByUserId", method=RequestMethod.GET)
-	public ResponseEntity<Long> getLevelById 
+	@RequestMapping(path="/getLevelByUserIdAndStageId", method=RequestMethod.GET)
+	public ResponseEntity<Long> getLevelByUserIdAndStageId 
 	(
-			@RequestHeader Long id) {
+			@RequestHeader Long userId,
+			@RequestHeader Long stageId) {
 		Long levelNumber = 1l;
-		Optional<User> opUser = userRepository.findById(id);
+		Optional<User> opUser = userRepository.findById(userId);
 		if (!opUser.isPresent())
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		User user = opUser.get();
+		Optional<Stage> opStage = stageRepository.findById(stageId);
+		if (!opStage.isPresent())
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		Stage stage = opStage.get();
 
-		boolean hasToChangeLevel = user.getLevel() == null;
-		if (!hasToChangeLevel) {
-			Level cur = user.getLevel();
+		UserStage userStage;
+		UserStageKey key = new UserStageKey(stage.getId(), user.getId());
+		if (!userStageRepository.existsById(key)) {
+			userStage = new UserStage();
+			userStage.setId(key);
+			userStage.setStage(stage);
+			userStage.setUser(user);
+			userStage.setLevelNumber(levelNumber);
+		} else {
+			userStage = userStageRepository.findById(key).get();
+
+			Optional<Level> opLevel = levelRepository.findByStage_IdAndNumber(stageId, userStage.getLevelNumber());
+			if (!opLevel.isPresent())
+				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+			Level cur = opLevel.get();
 			levelNumber = cur.getNumber();
 			int problems = cur.getProblems().getProblems().size();
-			int problemsSolved = problemContestUserRepository.findSolvedProblems(cur.getProblems().getId(), user.getId()).size();
+			int problemsSolved = problemContestUserRepository
+					.findSolvedProblems(cur.getProblems().getId(), user.getId()).size();
 			if (problemsSolved == problems) {
-				hasToChangeLevel = true;
 				levelNumber++;
-				if(levelNumber>levelRepository.count())
-					hasToChangeLevel=false;
+				if (levelNumber < levelRepository.countByStage_Id(stageId))
+					userStage.setLevelNumber(levelNumber);
 			}
+
 		}
-		
-		if(hasToChangeLevel) {
-			user.setLevel(levelRepository.findByNumber(levelNumber));
-			userRepository.save(user);
-		}
+
+		userStageRepository.save(userStage);
+
 
 		return new ResponseEntity<>(levelNumber, HttpStatus.ACCEPTED);
 	}

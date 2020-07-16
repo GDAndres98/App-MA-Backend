@@ -38,6 +38,7 @@ import app.ma.entities.Problem;
 import app.ma.entities.ProblemContest;
 import app.ma.entities.Role;
 import app.ma.entities.Section;
+import app.ma.entities.Stage;
 import app.ma.entities.Submit;
 import app.ma.entities.Tag;
 import app.ma.entities.User;
@@ -51,6 +52,7 @@ import app.ma.repositories.ProblemContestRepository;
 import app.ma.repositories.ProblemRepository;
 import app.ma.repositories.RoleRepository;
 import app.ma.repositories.SectionRepository;
+import app.ma.repositories.StageRepository;
 import app.ma.repositories.SubmitRepository;
 import app.ma.repositories.TagRepository;
 import app.ma.repositories.UserCourseRepository;
@@ -74,6 +76,7 @@ public class Runner implements CommandLineRunner {
 	@Autowired private ProblemContestRepository problemContestRepository;
 	@Autowired private SubmitRepository submitRepository;
 	@Autowired private LevelRepository levelRepository;
+	@Autowired private StageRepository stageRepository;
 
 	
     @Autowired
@@ -300,6 +303,9 @@ public class Runner implements CommandLineRunner {
 		
 		
 		
+		ArrayList<Stage> stages = new ArrayList<Stage>();
+		stages.add(createStage(1l,"Introducción", "journal-whills","Aqui te enseñaremos todo lo basico que debes saber sobre la programación competitiva y resolveras tus primeros problemas!"));
+		stages.add(createStage(3l,"Recursión", "sitemap", "Recurrencia, recursión o recursividad es la forma en la cual se especifica un proceso basado en su propia definición. ​ La recursión tiene esta característica discernible en términos de autorreferencialidad, autopoiesis, fractalidad, o, en otras palabras, construcción a partir de un mismo tipo."));
 		
 		
 		ArrayList<Level> niveles = new ArrayList<Level>();
@@ -307,7 +313,7 @@ public class Runner implements CommandLineRunner {
 		addProblemToContest(problemas.get(0), competencias.get(7), "A");
 		addProblemToContest(problemas.get(1), competencias.get(7), "B");
 		addProblemToContest(problemas.get(2), competencias.get(7), "C");
-		niveles.add(createLevel("Nivel 1", "cat", 1, competencias.get(7)));
+		niveles.add(createLevel("Nivel 1", "cat", 1, competencias.get(7),stages.get(0)));
 		addArticleToLevel(articulos.get(0), niveles.get(0));
 		addArticleToLevel(articulos.get(1), niveles.get(0));
 		addArticleToLevel(articulos.get(2), niveles.get(0));
@@ -317,7 +323,16 @@ public class Runner implements CommandLineRunner {
 		addProblemToContest(problemas.get(3), competencias.get(8), "A");
 		addProblemToContest(problemas.get(4), competencias.get(8), "B");
 		addProblemToContest(problemas.get(5), competencias.get(8), "C");
-		niveles.add(createLevel("Nivel 2", "dog", 2, competencias.get(8)));
+		niveles.add(createLevel("Nivel 2", "dog", 2, competencias.get(8),stages.get(0)));
+		addArticleToLevel(articulos.get(3), niveles.get(1));
+		addArticleToLevel(articulos.get(4), niveles.get(1));
+		addArticleToLevel(articulos.get(5), niveles.get(1));
+		
+		competencias.add(createLevelContest("Level1"));
+		addProblemToContest(problemas.get(3), competencias.get(9), "A");
+		addProblemToContest(problemas.get(4), competencias.get(9), "B");
+		addProblemToContest(problemas.get(5), competencias.get(9), "C");
+		niveles.add(createLevel("Nivel 1", "empire", 1, competencias.get(9),stages.get(1)));
 		addArticleToLevel(articulos.get(3), niveles.get(1));
 		addArticleToLevel(articulos.get(4), niveles.get(1));
 		addArticleToLevel(articulos.get(5), niveles.get(1));
@@ -336,18 +351,13 @@ public class Runner implements CommandLineRunner {
 		this.roleRepository.save(admin);
 	}
 
-	
-	public void addArticleToLevel
-	(
-			Article 		article,  
-			Level 		level) {
+	public void addArticleToLevel(Article article, Level level) {
 		level.addArticle(article);
 		article.setLevel(level);
-		
+
 		levelRepository.save(level);
 		articleRepository.save(article);
 	}
-
 
 	private Contest createLevelContest(String name) {
 		Contest publicContest = new Contest();
@@ -363,15 +373,28 @@ public class Runner implements CommandLineRunner {
 	}
 	
 
-	private Level createLevel(String name, String logo, long number, Contest contest) {
+	private Level createLevel(String name, String logo, long number, Contest contest, Stage stage) {
 		Level level = new Level();
 		level.setName(name);
 		level.setLogo(logo);
 		level.setNumber(number);
 		level.setProblems(contest);
+		level.setStage(stage);
 		
 		levelRepository.save(level);
+		stageRepository.save(stage);
 		return level;
+	}
+	
+	private Stage createStage(Long number, String name, String logo, String description) {
+		Stage stage = new Stage();
+		stage.setName(name);
+		stage.setLogo(logo);
+		stage.setDescription(description);
+		stage.setNumber(number);
+		
+		stageRepository.save(stage);
+		return stage;
 	}
 
 	private void addProblemToContest(Problem problem, Contest contest, String string) {
