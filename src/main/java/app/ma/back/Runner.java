@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -88,6 +89,10 @@ public class Runner implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		
 		executorService.execute(new MyJob(new Submit(), submitRepository));
+
+		Optional<Contest> contest = contestRepository.findById(1l);
+		if (contest.isPresent())
+			return;
 		
 		createGeneralContest();
 		
