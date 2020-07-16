@@ -3,6 +3,7 @@ package app.ma.entities;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -37,7 +38,7 @@ public class ProblemContestUser {
 			@JoinColumn(name = "contest_id", referencedColumnName = "contest_id"), })
 	ProblemContest problemContest;
 
-	@OneToMany(mappedBy = "problemContestUser")
+	@OneToMany(mappedBy = "problemContestUser", cascade = CascadeType.REMOVE)
 	private Set<Submit> submits;
 
 	@Formula(" (select count(*) from submit b where b.user_id =user_id and b.problem_id =problem_id and b.contest_id =contest_id and b.veredict>1 and b.submit_date< COALESCE((select c.submit_date from submit c where c.user_id =user_id and c.problem_id =problem_id and c.contest_id =contest_id and c.veredict=1 order by c.submit_date limit 1), '3000-02-11' )) ")
