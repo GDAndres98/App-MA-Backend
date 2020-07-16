@@ -1,5 +1,7 @@
 package app.ma.services;
 
+import java.util.BitSet;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,13 +16,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.ma.compositeKey.ProblemContestKey;
 import app.ma.compositeKey.UserCourseKey;
+import app.ma.entities.Contest;
 import app.ma.entities.Course;
+import app.ma.entities.Problem;
+import app.ma.entities.ProblemContest;
 import app.ma.entities.Role;
 import app.ma.entities.Section;
 import app.ma.entities.User;
 import app.ma.entities.UserCourse;
+import app.ma.repositories.ContestRepository;
 import app.ma.repositories.CourseRepository;
+import app.ma.repositories.ProblemContestRepository;
+import app.ma.repositories.ProblemRepository;
 import app.ma.repositories.SectionRepository;
 import app.ma.repositories.UserCourseRepository;
 import app.ma.repositories.UserRepository;
@@ -28,14 +37,13 @@ import app.ma.repositories.UserRepository;
 @RestController
 public class CourseController {
 
-	@Autowired
-	private CourseRepository courseRepository;
-	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	private UserCourseRepository userCourseRepository;
-	@Autowired
-	private SectionRepository sectionRepository;
+	@Autowired private CourseRepository courseRepository;
+	@Autowired private UserRepository userRepository;
+	@Autowired private UserCourseRepository userCourseRepository;
+	@Autowired private SectionRepository sectionRepository;
+	@Autowired private ContestRepository contestRepository;
+	@Autowired private ProblemRepository problemRepository;
+	@Autowired private ProblemContestRepository problemContestRepository;
 	
 	@CrossOrigin
 	@RequestMapping("/getAllCourses")
@@ -77,7 +85,21 @@ public class CourseController {
 		course.setLogoUrl(image);
 		course.setProfessor(professor);
 		
+		
+		Contest contest = new Contest();
+		contest.setEndTime(new Date());
+		contest.setStartTime(new Date());
+		contest.setName(name);
+		contest.setPrivate(true);
+		contest.setVisible(false);
+		contest.setPartialVerdict(false);
+		
+		this.contestRepository.save(contest);
+		
+		course.setContest(contest);
+		
 		courseRepository.save(course);
+		
 		return new ResponseEntity<>("Curso \""+ name + "\" creado satisfactoriamente.", HttpStatus.CREATED);
 	}
 	
@@ -177,6 +199,42 @@ public class CourseController {
 		userCourseRepository.deleteById(key);
 
 		return new ResponseEntity<>("Estudiante removido satisfactoriamente de la clase.", HttpStatus.CREATED);
+	}
+
+	@CrossOrigin
+	@RequestMapping(path="/addHomework", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> addHomework
+	(
+			@RequestParam Long 	contestId, 
+			@RequestParam Long 	problemId,
+			@RequestParam Date 	limitDate,
+			@RequestParam List<Boolean> 	testCases) {
+		
+		Optional<Contest> opContest = contestRepository.findById(contestId);
+		if(!opContest.isPresent()) return new ResponseEntity<>("Competencia no existe.", HttpStatus.BAD_REQUEST);
+		Optional<Problem> opProblem = problemRepository.findById(problemId);
+		if(!opProblem.isPresent()) return new ResponseEntity<>("Problema no existe.", HttpStatus.BAD_REQUEST);
+
+		Contest contest = opContest.get();
+		Problem problem = opProblem.get();
+		
+		int i = 0;
+		long bit = 0;
+		for(Boolean e: testCases) {			
+			if(!e)
+				bit |= (1 << i);
+			i++;
+		}
+		
+		ProblemContest problemContest = new ProblemContest();
+		problemContest.setId(new ProblemContestKey(problemId, contestId));
+		problemContest.setProblem(problem);
+		problemContest.setContest(contest);
+		problemContest.setLimitDate(limitDate);
+		problemContest.setProblemTestCases(bit);
+		
+		this.problemContestRepository.save(problemContest);
+		return new ResponseEntity<>("Tarea guardada exitosamente.", HttpStatus.CREATED);
 	}
 	
 	@CrossOrigin

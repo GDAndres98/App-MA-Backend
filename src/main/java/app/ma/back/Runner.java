@@ -602,6 +602,17 @@ public class Runner implements CommandLineRunner {
 
 	private void createAllCourses(ArrayList<Course> courses) {
 		for (Course e : courses) {
+			Contest contest = new Contest();
+			contest.setEndTime(new Date());
+			contest.setStartTime(new Date());
+			contest.setName(e.getName());
+			contest.setPrivate(true);
+			contest.setVisible(false);
+			contest.setPartialVerdict(false);
+			
+			this.contestRepository.save(contest);
+			
+			e.setContest(contest);
 			courseRepository.save(e);
 		}
 	}

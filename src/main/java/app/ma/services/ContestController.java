@@ -36,6 +36,7 @@ import app.ma.entities.ProblemContest;
 import app.ma.entities.Tag;
 import app.ma.objects.ContestScoreboard;
 import app.ma.objects.ContestStats;
+import app.ma.objects.Homework;
 import app.ma.objects.JSONView;
 import app.ma.repositories.ContestRepository;
 import app.ma.repositories.ProblemContestRepository;
@@ -130,6 +131,8 @@ public class ContestController {
 		return new ResponseEntity<>("Competencia creada correctamente.", HttpStatus.CREATED);
 	}
 	
+	
+	
 	@RequestMapping(path="/editContest", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> editContest
 	(
@@ -206,6 +209,18 @@ public class ContestController {
 		this.contestRepository.deleteById(id);
 		
 		return new ResponseEntity<>("Competencia eliminada correctamente.", HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(path="/getHomeworkById", method=RequestMethod.GET)
+	public ResponseEntity<List<Homework>> getHomeworkById
+	(
+			@RequestHeader Long id) {
+		List<ProblemContest> problems = problemContestRepository.findByContest_id(id);
+		ArrayList<Homework> homework = new ArrayList<Homework>();
+		for(ProblemContest e: problems)
+			homework.add(new Homework(e.getProblem(), e.getLimitDate(), e.getProblemTestCases()));
+
+		 return new ResponseEntity<List<Homework>>(homework, new HttpHeaders(), HttpStatus.OK);
 	}
 	
 	
@@ -317,7 +332,7 @@ public class ContestController {
 	public ResponseEntity<Iterable<Long>> getSolvedProblemsByContestId(
 			@RequestHeader Long contestId,
 			@RequestHeader Long userId,
-			@RequestHeader List<Long> problemsId) {
+			@RequestHeader(required = false) List<Long> problemsId) {
 		
 		System.out.println(problemsId);
 		
