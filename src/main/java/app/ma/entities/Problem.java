@@ -17,6 +17,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -52,6 +53,9 @@ public class Problem {
 	@JsonIgnore
     @OneToMany(mappedBy="problem", cascade = CascadeType.REMOVE)
     private Set<TestCase> testCases;
+	
+	@Formula(" (select count(*) from submit b where b.problem_id =id and b.contest_id =1 and b.veredict=1) ")
+	public Long solutions;
 	
 	@CreationTimestamp
 	private Date createAt;
@@ -170,5 +174,13 @@ public class Problem {
 
 	public void addTestCase(TestCase tc) {	
 		this.testCases.add(tc);
+	}
+	
+	public Long getSolutions() {
+		return solutions;
+	}
+
+	public void setSolutions(Long solutions) {
+		this.solutions = solutions;
 	}
 }

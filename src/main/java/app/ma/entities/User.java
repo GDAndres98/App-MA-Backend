@@ -54,13 +54,13 @@ public class User {
 	@Column(nullable = false, columnDefinition = "integer default 0")
 	private Long rating = 0l;
 
-	@OneToOne
-	@JoinColumn(nullable = true) // TODO Default Level
-	private Level level;
-
 	@OneToMany(mappedBy = "student")
 	@JsonIgnore
 	Set<UserCourse> courses;
+	
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	Set<UserStage> stages;
 
 	@OneToMany(mappedBy = "user")
 	@JsonIgnore
@@ -166,14 +166,6 @@ public class User {
 		this.profilePicUrl = profilePicUrl;
 	}
 
-	public Level getLevel() {
-		return level;
-	}
-
-	public void setLevel(Level level) {
-		this.level = level;
-	}
-
 	public Set<UserCourse> getCourses() {
 		return courses;
 	}
@@ -243,4 +235,12 @@ public class User {
 		this.professorClass.add(course);
 	}
 
+	public Set<UserStage> getStages() {
+		return stages;
+	}
+
+	public void setStages(Set<UserStage> stages) {
+		this.stages = stages;
+	}
+	
 }

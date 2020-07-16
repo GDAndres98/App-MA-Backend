@@ -6,10 +6,12 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -17,7 +19,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import app.ma.objects.JSONView;
@@ -48,6 +49,10 @@ public class Level {
 	
     @OneToMany(mappedBy="level")
     private Set<Article> articles = new HashSet<>();
+    
+	@ManyToOne
+	@JoinColumn(name = "stage_id", nullable = false)
+	private Stage stage;
     
 
 	@CreationTimestamp
@@ -121,6 +126,14 @@ public class Level {
 	
 	public void addArticle(Article article) {
 		this.articles.add(article);
+	}
+	
+	public Stage getStage() {
+		return stage;
+	}
+
+	public void setStage(Stage stage) {
+		this.stage = stage;
 	}
 	
 }
