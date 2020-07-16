@@ -19,4 +19,6 @@ import app.ma.entities.Tag;
 
 @Repository
 public interface ProblemContestRepository extends CrudRepository<ProblemContest, ProblemContestKey> {
+	public List<ProblemContest> findByContest_id(Long id);
+
 }

@@ -28,6 +28,7 @@ import app.ma.entities.ProblemContest;
 import app.ma.entities.Section;
 import app.ma.repositories.ArticleRepository;
 import app.ma.repositories.CourseRepository;
+import app.ma.repositories.ProblemRepository;
 import app.ma.repositories.SectionRepository;
 
 @RestController
@@ -36,6 +37,7 @@ public class SectionController {
 	@Autowired private SectionRepository sectionRepository;
 	@Autowired private CourseRepository  courseRepository;
 	@Autowired private ArticleRepository articleRepository;
+	@Autowired private ProblemRepository problemRepository;
 
 	@CrossOrigin
 	@RequestMapping("/getAllSections")
@@ -112,6 +114,24 @@ public class SectionController {
 	}
 	
 	@CrossOrigin
+	@RequestMapping(path="/setSectionAttached", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> setSectionAttached 
+	(
+			@RequestParam Long		id,
+			@RequestParam String 	attached) {
+		Optional<Section> opSection = this.sectionRepository.findById(id);
+
+		
+		Section section = opSection.get();
+
+		section.setAttached(attached);
+		
+		sectionRepository.save(section);
+		
+		return new ResponseEntity<>(attached, HttpStatus.OK);
+	}
+	
+	@CrossOrigin
 	@RequestMapping(path="/deleteSection", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> editSection 
 	(
@@ -149,6 +169,27 @@ public class SectionController {
 	}
 	
 	@CrossOrigin
+	@RequestMapping(path="/addProblemToSection", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> addProblemToSection
+	(
+			@RequestParam Long 		problemId,  
+			@RequestParam Long 		sectionId) {
+		
+		Optional<Problem> opProblem = problemRepository.findById(problemId);
+		if(!opProblem.isPresent()) return new ResponseEntity<>("Problema no existe.", HttpStatus.BAD_REQUEST);
+		Optional<Section> opSection = sectionRepository.findById(sectionId);
+		if(!opSection.isPresent()) return new ResponseEntity<>("Seccion no existe.", HttpStatus.BAD_REQUEST);
+		Section section = opSection.get();
+		Problem problem = opProblem.get();
+
+		section.addProblem(problem);
+		
+		sectionRepository.save(section);
+
+		return new ResponseEntity<>("Problema Agregado correctamente.", HttpStatus.ACCEPTED);
+	}
+	
+	@CrossOrigin
 	@RequestMapping(path="/removeArticleToSection", method=RequestMethod.POST) 
 	public @ResponseBody ResponseEntity<String> removeArticleToSection
 	(
@@ -166,6 +207,26 @@ public class SectionController {
 		sectionRepository.save(section);
 
 		return new ResponseEntity<>("Articulo removido correctamente.", HttpStatus.ACCEPTED);
+	}
+	
+	@CrossOrigin
+	@RequestMapping(path="/removeProblemToSection", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> removeProblemToSection
+	(
+			@RequestParam Long 		problemId,  
+			@RequestParam Long 		sectionId) {
+		
+		Optional<Problem> opProblem = problemRepository.findById(problemId);
+		if(!opProblem.isPresent()) return new ResponseEntity<>("Problema no existe.", HttpStatus.BAD_REQUEST);
+		Optional<Section> opSection = sectionRepository.findById(sectionId);
+		if(!opSection.isPresent()) return new ResponseEntity<>("Seccion no existe.", HttpStatus.BAD_REQUEST);
+		Section section = opSection.get();
+		Problem problem = opProblem.get();
+		section.deleteProblem(problem);
+		
+		sectionRepository.save(section);
+
+		return new ResponseEntity<>("Problema removido correctamente.", HttpStatus.ACCEPTED);
 	}
 	
 	@CrossOrigin

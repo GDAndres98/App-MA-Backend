@@ -116,9 +116,46 @@ public class ProblemController {
 	public Iterable<TestCase> getAllTestCasesByProblemId
 	(
 			@RequestHeader Long problemId) {
-		Iterable<TestCase> findAll = testCaseRepository.findByProblem_Id(problemId);
+		Iterable<TestCase> findAll = testCaseRepository.findByProblem_IdOrderByOrderTestCase(problemId);
 		return findAll;
 	}
+	
+	@CrossOrigin
+	@RequestMapping(path="/setTestCases", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> setTestCases
+	(
+			@RequestParam Long 		problemId, 
+			@RequestParam List<String>  input,
+			@RequestParam List<String>  output,
+			@RequestParam List<Long> 	dificulty) {
+		
+		System.out.println(input);
+		Optional<Problem> opProblem = this.problemRepository.findById(problemId);
+		if(!opProblem.isPresent())
+			return new ResponseEntity<String>("Problema no existe", new HttpHeaders(), HttpStatus.NOT_FOUND);
+		
+		Problem problem = opProblem.get();
+		
+		for(TestCase tc: problem.getTestCases())
+			this.testCaseRepository.delete(tc);
+		problem.setTestCases(new HashSet<>());
+		
+		for(int i = 0; i < input.size(); i++) {
+			TestCase tc = new TestCase();
+			tc.setTcInputURL(input.get(i));
+			tc.setTcOutputURL(output.get(i));
+			tc.setTcDifficulty(dificulty.get(i));
+			tc.setOrderTestCase((long)i);
+			tc.setProblem(problem);
+			this.testCaseRepository.save(tc);
+			problem.addTestCase(tc);
+		}
+		
+		this.problemRepository.save(problem);
+		
+		return new ResponseEntity<>("Casos de prueba actualizados correctamente.", HttpStatus.CREATED);
+	}
+	
 	
 	@CrossOrigin
 	@RequestMapping(path="/createProblem", method=RequestMethod.POST) 

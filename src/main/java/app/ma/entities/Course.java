@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -55,6 +56,14 @@ public class Course {
     @JsonIgnore
     private Set<Section> sections = new HashSet<>();
     
+    @OneToOne
+    @JsonIgnore
+    private Contest contest;
+    
+    
+    public Long getContestId() {
+    	return this.contest.getId();
+    }
 	
 	@CreationTimestamp
 	private Date createAt;
@@ -126,6 +135,14 @@ public class Course {
 
 	public void addSection(Section section) {
 		sections.add(section);
+	}
+
+	public Contest getContest() {
+		return contest;
+	}
+
+	public void setContest(Contest contest) {
+		this.contest = contest;
 	}
 	
 }

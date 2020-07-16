@@ -41,6 +41,7 @@ public class Level {
 	@JsonView(JSONView.LevelSummary.class)
 	@Column(nullable = false)
 	private Long number;
+	
 
 	@OneToOne // TODO One to one
 	@JoinColumn(nullable = false)

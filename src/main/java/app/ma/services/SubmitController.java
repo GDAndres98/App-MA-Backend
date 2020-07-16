@@ -31,6 +31,7 @@ import app.ma.entities.ProblemContestUser;
 import app.ma.entities.Submit;
 import app.ma.enums.Language;
 import app.ma.enums.Veredict;
+import app.ma.objects.HomeworkSubmit;
 import app.ma.repositories.ProblemContestRepository;
 import app.ma.repositories.ProblemContestUserRepository;
 import app.ma.repositories.SubmitRepository;
@@ -103,6 +104,7 @@ public class SubmitController {
         return new ResponseEntity<Page<Submit>>(pagedResult, new HttpHeaders(), HttpStatus.OK);
 	}
 	
+	
 	@RequestMapping("/getSubmitsByUserContest")
 	public ResponseEntity<Page<Submit>> getSubmitsByUserContest(
             @RequestHeader(defaultValue = "0") Integer pageNo, 
@@ -151,6 +153,52 @@ public class SubmitController {
 		return new ResponseEntity<List<Submit>>(submit, HttpStatus.OK);
 	}
 	
+	
+	@RequestMapping("/getLastSubmitAttempt")
+	public ResponseEntity<Submit> getLastSubmitAttempt(
+			@RequestHeader Long userId,
+			@RequestHeader(defaultValue = "1") Long contestId,
+			@RequestHeader Long problemId) {
+		Submit submit= submitRepository.findFirst1ByProblemContestUser_User_IdAndProblemContestUser_ProblemContest_Contest_IdAndProblemContestUser_ProblemContest_Problem_IdOrderBySubmitDateDesc(userId, contestId, problemId);
+		if(submit == null) return new ResponseEntity<Submit>(submit, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Submit>(submit, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping("/getGradeFromStudent")
+	public ResponseEntity<HomeworkSubmit> getGradeFromStudent(
+			@RequestHeader Long userId,
+			@RequestHeader(defaultValue = "1") Long contestId,
+			@RequestHeader Long problemId) {
+		Submit submit= submitRepository.findFirst1ByProblemContestUser_User_IdAndProblemContestUser_ProblemContest_Contest_IdAndProblemContestUser_ProblemContest_Problem_IdOrderBySubmitDateDesc(userId, contestId, problemId);
+		if(submit == null) return new ResponseEntity<HomeworkSubmit>(new HomeworkSubmit(), HttpStatus.BAD_REQUEST);
+		
+		ProblemContestUser pcu = pcuRepository.findById(new ProblemContestUserKey(userId, contestId, problemId)).get();
+		
+		HomeworkSubmit homeworkSubmit = new HomeworkSubmit(submit, pcu.getGrade());
+		
+		
+		return new ResponseEntity<HomeworkSubmit>(homeworkSubmit, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(path="/saveGrades", method = RequestMethod.POST)
+	public ResponseEntity<String> saveGrades(
+			@RequestParam Long idContest, 
+			@RequestParam Long idProblem, 
+			@RequestParam List<Long> studentsId,
+			@RequestParam List<Double> grades) {
+		
+		for(int i = 0; i < studentsId.size(); i++) {
+			Optional<ProblemContestUser> opPcu = pcuRepository.findById(new ProblemContestUserKey(studentsId.get(i), idContest, idProblem));
+			if(!opPcu.isPresent()) continue;
+			ProblemContestUser pcu = opPcu.get();
+			pcu.setGrade(grades.get(i));
+			pcuRepository.save(pcu);
+		}
+
+		return new ResponseEntity<>("Notas actualizadas correctamente.", HttpStatus.CREATED);
+	}
 	
 	
 }

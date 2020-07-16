@@ -1,5 +1,6 @@
 package app.ma.entities;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -31,6 +32,10 @@ public class ProblemContest {
 
 	@Column
 	String letter;
+	
+	@Column
+	Date limitDate;
+	
 
 	@OneToMany(mappedBy = "problemContest")
 	Set<ProblemContestUser> problemContestUser;
@@ -71,6 +76,22 @@ public class ProblemContest {
 
 	public void setLetter(String letter) {
 		this.letter = letter;
+	}
+
+	public Date getLimitDate() {
+		return limitDate;
+	}
+
+	public void setLimitDate(Date limitDate) {
+		this.limitDate = limitDate;
+	}
+
+	public Long getProblemTestCases() {
+		return problemTestCases;
+	}
+
+	public void setProblemTestCases(Long problemTestCases) {
+		this.problemTestCases = problemTestCases;
 	}
 
 //    @OneToMany(mappedBy="userCourse")

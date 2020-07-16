@@ -23,18 +23,19 @@ public class MyJob implements Runnable {
 		} catch (InterruptedException e) {e.printStackTrace();}
     	
     	System.out.println(submit.getProblemContestUser().problemContest == null);
-    	Veredict veredict = Veredict.values()[z.nextInt(Veredict.values().length-1) + 1];
-    	if(!veredict.equals(Veredict.COMPILATION_ERROR)) {
-    		Problem problem = this.submit.getProblemContestUser().problemContest.problem;
-    		if(veredict.equals(Veredict.TIME_LIMIT))
-    			this.submit.setTimeConsumed(problem.getTimeLimit());
-    		else
-    			this.submit.setTimeConsumed((long)z.nextInt(problem.getTimeLimit().intValue()));
-    		if(veredict.equals(Veredict.MEMORY_LIMIT))
-    			this.submit.setMemoryConsumed(problem.getMemoryLimit());
-    		else
-    			this.submit.setMemoryConsumed((long)z.nextInt(problem.getMemoryLimit().intValue()));
-    	}
+    	Veredict veredict = Veredict.ACCEPTED;
+//    	Veredict veredict = Veredict.values()[z.nextInt(Veredict.values().length-1) + 1];
+//    	if(!veredict.equals(Veredict.COMPILATION_ERROR)) {
+//    		Problem problem = this.submit.getProblemContestUser().problemContest.problem;
+//    		if(veredict.equals(Veredict.TIME_LIMIT))
+//    			this.submit.setTimeConsumed(problem.getTimeLimit());
+//    		else
+//    			this.submit.setTimeConsumed((long)z.nextInt(problem.getTimeLimit().intValue()));
+//    		if(veredict.equals(Veredict.MEMORY_LIMIT))
+//    			this.submit.setMemoryConsumed(problem.getMemoryLimit());
+//    		else
+//    			this.submit.setMemoryConsumed((long)z.nextInt(problem.getMemoryLimit().intValue()));
+//    	}
     	this.submit.setVeredict(veredict);
     	this.submitRepository.save(submit);
     }

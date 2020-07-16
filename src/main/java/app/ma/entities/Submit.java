@@ -30,7 +30,7 @@ public class Submit {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, length = 4000)
+	@Column(nullable = false, length = 10000)
 	@JsonIgnore
 	private String sourceCodeURL;
 	@Column(nullable = false)

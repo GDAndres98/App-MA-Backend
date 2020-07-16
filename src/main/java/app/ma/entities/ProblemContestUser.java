@@ -3,6 +3,7 @@ package app.ma.entities;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -44,6 +45,9 @@ public class ProblemContestUser {
 
 	@Formula(" (select c.submit_date from submit c where c.user_id =user_id and c.problem_id =problem_id and c.contest_id =contest_id and c.veredict=1 order by c.submit_date limit 1) ")
 	public Date solDate;
+	
+	@Column
+	Double grade = 0.0;
 
 	public ProblemContestUser() {
 	}
@@ -78,6 +82,14 @@ public class ProblemContestUser {
 	
 	public User getUser() {
 		return user;
+	}
+
+	public Double getGrade() {
+		return grade;
+	}
+
+	public void setGrade(Double grade) {
+		this.grade = grade;
 	}
 	
 }
