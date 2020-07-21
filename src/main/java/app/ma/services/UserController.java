@@ -52,14 +52,14 @@ public class UserController {
 	
 	@CrossOrigin
 	@RequestMapping(path="/getUserById", method=RequestMethod.GET)
-	public User getUserByID 
+	public ResponseEntity<User> getUserByID 
 	(
 			@RequestHeader Long id) {
 		
 		Optional<User> user = userRepository.findById(id);
 		if(!user.isPresent())
-			return null;
-		return user.get();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(user.get(), HttpStatus.OK);
 	}
 	
 	@CrossOrigin
@@ -202,6 +202,32 @@ public class UserController {
 		userRepository.save(newUser);
 			
 		return new ResponseEntity<>("Usuario creado correctamente.", HttpStatus.CREATED);
+	}
+	
+	@CrossOrigin
+	@RequestMapping(path="/setProfesorRole", method=RequestMethod.POST) 
+	public @ResponseBody ResponseEntity<String> setProfesorRol 
+	(
+			@RequestParam Long 	 userId, 
+			@RequestParam Boolean isProfesor) {
+
+		Optional<User> opUser = userRepository.findById(userId);
+		if(!opUser.isPresent())
+			return new ResponseEntity<>("Usuario no existe.", HttpStatus.BAD_REQUEST);
+		Role profesor = roleRepository.findByName("professor");
+		User user = opUser.get();
+		if(isProfesor && !user.isProfesor()) {
+			user.addRole(profesor);
+			profesor.addUser(user);
+		}
+		else if(!isProfesor && user.isProfesor()) {
+			user.removeRole(profesor);
+			profesor.removeUser(user);
+		}
+		userRepository.save(user);
+		roleRepository.save(profesor);
+
+		return new ResponseEntity<>("Usuario actualizado correctamente.", HttpStatus.CREATED);
 	}
 
 	@CrossOrigin
