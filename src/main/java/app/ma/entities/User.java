@@ -242,5 +242,9 @@ public class User {
 	public void setStages(Set<UserStage> stages) {
 		this.stages = stages;
 	}
+
+	public void removeRole(Role profesor) {
+		this.role.remove(profesor);
+	}
 	
 }

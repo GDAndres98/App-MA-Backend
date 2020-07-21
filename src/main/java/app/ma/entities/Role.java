@@ -121,4 +121,9 @@ public class Role {
 		this.isAdmin = isAdmin;
 	}
 
+
+	public void removeUser(User user) {
+		this.users.remove(user);
+	}
+
 }
