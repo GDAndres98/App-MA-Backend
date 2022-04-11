@@ -88,7 +88,7 @@ public class Runner implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		executorService.execute(new MyJob(new Submit(), submitRepository));
+//		executorService.execute(new MyJob(new Submit(), submitRepository));
 
 		Optional<Contest> contest = contestRepository.findById(1l);
 		if (contest.isPresent())
